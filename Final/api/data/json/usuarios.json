@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "password":"pass"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "email": "bob.smith@example.com",
+    "password":"pass"
+  },
+  {
+    "id": 3,
+    "name": "Charlie Brown",
+    "email": "charlie.brown@example.com",
+    "password":"pass"
+  },
+  {
+    "id": 4,
+    "name": "Diana Prince",
+    "email": "diana.prince@example.com",
+    "password":"pass"
+  },
+  {
+    "id": 5,
+    "name": "Ethan Hunt",
+    "email": "ethan.hunt@example.com",
+    "password":"pass"
+  },
+  {
+    "id": 6,
+    "name": "John Lee Hooker",
+    "email": "john.lee@hooker.com",
+    "password": "$2b$10$mhwhoMMH8EJge7dk.7UUYejBJ5qeNC0Sj986vkQFuxHMAfjSs7D56"
+  }
+]

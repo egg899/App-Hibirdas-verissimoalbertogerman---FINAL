@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP1</title>
+    <style>
+        #guitarists-list {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+
+        footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    </style>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body class="container">
+    <h1 class="my-4 text-center">Bienvenido a mi API RESTful</h1>
+    <p class="text-center">Esta API ofrece varios endpoints que puedes usar.</p>
+    
+    <h2 class="mt-4">Endpoints disponibles:</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="#" class="btn btn-link" onclick="fetchAllGuitarists()">GET /guitarristas</a> - Obtener todos los guitarristas
+        </li>
+        
+        <li class="list-group-item">
+            <input type="number" id="guitarist-id" class="form-control d-inline w-50" placeholder="ID del guitarrista" required>
+            <button class="btn btn-primary" onclick="fetchGuitaristById()">GET /guitarristas/:id - Obtener un guitarrista por ID</button>
+        </li>
+        <li class="list-group-item">
+            <input type="text" id="guitarist-name" class="form-control d-inline w-50" placeholder="Nombre del guitarrista" required>
+            <button class="btn btn-primary" onclick="fetchGuitaristByName()">GET /guitarristas/nombre/:nombre - obtener por nombre </button>
+        </li>
+    </ul>
+
+
+    <h3 class="mt-4">Lista de Guitarristas:</h3>
+    <div id="guitarists-list" class="list-group"></div>
+    <div class="error" id="error-message"></div>
+
+    <h3 class="mt-4">Paginacion de la Lista</h3>
+    <p>(Ejemplo = http://localhost:3000/guitarristas?page=1&limit=3)</p>
+    <div class="form-group">
+        <input type="number" id="page" class="form-control" placeholder="page" required>
+        <input type="number" id="limit" class="form-control" placeholder="limite" required>
+        <button class="btn btn-warning mt-2" onclick="paginationGuitarist()">Mostrar Lista</button>
+    </div>
+<hr>
+    <h2 class="mt-4">Iniciar Sesión para Adherir, Actualizar y Eliminar Guitarristas</h2>
+    <form id="login-form">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            (Usar : "john.lee@hooker.com")
+            <input type="email" id="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Contraseña:</label>
+            (Usar: "laclave")
+            <input type="password" id="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Iniciar Sesión</button>
+    </form>
+    
+
+
+
+
+
+    <h3 class="mt-4">Agregar Guitarrista</h3>
+<div class="form-group">
+    <input type="text" id="new-guitarist-name" class="form-control" placeholder="Nombre del guitarrista" required>
+    <button class="btn btn-primary" onclick="addGuitarist()">Agregar</button>
+</div>
+
+<h3 class="mt-4">Eliminar Guitarrista</h3>
+<div class="form-group">
+    <input type="number" id="delete-guitarist-id" class="form-control" placeholder="ID del guitarrista" required>
+    <button class="btn btn-danger" onclick="deleteGuitarist()">Eliminar</button>
+</div>
+    
+<h3 class="mt-4">Actualizar Guitarrista</h3>
+<div class="form-group">
+    <input type="number" id="update-guitarist-id" class="form-control" placeholder="ID del guitarrista" required>
+    <input type="text" id="update-guitarist-name" class="form-control" placeholder="Nuevo nombre del guitarrista" required>
+    <button class="btn btn-warning mt-2" onclick="updateGuitarist()">Actualizar</button>
+</div>
+
+
+    
+
+    <div id="guitarists-list"></div>
+    <div class="error" id="error-message"></div>
+    <footer class="mt-4 text-center">
+        <p>Nombre y Apellido: Alberto Germán Verissimo</p>
+        <p>Nombre de la materia: Aplicaciones Hibridas</p>
+        <p>Nombre del docente: MARCOS GALBÁN, Camila Belén</p>
+        <p>Comisión: DWN4AV</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+<script>
+    
+    async function fetchAllGuitarists() {
+            try {
+                const response = await fetch('http://localhost:3000/guitarristas'); // Replace with your actual URL
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                displayGuitarists(data);
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Error fetching guitarists: ' + error.message;
+            
+            }
+        }
+
+
+        async function paginationGuitarist() {
+            const page = document.getElementById('page').value;
+            const limit = document.getElementById('limit').value;
+    
+
+    try {
+                const response = await fetch(`http://localhost:3000/guitarristas?page=${page}&limit=${limit}`); // Replace with your actual URL
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                displayGuitarists(data);
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Error fetching guitarists: ' + error.message;
+            
+            }
+}
+
+
+
+
+
+
+        async function fetchGuitaristById() {
+            const id = document.getElementById('guitarist-id').value;
+            try {
+                const response = await fetch(`http://localhost:3000/guitarristas/${id}`); // Replace with your actual URL
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                displayGuitarists([data]); // Display as an array for consistency
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Error fetching guitarist by ID: ' + error.message;
+            }
+        }
+        async function fetchGuitaristByName() {
+            const nombre = document.getElementById('guitarist-name').value;
+            try {
+                const response = await fetch(`http://localhost:3000/guitarristas/nombre/${nombre}`); // Replace with your actual URL
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                displayGuitarists(data); // Display as an array for consistency
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Error fetching guitarist by ID: ' + error.message;
+            }
+        }
+
+        function displayGuitarists(guitarists) {
+            const list = document.getElementById('guitarists-list');
+            list.innerHTML = ''; // Clear previous entries
+            guitarists.forEach(guitarist => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-group-item';
+                listItem.textContent = `ID: ${guitarist.id}, Nombre: ${guitarist.name}`; // Adjust based on your data structure
+                list.appendChild(listItem);
+            });
+        }
+
+
+    
+
+
+
+//LOGIN
+
+document.getElementById('login-form').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent form submission
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const response = await fetch('http://localhost:3000/usuarios/login', { // Replace with your login endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed: ' + response.statusText);
+            }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.token); // Store the token in local storage
+            alert('Inicio de sesión exitoso!');
+        } catch (error) {
+            document.getElementById('error-message').textContent = error.message;
+        }
+    });
+
+//Adherir Guitarrista
+async function addGuitarist() {
+    const name = document.getElementById('new-guitarist-name').value; // Assume you have an input for new guitarist's name
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch('http://localhost:3000/guitarristas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the headers
+            },
+            body: JSON.stringify({ name })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add guitarist: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        alert('Guitarrista agregado exitosamente!');
+        fetchAllGuitarists();
+    } catch (error) {
+        document.getElementById('error-message').textContent = error.message;
+    }
+}
+
+
+//Actualizar guitarrista
+async function updateGuitarist() {
+    const id = document.getElementById('update-guitarist-id').value;
+    const name = document.getElementById('update-guitarist-name').value;
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`http://localhost:3000/guitarristas/${id}`, {
+            method: 'PUT', // Assuming you're using PUT to update
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the headers
+            },
+            body: JSON.stringify({ name })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update guitarist: ' + response.statusText);
+        }
+
+        const data = await response.json();
+        alert('Guitarrista actualizado exitosamente!');
+        fetchAllGuitarists();
+    } catch (error) {
+        document.getElementById('error-message').textContent = error.message;
+    }
+}
+
+
+
+
+        //Eliminar guitarrista
+        async function deleteGuitarist() {
+            const id = document.getElementById('delete-guitarist-id').value;
+            const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`http://localhost:3000/guitarristas/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}` // Include the token in the headers
+            },
+            
+            
+        });
+       
+        alert('Guitarrista eliminado exitosamente!');
+        fetchAllGuitarists();
+        if (!response.ok) {
+            throw new Error('Failed to delete guitarist: ' + response.statusText);
+        }
+        
+        
+    } catch (error) {
+        document.getElementById('error-message').textContent = error.message;
+    }
+
+
+
+   
+}
+
+
+        //fetchAllGuitarists();
+
+
+ 
+
+</script>
+</html>

@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "title": "Are You Experienced?",
+    "artist": "Jimi Hendrix",
+    "year": 1967,
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Are_You_Experienced_-_US_cover-edit.jpg/300px-Are_You_Experienced_-_US_cover-edit.jpg"
+  },
+  {
+    "id": 2,
+    "title": "461 Ocean Boulevard",
+    "artist": "Eric Clapton",
+    "year": 1974,
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/9/9f/EricClapton461OceanBoulevar.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Texas Flood",
+    "artist": "Stevie Ray Vaughan",
+    "year": 1983,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrU-yJhva5n3JL6HPTlLkiiLrZeJRTjqt8Vg&s"
+  },
+  {
+    "id": 4,
+    "title": "Rising Force",
+    "artist": "Yngwie Malmsteen",
+    "year": 1984,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmU3KpDScJ_cw3OmXc8R0x1CGT848s2Wvajw&s"
+  },
+  {
+    "id": 5,
+    "title": "Live at the Regal",
+    "artist": "B.B. King",
+    "year": 1965,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzsu61bqhaMLJf8D5usGiNnFcR7WCv7VYfBQ&s"
+  },
+  {
+    "id": 6,
+    "title": "I'm John Lee Hooker",
+    "artist": "John Lee Hooker",
+    "year": 1962,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnUpCM-8ZHbdTvTA2XUIa7xuRGRcCBgySa_g&s"
+  },
+  {
+    "id": 7,
+    "title": "Santana",
+    "artist": "Carlos Santana",
+    "year": 1969,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjM-usfPXNKds_9usFXUVECt5HJ5I8Z5KOZA&s"
+  },
+  {
+    "id": 8,
+    "title": "Passion and Warfare",
+    "artist": "Steve Vai",
+    "year": 1990,
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkw7hysvoYS5fab0z6GRvX9cjA6vGc8-4zoA&s"
+  }
+]

@@ -1,0 +1,50 @@
+[{
+  "_id": {
+    "$oid": "674640cd5c5bbccc3f3601b6"
+  },
+  "name": "Alberto",
+  "username": "Albert89",
+  "email": "germanverissimo5@hotmail.com",
+  "password": "$2b$10$P0oHmvL2j5pIMpyBbuGbO.1dOvYLwLXBZ0G12LJrAFUVwpOwHIYZC",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674656e67ec2b00480d16bcc"
+  },
+  "name": "gerchu",
+  "username": "gerchu",
+  "email": "gerchu@gerchu.com",
+  "password": "$2b$10$9NaW1008vmVcCr/siwhBde.AvXk/IZwv1wY5S0KuOPShOPbL9/qUS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67465fd90413cf5da08c6708"
+  },
+  "name": "ger",
+  "username": "ger",
+  "email": "ger@ger.com",
+  "password": "$2b$10$/Qub6anyQC3NJwuQHNLlNOPGkSKdPIZL2uN/qZ0zgA9IrNVNuiccK",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6746657b0413cf5da08c672d"
+  },
+  "name": "pepe",
+  "username": "pepe",
+  "email": "pepe@pepe.com",
+  "password": "$2b$10$m6uRJBop.u17CUnQgoOhHO7vmUvszevxecJimJdyD9M9ISHRG2BbS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6746c7d837399e365f5ffbbe"
+  },
+  "name": "flavio",
+  "username": "flavito",
+  "email": "flavio@flavio.com",
+  "password": "$2b$10$4hULOplQZJhxUEzkJ0DhWuzyDLdcUZucN4ZUE5Eb..2SoySajfKC2",
+  "__v": 0
+}]

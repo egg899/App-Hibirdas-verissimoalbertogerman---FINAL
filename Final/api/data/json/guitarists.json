@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Jimi Hendrix"
+  },
+  {
+    "id": 2,
+    "name": "Eric Clapton"
+  },
+  {
+    "id": 3,
+    "name": "Stevie Ray Vaughan"
+  },
+  {
+    "id": 4,
+    "name": "Yngwie Malmsteen"
+  },
+  {
+    "id": 5,
+    "name": "B.B. King"
+  },
+  {
+    "id": 6,
+    "name": "John Lee Hooker"
+  },
+  {
+    "id": 7,
+    "name": "Carlos Santana"
+  },
+  {
+    "id": 8,
+    "name": "Steve Vai"
+  },
+  {
+    "id": 9,
+    "name": "Joe Satriani"
+  }
+]

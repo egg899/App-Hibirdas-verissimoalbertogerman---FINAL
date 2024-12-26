@@ -1,0 +1,143 @@
+[{
+  "_id": {
+    "$oid": "673d1147458e810cf63b7fcf"
+  },
+  "name": "Eddie Van Halen",
+  "description": "Edward Lodewijk van Halen (Ámsterdam, 26 de enero de 1955-Santa Mónica, California; 6 de octubre de 2020),1​2​ más conocido por su nombre artístico Eddie Van Halen, fue un músico neerlandés-estadounidense, conocido mundialmente por ser el guitarrista y miembro fundador de la banda de hard rock Van Halen junto a su hermano Alex y a Mark Stone.",
+  "style": [
+    "Hard Rock",
+    "Heavy Metal"
+  ],
+  "albums": [
+    "Van Halen",
+    "1984",
+    "Fair Warning",
+    "Diver Down"
+  ],
+  "owner": {
+    "userId": "user",
+    "username": "user"
+  },
+  "__v": 0,
+  "imageUrl": "https://static01.nyt.com/images/2020/10/07/arts/07evh-appraisal/merlin_178174269_92551a38-528a-4b42-b598-67b3efac1a76-articleLarge.jpg?quality=75&auto=webp"
+},
+{
+  "_id": {
+    "$oid": "673d11ed458e810cf63b7fd6"
+  },
+  "name": "Angus Young",
+  "description": "Angus McKinnon Young (Glasgow, Escocia, Reino Unido, 31 de marzo de 1955) es un músico escocés de nacionalidad australiana, conocido por ser uno de los miembros fundadores y el principal guitarrista del grupo AC/DC, aparte de ser el único miembro que ha permanecido en la banda desde su inicio. Fue introducido en el Salón de la fama del Rock and Roll junto a los miembros actuales de la banda en el 2003. Es conocido por sus salvajes y enérgicos movimientos en el escenario, y su peculiar uniforme de colegial. Además, en el año 2014 se situó entre los mejores guitarristas de todos los tiempos, concedido por la revista Rolling Stone y en el puesto 24 en una nueva edición de 2011 de \"los 100 mejores guitarristas de todos los tiempos\", también por la revista Rolling Stone​ y en el puesto número 20 de la lista \"los 100 mejores guitarristas\", de la revista Total Guitar.​",
+  "style": [
+    "Rock,Hard Rock,Blues Rock, Rock and Roll"
+  ],
+  "albums": [
+    "Back in Black",
+    "Highway To Hell",
+    "Let There Be Rock",
+    "High Voltage"
+  ],
+  "owner": {
+    "userId": "user",
+    "username": "user"
+  },
+  "__v": 0,
+  "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXLc-3GkUvNRrQH5fQxjxtHAjgsicPH_F2xd2mqeXAODJ97CQvrEZStH-keQ5fB1kaND0&usqp=CAU"
+},
+{
+  "_id": {
+    "$oid": "673d1235458e810cf63b7fda"
+  },
+  "name": "John Petrucci",
+  "description": "John Peter Petrucci (12 de julio de 1967) es un virtuoso guitarrista estadounidense, miembro y fundador de la banda de metal progresivo Dream Theater. \nEs considerado como uno de los mejores guitarristas del mundo. Fue elegido como el 2.º mejor guitarrista en el\n libro The 100 Greatest Metal Guitarists (los 100 mejores \nguitarristas del metal),1​ el 27.º según la revista Guitar World​ y catalogado por Guitar One como uno de los 10 mejores guitarristas de todos los tiempos.",
+  "style": [
+    "Progressive Metal",
+    "Heavy Metal",
+    "Rock"
+  ],
+  "albums": [
+    "Images and Words",
+    "Metropolis Pt. 2: Scenes from a Memory",
+    "A Dramatic Turn of Events"
+  ],
+  "owner": {
+    "userId": "user",
+    "username": "user"
+  },
+  "__v": 0,
+  "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVEp4SffrX3uKZE6BesZXmsGrLRBNd5_r3gtMvnsBMUJfa9I4UQUHugzDQnJypeSiNbYQ&usqp=CAU"
+},
+{
+  "_id": {
+    "$oid": "673f56a5648e8a36be4e8a33"
+  },
+  "name": "Yngwie Malmsteen",
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Yngwie_Malmsteen_1.jpg/330px-Yngwie_Malmsteen_1.jpg",
+  "description": "Yngwie Johann Malmsteen (Estocolmo, 30 de junio de 1963), de nombre real Lars Johan Yngve Lannerbäck;​ es un virtuoso​ guitarrista de heavy metal y compositor sueco, que participó activamente en grupos como Steeler o Alcatrazz; y al que se le atribuye ser la mayor influencia en la creación del subgénero conocido como metal neoclásico, siendo uno de los grandes exponentes de las técnicas de shred en la guitarra eléctrica durante las décadas de 1970 - 1980.",
+  "style": [
+    "Metal neoclásico",
+    "Heavy metal",
+    "Shred metal",
+    "Power metal"
+  ],
+  "albums": [
+    "Rising Force",
+    "Marching Out",
+    "Trilogy"
+  ],
+  "owner": {
+    "userId": "user",
+    "username": "user"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673f5cf1648e8a36be4e8a4b"
+  },
+  "name": "Joe Satriani",
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/PER20887_03.jpg/375px-PER20887_03.jpg",
+  "description": "Joe \"Satch\" Satriani (Westbury, Nueva York, 15 de julio de 1956) es un virtuoso guitarrista de rock instrumental estadounidense. Fue nominado en 15 ocasiones a los Premios Grammy y ha vendido más de 10 millones de discos en todo el mundo.\nSegún otros guitarristas ha conseguido dominar casi todas las técnicas de ejecución de su instrumento, incluyendo tapping a dos manos, sweep picking, volume swells y tap harmonics. ",
+  "style": [
+    "Rock instrumental",
+    "Blues rock",
+    "Jazz rock",
+    "Hard rock",
+    "Heavy metal",
+    "Metal progresivo",
+    "Shred"
+  ],
+  "albums": [
+    "Not of This Earth",
+    "Surfing with the Alien",
+    "Flying in a Blue Dream"
+  ],
+  "owner": {
+    "userId": "user",
+    "username": "user"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6746c88537399e365f5ffbc8"
+  },
+  "name": "Phil Campbell",
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Motorhead-johngullo-photograph-sofajockey-com.jpg/330px-Motorhead-johngullo-photograph-sofajockey-com.jpg",
+  "description": "Philip Anthony Campbell1​ (Pontypridd, Gales, 7 de mayo de 1961)​ es un músico y compositor galés, conocido por haber sido el guitarrista de la banda de rock y heavy metal británica Motörhead, desde 1984 hasta su disolución en 2015. También formó parte de la agrupación Persian Risk.",
+  "style": [
+    "Heavy Metal",
+    "Hard Rock",
+    "Rock",
+    "Rock and Roll"
+  ],
+  "albums": [
+    "Orgasmatron",
+    "Rock 'n' Roll",
+    "Bastards"
+  ],
+  "owner": {
+    "userId": "user",
+    "username": "user"
+  },
+  "__v": 0
+}]

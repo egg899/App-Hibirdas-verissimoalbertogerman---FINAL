@@ -1,0 +1,285 @@
+@use "sass:color"; // Import the color module
+
+// Variables for styling
+$form-bg: #f9f9f9;
+$form-border: #ddd;
+$input-bg: #fff;
+$button-bg: #007bff;
+$button-color: #fff;
+$primary-color: #f8f8f8; // Light text color for content
+$secondary-color: #00ffcc; // Accent color for links and buttons
+$hover-color: #ff8000; // Hover effect color
+$background-gradient: linear-gradient(to bottom right, #121212, #282828); // Dark background gradient
+$text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); // Text shadow for better contrast
+$card-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); // Card shadow effect
+$border-radius: 8px; // Rounded corners
+
+// General styling
+body {
+  font-family: 'Lora', serif;
+  background: $background-gradient;
+  color: $primary-color;
+  margin: 0;
+  padding: 0;
+  text-shadow: $text-shadow;
+}
+
+p, h1, h2, h3 {
+  font-family: 'Oswald', sans-serif;
+  color: $secondary-color!important;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+form, .error{
+  color: $primary-color!important;
+}
+
+
+
+.form {
+  background: $form-bg;
+ 
+  max-width: 100%; // Default size for smaller screens
+  width: 400px; // Full width for larger screens
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid $form-border;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+
+
+  input[type="text"] {
+    width: 100%; // Ensure inputs fill the container
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid $form-border;
+    border-radius: 4px;
+    box-sizing: border-box; // Prevent overflow
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    background: $button-bg;
+    color: $button-color;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  
+    &:hover {
+      background: color.adjust($button-bg, $lightness: -10%);
+    }
+  }
+}
+
+// List of guitarists
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 90%;
+  width: 400px; // Same as the form width for consistency
+
+  li {
+    //margin-bottom: 10px;
+
+    a {
+      text-decoration: none;
+      color: $button-bg;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+textarea {
+    width: 100%; 
+    height: 150px; 
+    padding: 10px;
+    margin-top: 10px; 
+    border: 1px solid $form-border;
+    border-radius: 4px;
+    resize: vertical; 
+    font-family: inherit;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  textarea::placeholder {
+    color: #aaa;
+    font-size: 14px;
+  }
+  
+
+//Animaciones
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  .bounce-animation {
+    animation: bounce 1s infinite;
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+  }
+
+ //Lista deguitarristas y albumes
+  .lista {
+    list-style-type: none; /* Removes default bullets */
+  // margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* Stacks children vertically */
+  gap: 1rem; /* Adds space between items */
+  }
+  
+  .lista .guitarist-item, .album-item {
+    display: flex; /* Ensures buttons and links align horizontally */
+  align-items: center; /* Aligns items vertically within each row */
+  gap: 0.5rem; /* Space between buttons and the link */
+  padding: 0.5rem; /* Optional padding */
+  border: 1px solid #ccc; /* Optional border for visibility */
+  border-radius: 0.5rem; /* Optional rounded corners */
+  }
+  
+  .guitarist-link-container {
+    flex-grow: 1; /* Ensures the link takes up available space */
+  }
+  
+  .guitarist-link {
+    text-decoration: none; /* Removes underline */
+    color: #000; /* Adjusts the link color */
+  }
+  
+  .guitarist-link:hover {
+    text-decoration: underline; /* Adds underline on hover */
+  }
+
+
+
+
+  .guitarist-item, .album-item {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $primary-color;
+    transition: transform 0.3s ease;
+  }
+  
+  .guitarist-item:hover, .album-item:hover {
+    transform: scale(1.05);
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .guitarist-link,.album-link {
+    color: $secondary-color;
+    font-size: 18px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .guitarist-link:hover, .album-link:hover {
+    color: $hover-color;
+  }
+  
+  .guitarist-link-container,.album-link-container {
+    flex-grow: 1;
+  }
+
+
+  
+  button {
+    margin: 0 10px; /* Adds spacing around buttons */
+  }
+  
+
+  .album-list {
+    list-style-type: none; /* Removes default bullets */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Stacks items vertically */
+    gap: 1rem; /* Adds space between items */
+  }
+  
+  .album-item {
+    display: flex; /* Aligns buttons and link horizontally in each row */
+    align-items: center; /* Vertically centers items in each row */
+    gap: 0.5rem; /* Space between buttons and link */
+    padding: 0.5rem; /* Optional padding for better spacing */
+    border: 1px solid #ccc; /* Optional border for visibility */
+    border-radius: 0.5rem; /* Rounded corners */
+    //background-color: #f9f9f9; /* Optional background for styling */
+  }
+  
+  .album-link {
+    flex: 1; /* Ensures the link takes up available space */
+    text-decoration: none; /* Removes underline */
+    //color: #007bff; /* Bootstrap primary color */
+  }
+  
+  .album-link:hover {
+    text-decoration: underline; /* Adds underline on hover */
+  }
+  
+ 
+  .list li {
+    color:white;
+  }
+
+
+
+
+    //For NAVIGATION
+
+    /* In your style file, e.g., nav.scss */
+nav {
+  border-radius: 15px;  /* Adjust the radius to your liking */
+  border: 2px solid #ccc;
+  
+}
+
+nav ul {
+  display: flex;
+  list-style-type: none;
+  justify-content: center;
+}
+
+
+.navbar-nav{
+  align-items: center;
+}
+
+// nav li {
+//   margin: 0 15px;
+  
+
+// }
+
+// nav a {
+//   color: white;
+//   text-decoration: none;
+//   font-weight: bold;
+// }
+
+// nav a:hover {
+//   color: #f1f1f1;
+// }
+
