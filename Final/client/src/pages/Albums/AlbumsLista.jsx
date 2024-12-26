@@ -46,8 +46,9 @@ const AlbumsLista = () => {
 console.log('albumsList', albumsList);
   useEffect(() => {
     fetchAlbums();
+    
   }, [showConfirmationModal]);
-
+//console.log('Artista elegido: ', artist);
 
   const {user, auth, logoutUser} = useContext(AuthContext);
   
@@ -176,6 +177,7 @@ console.log('albumsList', albumsList);
           artist={artist}
           image={image}
           description={description}
+          albums ={filteredAlbums}
           setTitle={setTitle}
           setYear={setYear}
           setArtist={setArtist}
