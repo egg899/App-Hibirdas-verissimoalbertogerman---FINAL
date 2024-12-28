@@ -4,6 +4,8 @@ import path from 'path';
 import usuariosRoute from './routes/usuariosRoute.js'; // Correct
 import guitaristRoute from './routes/guitaristsRoute.js'; // Correct
 import albumsRoute from './routes/albumsRoute.js'; // Correct
+import comentariosRoute from './routes/comentariosGuitRoute.js'; // Correct
+
 import mongoose from 'mongoose';
 import dotenv from "dotenv";
 import cors from 'cors';
@@ -39,7 +41,7 @@ app.get('/', (req, res) => {
 app.use('/usuarios', usuariosRoute);
 app.use('/guitarists', guitaristRoute);
 app.use('/albums', albumsRoute);
-
+app.use('/comentarios', comentariosRoute);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

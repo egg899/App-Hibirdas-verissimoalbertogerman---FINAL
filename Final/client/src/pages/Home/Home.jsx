@@ -81,7 +81,7 @@ console.log('header', header);
 console.log('user',user);
 
   useEffect(() => {
-    
+     
       fetchGuitarists();
     
     
@@ -285,13 +285,13 @@ const handleSuggestionClick = (suggestion) => {
             {user && user.role === 'admin' && (
               <div className="d-flex justify-content-between">
               <button
-                className="btn btn-warning"
+                className="btn btn-warning "
                 onClick={() => handleEditGuitarist(guitarrista)}
               >
                 Editar
               </button>
               <button
-                className="btn btn-danger"
+                className="btn btn-danger "
                 onClick={() => handleDeleteConfirmation(guitarrista)}
               >
                 Eliminar

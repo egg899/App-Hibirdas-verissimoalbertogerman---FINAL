@@ -17,7 +17,7 @@ const usuariosSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true,
-        enum: ['admin', 'user'], // Limita los valores de role a 'admin' o 'user'
+        enum: ['admin', 'user', 'contributor'], // Limita los valores de role a 'admin' o 'user'
         default: 'user' // El rol por defecto es 'user'
     },
    password: {

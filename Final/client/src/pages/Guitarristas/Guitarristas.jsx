@@ -21,7 +21,15 @@ const Guitarristas = () => {
   const [validAlbums, setValidAlbums] = useState([]); // To store valid albums
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [content, setContent] = useState("");
+  const [message, setMessage] = useState("");
+
   const [loading, setLoading] = useState(false);
+
+
+
+
+
 
   const fetchGuitaristsDetails = async () => {
     setLoading(true);
@@ -53,10 +61,37 @@ const Guitarristas = () => {
     }
   };
 
+  console.log('GuitarristaId', guitarrista._id)
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if(!content) {
+      setMessage("Por favor, escriba un comentario.");
+      return;
+    }
+
+    try { 
+      const newComment  = {
+        content,
+        user: user._id,
+        guitarist:guitarrista._id
+
+      }; //New Comment
+      
+      const response = await axios.post(`http://localhost:3000/comentarios/`, newComment);
+      setMessage("Comentario adherido con exito");
+      setContent("");
+
+    } catch (error) {
+      console.error('Error submitting comment:', error.message);
+      setMessage("Hubo un error al enviar el comentario.");
+    }
+
+  }//handleCommentSubmit
+
   useEffect(() => {
     fetchGuitaristsDetails();
   }, []);
-
+ 
   console.log("validAlbums", validAlbums);
   useEffect(() =>{
     if(user) {
@@ -152,7 +187,20 @@ const Guitarristas = () => {
   <p>No hay álbumes disponibles</p>
 )}
 
-
+<h2>Comentarios</h2>
+{message && <p>{message}</p>}
+  <form>
+    <div>
+      <label htmlFor="content">Comentario</label>
+      <textarea 
+        id="content"
+        value ={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder='Escribe ti comentario aqui'>
+    </textarea>
+    </div>
+    <button type="submit" onClick={handleCommentSubmit}>Adherir Comentario</button>
+  </form>
       
         </div>
       </div>
