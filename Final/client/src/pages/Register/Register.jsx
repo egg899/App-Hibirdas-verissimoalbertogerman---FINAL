@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
+import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
 
 const Register = () => {
   const navigate = useNavigate();
@@ -12,7 +14,9 @@ const Register = () => {
     role: "user",  // Establece un valor por defecto en 'user'
   });
   const [error, setError] = useState("");
-
+  const {user, auth, logoutUser} = useContext(AuthContext);
+  const [isAdmin, setIsAdmin] = useState(false);
+  console.log("user Logged", user);
   const handleRegister = async (e) => {
     e.preventDefault();
     await axios.post('http://localhost:3000/usuarios/register', userData)
@@ -26,6 +30,18 @@ const Register = () => {
       });
   }
 
+  useEffect(() => {
+    if(user){
+      if(user.role == 'admin') {
+      setIsAdmin(true);
+    }else{
+      setIsAdmin(false);
+    }
+    }
+    
+  }, [user]);
+
+ 
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -81,19 +97,21 @@ const Register = () => {
               />
             </div>
 
-            <div className="form-group mb-3">
-              <label htmlFor="role">Rol</label>
-              <select
-                id="role"
-                className="form-control"
-                value={userData.role}
-                onChange={(e) => setUserData({ ...userData, role: e.target.value })}
-                required
-              >
-                <option value="user">Usuario</option>
-                <option value="admin">Administrador</option>
-              </select>
-            </div>
+            {isAdmin && (
+              <div className="form-group mb-3">
+                <label htmlFor="role">Rol</label>
+                <select
+                  id="role"
+                  className="form-control"
+                  value={userData.role}
+                  onChange={(e) => setUserData({ ...userData, role: e.target.value })}
+                >
+                  <option value="user">Usuario</option>
+                  <option value="admin">Administrador</option>
+                  <option value="contributor">Contribuidor</option>
+                </select>
+              </div>
+            )}
 
             {error && <div className="alert alert-danger">{error}</div>}
 

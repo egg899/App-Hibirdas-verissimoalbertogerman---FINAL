@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 const capitalizeFirstLetter = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
-const Nav = ({ username, cerrarSesion, isLoggedIn }) => {
+
+const Nav = ({ username, cerrarSesion, isLoggedIn, isAdmin }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -24,16 +25,17 @@ const Nav = ({ username, cerrarSesion, isLoggedIn }) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-          <li className="nav-item">
-                  <Link className="nav-link" to="/">
-                    Home
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/albumsLista">
-                    Albums
-                  </Link>
-                </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/albumsLista">
+                Albums
+              </Link>
+            </li>
+
             {!isLoggedIn && (
               <>
                 <li className="nav-item">
@@ -51,14 +53,46 @@ const Nav = ({ username, cerrarSesion, isLoggedIn }) => {
 
             {isLoggedIn && (
               <>
-                <li className="nav-item" onClick={cerrarSesion}>
-                  <Link className="nav-link" to="/">
-                    Cerrar Sesión
-                  </Link>
-                </li>
                 {username && (
-                  <li className="nav-item user">
-                    <Link to={`/usuarios/nombre/${username}`}>Bienvenido {capitalizeFirstLetter(username)}</Link>
+                  <li className="nav-item dropdown">
+                    <Link
+                      className="nav-link dropdown-toggle"
+                      to="#"
+                      id="userDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Bienvenido {capitalizeFirstLetter(username)}
+                    </Link>
+                    <ul className="dropdown-menu" aria-labelledby="userDropdown">
+                      <li>
+                        <Link className="dropdown-item" to={`/usuarios/nombre/${username}`}>
+                          Perfil
+                        </Link>
+                      </li>
+                      
+                      {isAdmin && (
+                          <>
+                        <li>
+                          <Link className="dropdown-item" to="/gestionar-usuarios">
+                            Gestionar Usuarios
+                          </Link>
+                        </li>
+                         <li>
+                         <Link className="dropdown-item" to="/register">
+                           Registrar Usuario
+                         </Link>
+                       </li>
+                       </>
+                      )}
+
+<li>
+                        <Link className="dropdown-item" to="/" onClick={cerrarSesion}>
+                          Cerrar Sesión
+                        </Link>
+                      </li>
+                    </ul>
                   </li>
                 )}
               </>

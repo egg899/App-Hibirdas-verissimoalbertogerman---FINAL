@@ -36,6 +36,7 @@ const Home = () => {
   const [error, setError] =useState("");
   const {user, auth, logoutUser} = useContext(AuthContext);
 
+  const [isAdmin, setIsAdmin] = useState(false);
 
 console.log('auth',auth);
 
@@ -80,7 +81,7 @@ console.log('header', header);
 
 console.log('user',user);
 
-  useEffect(() => {
+useEffect(() => {
      
       fetchGuitarists();
     
@@ -90,9 +91,14 @@ console.log('user',user);
   }, [showConfirmationModal]) //;
 
 
-  useEffect(() =>{
+  useEffect(() => {
     if(user) {
       setIsLoggedIn(true);
+      if(user.role == 'admin') {
+        setIsAdmin(true);
+      }else{
+        setIsAdmin(false);
+      }
     } else {
       setIsLoggedIn(false);
     }
@@ -149,7 +155,7 @@ console.log("guitarrist", guitarristas)
      
         // Refrescar la lista con los datos actualizados del backend
         fetchGuitarists();
-        
+        window.location.reload();
       
      
     } catch (error) {
@@ -207,7 +213,7 @@ const handleSuggestionClick = (suggestion) => {
 
   return (
     <>
-<Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn}/>
+<Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn} isAdmin={isAdmin}/>
     <div className="container container-fluid">
       
       {user ? <h1>Bienvenido {capitalizeFirstLetter(user.name)}</h1> : <h1>Bienvenido</h1>}

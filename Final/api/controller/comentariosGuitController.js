@@ -20,6 +20,36 @@ export const agarrarTodosLosComentarios = async (req, res) => {
     }
 };
 
+
+const GuitarristaCommentsByGuitaristId = async (guitarist) => {
+    try {
+        const objectId = new mongoose.Types.ObjectId(guitarist); // Convert to ObjectId
+        // Find all comments for the guitarist and populate the user field
+        return await comentariosGuitModel.find({ guitarist: objectId }).populate('user');;
+    } catch (error) {
+        console.error("Error al convertir ObjectId", error);
+        throw new Error("Formato ObjectId inválido");
+    }
+};
+
+export const agarrarGuitarristaCommentsById = async (req, res) => {
+    const guitaristId = req.params.guitarristaId; // Extract the guitarist ID from params
+
+    try {
+        const guitaristComments = await GuitarristaCommentsByGuitaristId(guitaristId);
+        if (!guitaristComments || guitaristComments.length === 0) {
+            return res.status(404).json({ message: "No comments found for this guitarist" });
+        }
+        res.json(guitaristComments); // Return all comments as JSON
+    } catch (error) {
+        console.error("Error fetching comments by guitarist ID:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
+
 //Adheriendo comentarios
 export const adherirComentarios = async (req, res) => {
     const { content, user, guitarist, timestamp } = req.body;

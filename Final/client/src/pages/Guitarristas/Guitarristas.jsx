@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Nav from '../../components/Nav';
+import ComentarioGuit from '../../components/comentarioGuit';
+import ComentarioDisplay from '../../components/comentarioDisplay';
 const Guitarristas = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ const Guitarristas = () => {
 
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
+  const [comments, setComments] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -73,7 +76,7 @@ const Guitarristas = () => {
       const newComment  = {
         content,
         user: user._id,
-        guitarist:guitarrista._id
+        guitarist:id
 
       }; //New Comment
       
@@ -82,16 +85,37 @@ const Guitarristas = () => {
       setContent("");
 
     } catch (error) {
-      console.error('Error submitting comment:', error.message);
+      console.error('Error al comentar:', error.message);
       setMessage("Hubo un error al enviar el comentario.");
     }
 
   }//handleCommentSubmit
 
+
+const fetchComments = async () => {
+    try{
+      const response = await axios.get(`http://localhost:3000/comentarios/${id}`);
+      setComments(response.data);
+    }
+    catch (error) {
+      console.error('Error para encontrar los comentarios: ', error.message);
+    }
+}// fetchComments
+
+
+
+
   useEffect(() => {
     fetchGuitaristsDetails();
+    fetchComments();
   }, []);
- 
+
+  useEffect(() => {
+   
+    fetchComments();
+  }, [handleCommentSubmit]);
+  
+  console.log('Los comentarios :', comments );
   console.log("validAlbums", validAlbums);
   useEffect(() =>{
     if(user) {
@@ -150,6 +174,11 @@ const Guitarristas = () => {
         Volver
       </button>
         </div>
+
+              
+
+
+
         <div className="col-sm-6 ">
           <p className="text-justify">
             {guitarrista.description || 'Descripción no disponible'}
@@ -187,25 +216,20 @@ const Guitarristas = () => {
   <p>No hay álbumes disponibles</p>
 )}
 
-<h2>Comentarios</h2>
-{message && <p>{message}</p>}
-  <form>
-    <div>
-      <label htmlFor="content">Comentario</label>
-      <textarea 
-        id="content"
-        value ={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder='Escribe ti comentario aqui'>
-    </textarea>
-    </div>
-    <button type="submit" onClick={handleCommentSubmit}>Adherir Comentario</button>
-  </form>
+
       
         </div>
       </div>
 
-      
+     <div className="col">
+
+      <ComentarioGuit message={message} content={content} setContent={setContent} handleCommentSubmit={handleCommentSubmit}/>
+     <ComentarioDisplay comments={comments}/>
+     
+
+
+
+     </div> 
 
       
     </div></>
