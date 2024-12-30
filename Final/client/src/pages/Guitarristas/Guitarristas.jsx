@@ -83,6 +83,7 @@ const Guitarristas = () => {
       const response = await axios.post(`http://localhost:3000/comentarios/`, newComment);
       setMessage("Comentario adherido con exito");
       setContent("");
+      fetchComments();
 
     } catch (error) {
       console.error('Error al comentar:', error.message);
@@ -107,13 +108,13 @@ const fetchComments = async () => {
 
   useEffect(() => {
     fetchGuitaristsDetails();
-    fetchComments();
+    
   }, []);
 
   useEffect(() => {
    
     fetchComments();
-  }, [handleCommentSubmit]);
+  }, []);
   
   console.log('Los comentarios :', comments );
   console.log("validAlbums", validAlbums);
