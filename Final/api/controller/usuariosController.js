@@ -94,7 +94,27 @@ export const obtenerUsuarioPorId = async (req, res) => {
 };
 
 
+//Boarrar Usuario
+const deleteUsuarioById = async (_id) => {
+    const objectId = new mongoose.Types.ObjectId(_id);
+    const deletedUser = await usuariosModel.findOneAndDelete({_id: objectId});
+    return deletedUser;
+}//deleteUsuarioById
 
+export const eliminarUsuario = async (req, res) => {
+    const userId = req.params.id;
+
+    try{
+        const deletedUser = await deleteUsuarioById(userId);
+        if(!deletedUser) {
+            return res.status(404).json({ error: "No se encontró el usuario con ese ID" });
+        }
+        res.json(deletedUser);
+    }
+    catch (error) {
+        return res.status(500).json({error:error.message});
+    }
+}//eliminar Usuario
 
 // Get user by name
 export const obtenerUsuarioPorNombre = async (req, res) => {
@@ -236,6 +256,11 @@ export const agregarUsuarios = async (req, res) => {
         return res.status(500).send("Error adheriendo al usuario");
     }
 };
+
+
+
+
+
 
 
 //Login user

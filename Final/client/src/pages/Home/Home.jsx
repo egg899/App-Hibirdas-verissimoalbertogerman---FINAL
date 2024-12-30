@@ -155,7 +155,7 @@ console.log("guitarrist", guitarristas)
      
         // Refrescar la lista con los datos actualizados del backend
         fetchGuitarists();
-        window.location.reload();
+        //window.location.reload();
       
      
     } catch (error) {
@@ -171,7 +171,7 @@ console.log("guitarrist", guitarristas)
     console.log('the guitarist: ',guitarist.albums);
     setGuitaristToDelete(guitarist._id); // Set the guitarist ID to be deleted
     setShowConfirmationModal(true); // Show the confirmation modal
-    
+    fetchGuitarists();
   };
   
   const handleCancelDelete = () => {

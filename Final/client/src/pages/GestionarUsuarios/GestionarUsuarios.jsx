@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import ModalUsuario from "../../components/Modal/ModalUsuario";
+import DeleteModal from "../../components/Modal/deleteModal";
 const GestionarUsuarios = () => {
   const navigate = useNavigate();
 
@@ -10,6 +11,8 @@ const GestionarUsuarios = () => {
   const [currentUsuario, setCurrentUsuario ] = useState(null);
   const [userId, setUserId] = useState(null);  
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // State for delete modal
+  const [userToDelete, setUserToDelete] = useState(null); 
 
   const fetchUsers = async () => {
     try {
@@ -39,27 +42,36 @@ const GestionarUsuarios = () => {
     }
 }//fetchuser
 console.log('current',currentUsuario);
+
   const handleEditar = (id) => {
     console.log(`Editar usuario con ID: ${id}`);
     fetchUser(id);
-    //setCurrentUsuario(id)
     setUserId(id);
     setShowModal(true);
 
   };
   
-
-  const handleBorrar = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas borrar este usuario?")) {
+  
+  const handleConfirmDelete = async () => {
+    if (userToDelete) {
       try {
-        await axios.delete(`http://localhost:3000/usuarios/${id}`);
-        setUsuarios(usuarios.filter((usuario) => usuario.id !== id));
+        await axios.delete(`http://localhost:3000/usuarios/${userToDelete._id}`);
+        setUsuarios(usuarios.filter((usuario) => usuario._id !== userToDelete._id));
+        setShowDeleteModal(false);
+        setUserToDelete(null);
       } catch (error) {
         console.error("Error eliminando al usuario:", error);
         alert("Error al intentar borrar el usuario.");
       }
     }
   };
+  
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setUserToDelete(null);
+  };
+  
+  
 
   useEffect(() => {
     fetchUsers();
@@ -91,6 +103,13 @@ console.log('current',currentUsuario);
         />
       )}
 
+      {showDeleteModal && (
+        <DeleteModal
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        userName={userToDelete?.name}
+        />
+      )}
 
       <div className="row">
         {usuarios.map((usuario) => (
@@ -125,11 +144,15 @@ console.log('current',currentUsuario);
                   Editar
                 </button>
                 <button
-                  className="btn btn-danger btn-sm ms-3"
-                  onClick={() => handleBorrar(usuario._id)}
-                >
-                  Borrar
-                </button>
+                    className="btn btn-danger btn-sm ms-3"
+                    onClick={() => {
+                      setUserToDelete(usuario); // Pass the user object
+                      setShowDeleteModal(true);
+                    }}
+                  >
+                    Borrar
+                  </button>
+
               </div>
             </div>
           </div>

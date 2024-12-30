@@ -82,16 +82,14 @@ const ModalUsuario = ({ user, userId, onClose, onUserSaved}) => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
 
-<select
-                 
-                  
-                  value={role}
-                  onChange={(e) => setRole( e.target.value )}
-                >
-                  <option value="user">Usuario</option>
-                  <option value="admin">Administrador</option>
-                  <option value="contributor">Contribuidor</option>
-                </select>
+                    <select 
+                        value={role}
+                        onChange={(e) => setRole( e.target.value )}
+                        >
+                        <option value="user">Usuario</option>
+                        <option value="admin">Administrador</option>
+                        <option value="contributor">Contribuidor</option>
+                    </select>
 
                     <input
                         type="password"
