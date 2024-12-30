@@ -26,7 +26,7 @@ const AlbumsLista = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [albumToDelete, setAlbumToDelete] = useState(null);
-
+  const [isAdmin, setIsAdmin] = useState(false);
 
   
 
@@ -53,13 +53,19 @@ console.log('albumsList', albumsList);
   const {user, auth, logoutUser} = useContext(AuthContext);
   
   
-  useEffect(() =>{
-    if(user) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  },[user])
+ 
+   useEffect(() => {
+     if(user) {
+       setIsLoggedIn(true);
+       if(user.role == 'admin') {
+         setIsAdmin(true);
+       }else{
+         setIsAdmin(false);
+       }
+     } else {
+       setIsLoggedIn(false);
+     }
+   },[user])
 
  
 
@@ -165,7 +171,7 @@ console.log('albumsList', albumsList);
 
   return (
     <>
-    <Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn}/>
+<Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn} isAdmin={isAdmin}/>
 
     <div className="container container-fluid ">
       <p>Aqui podras buscar los albumes relacionados con los artistas.

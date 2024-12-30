@@ -5,3 +5,4 @@ export { Guitarristas } from "./Guitarristas/Guitarristas";
 export { Register } from "./Register/Register";
 export { Login } from "./Login/Login";
 export { Usuario } from "./Usuario/Usuario";
+export { GestionarUsuarios } from "./GestionarUsuarios/GestionarUsuarios"; //

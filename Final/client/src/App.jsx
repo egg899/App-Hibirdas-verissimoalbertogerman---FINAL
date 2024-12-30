@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import { Home, Albums, Guitarristas, AlbumsLista, Register, Login, Usuario } from './pages'
+import { Home, Albums, Guitarristas, AlbumsLista, Register, Login, Usuario, GestionarUsuarios } from './pages'
 import ProtectedRoutes from './utils/ProtectedRoutes'
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         <Route path="/albumsLista" element={ <AlbumsLista/> }/>
         <Route path="/guitarristas/:id" element={ <Guitarristas/> } />
         <Route path="/albums/titulo/:titulo" element={ <Albums/> } />
-
+        <Route path="/gestionarUsuarios" element={<GestionarUsuarios/>} />
         <Route path="/register" element={ <Register/> } />
         <Route path="/login" element={ <Login/> } />
 

@@ -59,6 +59,43 @@ export const agarrarTodosLosUsuarios = async (req, res) => {
     }
 };
 
+
+// Get user by ID
+export const obtenerUsuarioPorId = async (req, res) => {
+    const { id } = req.params; // Extract the id from URL parameters
+
+    // Validate if the ID is provided and is a valid MongoDB ObjectId
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: "ID inválido o no proporcionado" });
+    }
+
+    try {
+        // Search for the user by ID in the MongoDB database
+        const user = await usuariosModel.findById(id);
+
+        // If no user is found, return a 404 status
+        if (!user) {
+            return res.status(404).json({ mensaje: "No se encontró el usuario con ese ID" });
+        }
+
+        // Respond with the user data
+        res.json({
+            _id: user._id,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            password: user.password // Hide the password for security reasons
+        });
+    } catch (error) {
+        console.error("Error fetching user by ID:", error);
+        res.status(500).send("Error al buscar el usuario por ID");
+    }
+};
+
+
+
+
 // Get user by name
 export const obtenerUsuarioPorNombre = async (req, res) => {
     const { name } = req.params; // Extract name from URL parameters
@@ -89,6 +126,52 @@ export const obtenerUsuarioPorNombre = async (req, res) => {
     }
 };
 
+const updateUserById = async (_id, name, username, email, role, password) => {
+    try {
+        const objectId = new mongoose.Types.ObjectId(_id);
+        const updateFields = { name, username, email, role };
+        if (password) {
+            updateFields.password = await bcrypt.hash(password, 10);
+        }
+       
+        const updatedUser = await usuariosModel.findOneAndUpdate(
+            { _id: objectId },
+            updateFields,
+            { new: true }
+        );
+
+        return updatedUser;
+    }
+    catch (error) {
+        throw new Error(`Error al actualizar  el usuario: ${error.message}`);
+    }
+
+
+
+}//udatedUserById
+
+export const actualizarUsuario = async ( req, res ) => {
+    const userId = req.params.id;
+    const { name, username, email, role, password } = req.body;
+    
+    if (!name || !username || !email || !role) {
+        return res.status(400).json({ error: "Todos los campos son requeridos." });
+    }
+
+    try {
+        const updatedUser = await updateUserById(userId, name, username, email, role, password);
+        
+        if (!updatedUser) {
+            return res.status(404).send({ mensaje: "No se encontró el usuario con el id especificado" });
+        }
+
+        res.json(updatedUser);
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+
+}//actualizarUsuario
 
 
 

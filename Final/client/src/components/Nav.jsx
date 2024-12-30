@@ -75,7 +75,7 @@ const Nav = ({ username, cerrarSesion, isLoggedIn, isAdmin }) => {
                       {isAdmin && (
                           <>
                         <li>
-                          <Link className="dropdown-item" to="/gestionar-usuarios">
+                          <Link className="dropdown-item" to="/gestionarUsuarios">
                             Gestionar Usuarios
                           </Link>
                         </li>

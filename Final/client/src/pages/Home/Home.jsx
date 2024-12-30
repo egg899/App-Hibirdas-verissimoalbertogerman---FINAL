@@ -33,7 +33,7 @@ const Home = () => {
   const [limit, setLimit] = useState();
   const [suggestions, setSuggestions] = useState('');
   const debouncedSearch = useDebounce(search, 1000);
-  const [error, setError] =useState("");
+  const [error, setError] = useState("");
   const {user, auth, logoutUser} = useContext(AuthContext);
 
   const [isAdmin, setIsAdmin] = useState(false);
