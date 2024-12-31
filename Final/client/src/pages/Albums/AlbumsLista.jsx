@@ -177,7 +177,10 @@ console.log('albumsList', albumsList);
       <p>Aqui podras buscar los albumes relacionados con los artistas.
       </p>
       {isLoggedIn ? (
-        <AlbumListForm
+  (user?.role === 'admin' || user?.role === 'contributor') ? (
+    <>
+    <p>Busca entre los Albumes disponibles o agrega mas</p>
+   <AlbumListForm
           title={title}
           year={year}
           artist={artist}
@@ -190,10 +193,13 @@ console.log('albumsList', albumsList);
           setImage={setImage}
           setDescription={setDescription}
           handleSubmit={handleAddAlbum}
-        />
-      ) : (
-        <p>Inicie sesión para agregar un nuevo Album.</p>
-      )}
+        /></>
+  ) : (
+    <p>Busca entre los Albumes disponibles</p>
+  )
+) : (
+  <p>Inicie sesión para poder ver los detalles o agregar un nuevo Album si eres administrador o contribuidor.</p>
+)}
 
       <h1>LISTA DE ALBUMES</h1>
 
@@ -217,34 +223,93 @@ console.log('albumsList', albumsList);
         />
       )}
 
-<ul className="lista">
-  {filteredAlbums.map((album, index) => (
-    <li key={index} className="album-item">
-      {isLoggedIn && (
-        <button
-        
-          onClick={() => handleEditAlbum(album)}
-        >
-          Editar
-        </button>
-      )}
-      <Link
-        to={`/albums/titulo/${album.title}`}
-        className="album-link"
-      >
-        {album.title}
-      </Link>
-      {isLoggedIn && (
-        <button
-         
-          onClick={() => handleDeleteConfirmation(album._id)}
-        >
-          Eliminar
-        </button>
-      )}
-    </li>
-  ))}
-</ul>
+
+
+
+
+
+{isLoggedIn ? (
+  <div className="row">
+    {filteredAlbums.map((album) => (
+      <div key={album._id} className="col col-md-4 col-lg-3 mb-4">
+        <div className="card">
+          <img
+            src={album.imageUrl || 'default-image.jpg'} // Default image if no URL
+            alt={album.title}
+            className="card-img-top"
+            style={{ height: '200px', objectFit: 'cover' }} // Adjust image
+          />
+          <div className="card-body">
+            <h5 className="card-title">{album.title}</h5>
+            <p className="autor">Autor: {album.owner.username}</p>
+            {/* Show buttons only if role is admin */}
+            {user && user.role === 'admin' && (
+              <div className="d-flex justify-content-between">
+                <button
+                  className="btn btn-warning"
+                  onClick={() => handleEditAlbum(album)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleDeleteConfirmation(album._id)}
+                >
+                  Eliminar
+                </button>
+              </div>
+            )}
+            {/* Contributor can edit/delete their own albums */}
+            {user && (user.role === 'contributor' && user.username === album.owner.username) && (
+              <div className="d-flex justify-content-between">
+                <button
+                  className="btn btn-warning"
+                  onClick={() => handleEditAlbum(album)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleDeleteConfirmation(album._id)}
+                >
+                  Eliminar
+                </button>
+              </div>
+            )}
+            {/* Button to view details, always shown */}
+            <Link to={`/albums/titulo/${album.title}`} className="btn btn-info mt-2">
+              Ver detalles
+            </Link>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <div className="row">
+    {filteredAlbums.map((album) => (
+      <div key={album._id} className="col-md-4 col-lg-3 mb-4">
+        <div className="card">
+          <img
+            src={album.imageUrl || 'default-image.jpg'}
+            alt={album.title}
+            className="card-img-top"
+            style={{ height: '200px', objectFit: 'cover' }}
+          />
+          <div className="card-body">
+            <h5 className="card-title">{album.title}</h5>
+            <p className="autor">Autor: {album.owner.username}</p>
+            {/* Optionally add a button to view details here */}
+            {/* <Link to={`/albums/${album._id}`} className="btn btn-info mt-2">
+              Ver detalles
+            </Link> */}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
 
 
       {showConfirmationModal && (

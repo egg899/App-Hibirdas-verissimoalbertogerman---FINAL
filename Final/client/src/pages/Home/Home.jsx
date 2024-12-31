@@ -221,22 +221,29 @@ const handleSuggestionClick = (suggestion) => {
       <p>Esta es una de las mejores bases de datos de guitarristas</p>
       
       {isLoggedIn ? (
-        <GuitaristForm
-          name={name}
-          style={style}
-          albums={albums}
-          image={image}
-          description={description}
-          setName={setName}
-          setStyle={setStyle}
-          setAlbums={setAlbums}
-          setImage={setImage}
-          setDescription={setDescription}
-          handleSubmit={handleAddGuitarrist}
-        />
-      ) : (
-        <p>Inicie sesión para poder ver los detalles o agregar un nuevo guitarrista si eres administrador.</p>
-      )}
+  (user?.role === 'admin' || user?.role === 'contributor') ? (
+    <>
+    <p>Busca entre los guitarristas disponibles o agrega mas</p>
+    <GuitaristForm
+      name={name}
+      style={style}
+      albums={albums}
+      image={image}
+      description={description}
+      setName={setName}
+      setStyle={setStyle}
+      setAlbums={setAlbums}
+      setImage={setImage}
+      setDescription={setDescription}
+      handleSubmit={handleAddGuitarrist}
+    /></>
+  ) : (
+    <p>Busca entre los guitarristas disponibles</p>
+  )
+) : (
+  <p>Inicie sesión para poder ver los detalles o agregar un nuevo guitarrista si eres administrador o contribuidor.</p>
+)}
+
 
       <h1>LISTA DE GUITARRISTAS</h1>
       <form className="search-bar-container">
@@ -287,6 +294,7 @@ const handleSuggestionClick = (suggestion) => {
           />
           <div className="card-body">
             <h5 className="card-title">{guitarrista.name}</h5>
+            <p className="autor">Autor: {guitarrista.owner.username}</p>
           {/*Mostrar botonr¿es solo si el rol es admin*/}
             {user && user.role === 'admin' && (
               <div className="d-flex justify-content-between">
@@ -304,7 +312,30 @@ const handleSuggestionClick = (suggestion) => {
               </button>
             </div>
 
-            )}
+            )}{/*Admin*/}
+
+      {user && (user.role === 'contributor' && user.username === guitarrista.owner.username) && (
+              <div className="d-flex justify-content-between">
+                
+              <button
+                className="btn btn-warning "
+                onClick={() => handleEditGuitarist(guitarrista)}
+              >
+                Editar
+              </button>
+              <button
+                className="btn btn-danger "
+                onClick={() => handleDeleteConfirmation(guitarrista)}
+              >
+                Eliminar
+              </button>
+            </div>
+
+            )}{/*contributor*/}
+
+
+
+
             {/* Botón para ver detalles siempre */}
             <Link to={`/guitarristas/${guitarrista._id}`} className="btn btn-info mt-2">
               Ver detalles
@@ -327,6 +358,8 @@ const handleSuggestionClick = (suggestion) => {
           />
           <div className="card-body">
             <h5 className="card-title">{guitarrista.name}</h5>
+            <p className="autor">Autor: {guitarrista.owner.username}</p>
+
             {/* <Link to={`/guitarristas/${guitarrista._id}`} className="btn btn-info mt-2">
               Ver detalles
             </Link> */}

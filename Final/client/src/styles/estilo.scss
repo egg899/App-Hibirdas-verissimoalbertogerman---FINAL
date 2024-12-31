@@ -32,6 +32,14 @@ p, h1, h2, h3 {
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
 }
 
+.autor{
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  text-transform: none!important;
+  font-style: oblique!important;
+  text-shadow: $text-shadow!important;
+  color:#000!important;
+}
+
 form, .error{
   color: $primary-color!important;
 }
