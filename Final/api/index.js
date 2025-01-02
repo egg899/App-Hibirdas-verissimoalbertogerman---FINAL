@@ -13,22 +13,30 @@ import cors from 'cors';
 
 import validateBody from './validation.js';
 import { fileURLToPath } from 'url';
+import { Server as socketIo } from 'socket.io';
+
+
+dotenv.config(); // Load environment variables
+
 const app = express();
 const port = 3000;
 
-app.use(cors());
-
+import http from 'http';
+const server = http.createServer(app);
+const io = new socketIo(server);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-mongoose.connect(process.env.MONGODB_URI)
-.then(() =>console.log("Conexion exitosa con mongodb!"))
-.catch((err) => console.error("Error al conectar con mongodb!", err));
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Successfully connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
 //Middleware to parse JSON request bodies
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
 app.use(validateBody);
 
 //console.log(guitaristRoutes);
@@ -43,7 +51,23 @@ app.use('/guitarists', guitaristRoute);
 app.use('/albums', albumsRoute);
 app.use('/comentarios', comentariosRoute);
 
-app.listen(port, () => {
+
+//socket
+io.on('connection', (socket) => {
+  console.log('Un cliente se ha conectado', socket.id);
+
+
+  socket.on('mensaje', (data) => {
+    console.log('´mensaje recibido', data);
+    io.emit('mensaje', `Servidor: ${data}`);
+  });
+
+
+  socket.on('disconnect', () => {
+    console.log('Un cliente se ha desconectado');
+  });
+})
+server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
     console.log(`    ░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▒
         ░▐▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▓▀▌▀▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌
