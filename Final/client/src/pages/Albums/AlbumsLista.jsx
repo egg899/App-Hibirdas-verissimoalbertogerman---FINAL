@@ -231,7 +231,7 @@ console.log('albumsList', albumsList);
 {isLoggedIn ? (
   <div className="row">
     {filteredAlbums.map((album) => (
-      <div key={album._id} className="col col-md-4 col-lg-3 mb-4">
+      <div key={album._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
           <img
             src={album.imageUrl || 'default-image.jpg'} // Default image if no URL
@@ -288,7 +288,7 @@ console.log('albumsList', albumsList);
 ) : (
   <div className="row">
     {filteredAlbums.map((album) => (
-      <div key={album._id} className="col-md-4 col-lg-3 mb-4">
+      <div key={album._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
           <img
             src={album.imageUrl || 'default-image.jpg'}

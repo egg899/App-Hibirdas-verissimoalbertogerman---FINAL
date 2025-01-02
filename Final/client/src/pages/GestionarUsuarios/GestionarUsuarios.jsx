@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import ModalUsuario from "../../components/Modal/ModalUsuario";
 import DeleteModal from "../../components/Modal/deleteModal";
+import { AuthContext } from '../../context/AuthContext';
 const GestionarUsuarios = () => {
   const navigate = useNavigate();
 
@@ -13,6 +14,10 @@ const GestionarUsuarios = () => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false); // State for delete modal
   const [userToDelete, setUserToDelete] = useState(null); 
+  const {user} = useContext(AuthContext);
+
+
+  console.log('user gestionando: ', user);
 
   const fetchUsers = async () => {
     try {
@@ -74,7 +79,13 @@ console.log('current',currentUsuario);
   
 
   useEffect(() => {
-    fetchUsers();
+    
+    if(!user || user.role !== 'admin') {
+      navigate("/");
+      return;
+    } else{
+      fetchUsers();
+    }
   }, []);
 
   return (

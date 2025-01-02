@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Modal.scss';
 //import '../../styles/estilo.scss';
 
-const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved }) => {
+const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [style, setStyle] = useState('');
@@ -38,7 +38,7 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved }) =>
             
             if (guitarist) {
                 // Edit existing guitarist
-                await axios.put(`http://localhost:3000/guitarists/${guitaristId}`, newInfo);
+                await axios.put(`http://localhost:3000/guitarists/${guitaristId}`, newInfo, { headers:{'authorizartion':auth}});
             } else {
                 // Add new guitarist
                 await axios.post('http://localhost:3000/guitarists', newInfo);

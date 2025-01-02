@@ -10,9 +10,9 @@ router.post('/register', agregarUsuarios);
 router.post('/login', loginUsuario);
 router.put('/:id', actualizarUsuario);
 router.delete('/:id', eliminarUsuario);
-//router.get("/nombre/:name", obtenerUsuarioPorNombre);
+router.get("/nombre/:name", obtenerUsuarioPorNombre);
 
-router.get("/nombre/:name", authenticateToken, obtenerUsuarioPorNombre);
+//router.get("/nombre/:name", authenticateToken, obtenerUsuarioPorNombre);
 
 
 export default router;

@@ -10,9 +10,9 @@ router.get('', agarrarTodosLosGuitarristas);
 router.get('/:id', agarrarGuitarristaPorId);
 router.get('/nombre/:nombre', agarrarGuitarristaPorNombre);
 router.get('/id/:nombre', devolverGuitarristaId);
-router.put('/:id', actualizarGuitarrista);
-router.delete('/:id', eliminarGuitarrista);
-router.post('', agregarGuitarrista);
+router.put('/:id', authenticateToken, actualizarGuitarrista);
+router.delete('/:id', authenticateToken, eliminarGuitarrista);
+router.post('', authenticateToken, agregarGuitarrista);
 
 
 // router.get('', agarrarTodosLosGuitarristas);
@@ -24,8 +24,8 @@ router.post('', agregarGuitarrista);
 // const router = express.Router();
 
 // router.get('', agarrarTodosLosGuitarristas); 
-// router.get('/:id', agarrarGuitarristasPorId);
-// router.get('/nombre/:nombre', agarrarGuitarristasPorNombre);
+// router.get('/:id', agarrarGuitarristaPorId);
+// router.get('/nombre/:nombre', agarrarGuitarristaPorNombre);
 // router.put('/:id', authenticateToken, actualizarGuitarrista);
 // router.delete('/:id', authenticateToken, eliminarGuitarrista);
 // router.post('', authenticateToken, agregarGuitarrista);

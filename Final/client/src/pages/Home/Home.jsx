@@ -8,6 +8,8 @@ import ConfirmationModal from '../../components/Confirmation/ConfirmationModal';
 import useDebounce from '../../hooks/useDebounce';
 import { AuthContext } from '../../context/AuthContext';
 import Nav from '../../components/Nav';
+
+
 const Home = () => {
   const navigate = useNavigate();
 
@@ -88,8 +90,10 @@ useEffect(() => {
     
 
     //handleSearch('Angus');
-  }, [showConfirmationModal]) //;
+  }, []) //;
 
+  
+ 
 
   useEffect(() => {
     if(user) {
@@ -121,10 +125,14 @@ useEffect(() => {
         userId: user._id,
         username: user.username,
       },
+     
+
     };
 
     try {
-      await axios.post('http://localhost:3000/guitarists', newGuitarist);
+      await axios.post('http://localhost:3000/guitarists', newGuitarist,
+        { headers:{'authorizartion':auth}}
+      );
       setName('');
       setDescription('');
       setStyle('');
@@ -149,14 +157,17 @@ console.log("guitarrist", guitarristas)
   const handleDeleteGuitarist = async (id) => {
     
     try {
-      
-      setShowConfirmationModal(false); // Refresh
-       await axios.delete(`http://localhost:3000/guitarists/${id}`);
-     
+      setShowConfirmationModal(false);
+       await axios.delete(`http://localhost:3000/guitarists/${id}`, 
+       { headers:{'authorizartion':auth}});
+       setGuitarristas(prev => prev.filter(guitarist => guitarist._id !== id)); // Update local state
+
+
         // Refrescar la lista con los datos actualizados del backend
-        fetchGuitarists();
+        //fetchGuitarists();
         //window.location.reload();
-      
+        
+        
      
     } catch (error) {
       console.error('Error al eliminar guitarrista:', error);
@@ -173,7 +184,8 @@ console.log("guitarrist", guitarristas)
     setShowConfirmationModal(true); // Show the confirmation modal
     fetchGuitarists();
   };
-  
+
+
   const handleCancelDelete = () => {
     setShowConfirmationModal(false); // Close the confirmation modal
     setGuitaristToDelete(null); // Clear the guitarist ID
@@ -277,6 +289,7 @@ const handleSuggestionClick = (suggestion) => {
           guitarist={currentGuitarrista}
           guitaristId={guitaristId}
           onGuitaristSaved={handleGuitaristSaved}
+          auth={auth}
           onClose={() => setShowModal(false)}
         />
       )}
@@ -284,13 +297,13 @@ const handleSuggestionClick = (suggestion) => {
 {isLoggedIn ? (
   <div className="row">
     {guitarristas.map((guitarrista) => (
-      <div key={guitarrista._id} className="col col-md-4 col-lg-3 mb-4">
+      <div key={guitarrista._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
           <img
             src={guitarrista.imageUrl || 'default-image.jpg'} // Imagen predeterminada si no hay imagen
             alt={guitarrista.name}
             className="card-img-top"
-            style={{ height: '200px', objectFit: 'cover' }} // Ajustar la imagen
+            style={{ height: '200px', objectFit: 'cover', objectPosition: 'top' }} // Ajustar la imagen
           />
           <div className="card-body">
             <h5 className="card-title">{guitarrista.name}</h5>
@@ -348,7 +361,7 @@ const handleSuggestionClick = (suggestion) => {
 ) : (
   <div className="row">
     {guitarristas.map((guitarrista) => (
-      <div key={guitarrista._id} className="col-md-4 col-lg-3 mb-4">
+      <div key={guitarrista._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
           <img
             src={guitarrista.imageUrl || 'default-image.jpg'}
