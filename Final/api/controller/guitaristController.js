@@ -1,6 +1,7 @@
 import guitaristsModel from "../model/guitaristsModel.js";
 import albumsModel from "../model/albumsModel.js";
 import mongoose from "mongoose";
+import { io } from "../index.js"; 
 import { agregarAlbum } from "./albumController.js";
 //todos los guitarristas
 const todosLosGuitarristas = async (req) => {
@@ -194,6 +195,11 @@ export const eliminarGuitarrista = async (req, res) => {
 
 
         const deletedGuitarrista = await deleteGuitarristasById(guitarristaId);
+
+         // Emit the event for real-time update
+         io.emit("guitaristDeleted", { id: guitarristaId });
+         res.status(200).json({ message: "Guitarrista eliminado con éxito", id: guitarristaId });
+
         if(!deletedGuitarrista) { 
             return res.status(404).send("El guitarrista no fue encontrado");
         }

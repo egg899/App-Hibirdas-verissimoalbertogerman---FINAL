@@ -9,7 +9,7 @@ const secretKey = process.env.SECRET_KEY;
 
 const authenticateToken = (req, res, next) => {
     console.log("Headers:", req.headers);
-    const getToken = req.headers.authorizartion;
+    const getToken = req.headers.authorization;
 
     console.log('getToken', getToken);
     if (getToken) {

@@ -23,7 +23,14 @@ const port = 3000;
 
 import http from 'http';
 const server = http.createServer(app);
-const io = new socketIo(server);
+//const io = new socketIo(server);
+const io = new socketIo(server, {
+  cors: {
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  }
+})
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,7 +58,7 @@ app.use('/guitarists', guitaristRoute);
 app.use('/albums', albumsRoute);
 app.use('/comentarios', comentariosRoute);
 
-
+export { io };
 //socket
 io.on('connection', (socket) => {
   console.log('Un cliente se ha conectado', socket.id);

@@ -8,7 +8,7 @@ import ConfirmationModal from '../../components/Confirmation/ConfirmationModal';
 import useDebounce from '../../hooks/useDebounce';
 import { AuthContext } from '../../context/AuthContext';
 import Nav from '../../components/Nav';
-
+import {io} from "socket.io-client";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -39,6 +39,7 @@ const Home = () => {
   const {user, auth, logoutUser} = useContext(AuthContext);
 
   const [isAdmin, setIsAdmin] = useState(false);
+  const socket = io('http://localhost:3000');//Conectado al servidor
 
 console.log('auth',auth);
 
@@ -84,15 +85,25 @@ console.log('header', header);
 console.log('user',user);
 
 useEffect(() => {
-     
+    
       fetchGuitarists();
     
-    
+// Listen for the 'guitaristDeleted' event
+socket.on('guitaristDeleted', (deletedId) => {
+  console.log('Guitarist deleted with ID:', deletedId.id);
+  setGuitarristas((prevGuitarristas) =>
+    prevGuitarristas.filter((guitarrista) => guitarrista._id !== deletedId)
+  );
+});
 
-    //handleSearch('Angus');
+// Clean up the socket listener
+return () => {
+  socket.off('guitaristDeleted');
+};
+    
   }, []) //;
 
-  
+ 
  
 
   useEffect(() => {
@@ -107,7 +118,6 @@ useEffect(() => {
       setIsLoggedIn(false);
     }
   },[user])
-
 
  
  
@@ -131,16 +141,24 @@ useEffect(() => {
 
     try {
       await axios.post('http://localhost:3000/guitarists', newGuitarist,
-        { headers:{'authorizartion':auth}}
+        { headers:{'authorization':auth}}
       );
       setName('');
       setDescription('');
       setStyle('');
       setAlbums('');
       setImage('');
+      setError('');
       fetchGuitarists(); // Refresh the list after adding
     } catch (err) {
       console.error(err);
+      if (err.response && err.response.status === 400) {
+        // Handle specific error like duplicate guitarist
+        setError(err.response.data || 'el guitarrista ya existe');
+      } else {
+        setError('Un error inesperado ha ocurrido');
+      }
+      
     }
   };
 console.log("guitarrist", guitarristas)
@@ -159,7 +177,7 @@ console.log("guitarrist", guitarristas)
     try {
       setShowConfirmationModal(false);
        await axios.delete(`http://localhost:3000/guitarists/${id}`, 
-       { headers:{'authorizartion':auth}});
+       { headers:{'authorization':auth}});
        setGuitarristas(prev => prev.filter(guitarist => guitarist._id !== id)); // Update local state
 
 
@@ -229,7 +247,7 @@ const handleSuggestionClick = (suggestion) => {
     <div className="container container-fluid">
       
       {user ? <h1>Bienvenido {capitalizeFirstLetter(user.name)}</h1> : <h1>Bienvenido</h1>}
-      {error && <h3>{error}</h3>}
+      {error && <h3 className="alert alert-danger">{error}</h3>}
       <p>Esta es una de las mejores bases de datos de guitarristas</p>
       
       {isLoggedIn ? (
