@@ -27,7 +27,7 @@ const AlbumsLista = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [albumToDelete, setAlbumToDelete] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const [error, setError] = useState("");
   
 
   const fetchAlbums = async () => {
@@ -86,6 +86,14 @@ console.log('albumsList', albumsList);
       console.error('User not logged in');
       return;
     }
+
+    if (!title || !description || !artist || !year || !image) {
+      setError("Por favor llene todos los campos.");
+      return; // Prevent form submission
+    } else {
+      setError("");
+    }
+
     try {
       const response = await axios.get(
         `http://localhost:3000/guitarists/id/${artist}`
@@ -96,6 +104,11 @@ console.log('albumsList', albumsList);
         console.error('Artista no encontrado');
         return;
       }
+
+           // Check if any required field is empty
+ 
+
+
 
       const newAlbum = {
         title,
@@ -119,6 +132,10 @@ console.log('albumsList', albumsList);
       fetchAlbums();
     } catch (error) {
       console.error('Error al agregar el álbum:', error);
+      if (error.response && error.response.status === 500) {
+        // Handle specific error like duplicate guitarist
+        setError(error.response.data || 'Error al agregar el álbum');
+      }
     }
   };
 
@@ -176,6 +193,8 @@ console.log('albumsList', albumsList);
     <div className="container container-fluid ">
       <p>Aqui podras buscar los albumes relacionados con los artistas.
       </p>
+      {error && <h3 className="alert alert-danger">{error}</h3>}
+
       {isLoggedIn ? (
   (user?.role === 'admin' || user?.role === 'contributor') ? (
     <>

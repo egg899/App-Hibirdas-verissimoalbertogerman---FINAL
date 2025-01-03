@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
@@ -14,19 +14,30 @@ const Login = () => {
 
   const { setUser } = useContext(AuthContext);
 
+  useEffect(() => {
+    if (userData.email || userData.password) {
+      setError("");
+    }
+  }, [userData]);
+
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:3000/usuarios/login', userData)
+    try {
+        await axios.post('http://localhost:3000/usuarios/login', userData)
       .then((res) => {
         console.log('res', res);
         setUser(res.data.usuario);
         Cookies.set('jwToken', res.data.jwtToken, { expires: 3 });
         navigate('/');
       })
-      .catch((error) => {
-        console.log(error);
-        setError(error.response.data.message);
-      })
+    }
+  
+    catch (error) {
+      setError(error.response?.data?.mensaje || "An error occurred.");
+      console.log('el error: ', error);
+    }
   }
 
   return (

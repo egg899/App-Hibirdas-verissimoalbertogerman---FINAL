@@ -48,7 +48,7 @@ const AlbumListForm = ({
         <h2>Agregar Album</h2>
         <form className="form" onSubmit={handleSubmit}>
 
-        <label for="artist" hidden>Artista</label>
+        <label htmlFor="artist" hidden>Artista</label>
             <select name="artist" value={artist} onChange={(e)=>
                
                 {
@@ -85,7 +85,7 @@ const AlbumListForm = ({
                 }
             </select>  
 
-            <label for="title" hidden>Titulo del Album</label>
+            <label htmlFor="title" hidden>Titulo del Album</label>
             <select name="title" value={title} onChange={(e)=>{
                 setTitle(e.target.value)
             }

@@ -37,11 +37,12 @@ const Home = () => {
   const debouncedSearch = useDebounce(search, 1000);
   const [error, setError] = useState("");
   const {user, auth, logoutUser} = useContext(AuthContext);
+ const [usuariosConectados, setUsuariosConectados] = useState({ test: 'testUser' });
 
   const [isAdmin, setIsAdmin] = useState(false);
   const socket = io('http://localhost:3000');//Conectado al servidor
 
-console.log('auth',auth);
+//console.log('auth',auth);
 
 
   
@@ -104,27 +105,52 @@ return () => {
   }, []) //;
 
  
- 
 
   useEffect(() => {
-    if(user) {
+    if (user) {
+      
+      // socket.on('userLoggedIn', (userId) => {
+      //   console.log('Informacion del usuario logueado: ', userId);
+        
+      //   setUsuariosConectados((prev) => ({
+      //     ...prev,
+      //     [socket.id]: userId,
+      //   }));
+      //   console.log('Usuarios conectados', usuariosConectados); 
+
+
+
+
+
+
+      // });
+  
       setIsLoggedIn(true);
-      if(user.role == 'admin') {
-        setIsAdmin(true);
-      }else{
-        setIsAdmin(false);
-      }
+      setIsAdmin(user.role === 'admin');
+  
+      // return () => {
+      //   socket.off('userLoggedIn');
+      // };
     } else {
       setIsLoggedIn(false);
     }
-  },[user])
+  }, [user]);
+  
 
- 
- 
-
+  useEffect(() => {
+    console.log('Usuarios conectados (effect):', usuariosConectados);
+  }, [usuariosConectados]);
 
   const handleAddGuitarrist = async (e) => {
     e.preventDefault();
+
+     // Check if any required field is empty
+  if (!name || !description || !style || !albums || !image) {
+    setError("Por favor llene todos los campos.");
+    return; // Prevent form submission
+  }
+
+
     const newGuitarist = {
       name,
       description,

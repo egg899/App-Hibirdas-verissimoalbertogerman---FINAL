@@ -59,13 +59,16 @@ app.use('/albums', albumsRoute);
 app.use('/comentarios', comentariosRoute);
 
 export { io };
+
+const usuariosConectados = {};
 //socket
 io.on('connection', (socket) => {
   console.log('Un cliente se ha conectado', socket.id);
 
+ 
 
   socket.on('mensaje', (data) => {
-    console.log('´mensaje recibido', data);
+    console.log('mensaje recibido', data);
     io.emit('mensaje', `Servidor: ${data}`);
   });
 

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
 import usuariosModel from "../model/usuariosModel.js";
+import { io } from "../index.js";
 import mongoose from "mongoose";
 
 dotenv.config();
@@ -277,6 +278,7 @@ export const loginUsuario = async (req, res) => {
     try {
         // Find user by email in the MongoDB database
         const user = await usuariosModel.findOne({ email });
+        io.emit('userLoggedIn', { ...user._doc });
 
         if (!user) {
             return res.status(404).send({ mensaje: "No se encontró el usuario" });
