@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const navigate = useNavigate();
+  
   const [userData, setUserData] = useState({
     name: "",
     username: "",
@@ -16,7 +17,59 @@ const Register = () => {
   const [error, setError] = useState("");
   const {user, auth, logoutUser} = useContext(AuthContext);
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [uploadMessage, setUploadMessage] = useState("");
+
+   const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+    
+    // Generate a preview URL
+    if (selectedFile) {
+      const previewUrl = URL.createObjectURL(selectedFile);
+      setPreview(previewUrl);
+    }
+   };
+
+
+   const handleUpload = async (event) => {
+    event.preventDefault();
+    console.log('image: ', file);
+    if (!file) {
+      setUploadMessage("Please select a file first!");
+      return;
+    }
+
+    const formData = new FormData();
+    if(file){
+      console.log('File to upload:', file);
+      formData.append("image", file);    
+    }
+    
+    
+    try {
+      console.log('formData: ', formData);
+       for (let [key, value] of formData.entries()) {
+         console.log('formData',`${key}:`, value);
+       }
+      const response = await axios.post("http://localhost:3000/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log('File uploaded:', response.data);
+      setUploadMessage(response.data.message);
+    }catch(error) {
+      console.error("Error uploading file", error.response ? error.response.data : error.message);
+      setUploadMessage("Failed to upload file");
+    }
+
+
+
+   }//handleUpload
+
   console.log("user Logged", user);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     await axios.post('http://localhost:3000/usuarios/register', userData)
@@ -46,7 +99,21 @@ const Register = () => {
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col col-lg-12">
-          <h1 className="text-center">Registrarse</h1>
+        
+        {/* <div style={{ textAlign:"center", marginTop: "50px"  }}>
+          <h1>Image Upload</h1>
+            <form onSubmit={handleUpload}>
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <button type="submit">Upload</button>
+            </form>
+            {preview && <img src={preview} alt="preview" style={{ marginTop: "20px", width: "300px" }} />}
+            {uploadMessage && <p>{uploadMessage}</p>}
+
+        </div> */}
+
+
+
+           <h1 className="text-center">Registrarse</h1>
           <p className="text-center">Crea una cuenta para comenzar a usar nuestra plataforma.</p>
           <form onSubmit={handleRegister}>
             <div className="form-group mb-3">
@@ -116,7 +183,7 @@ const Register = () => {
             {error && <div className="alert alert-danger">{error}</div>}
 
             <button type="submit" className="btn btn-primary btn-block">Registrarse</button>
-          </form>
+          </form> 
           <p className="mt-3 text-center">
             ¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a>
           </p>
