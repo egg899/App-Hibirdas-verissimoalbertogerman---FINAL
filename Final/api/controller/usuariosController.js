@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import usuariosModel from "../model/usuariosModel.js";
 import { io } from "../index.js";
 import mongoose from "mongoose";
+import multer from "multer";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
  //const secretKey = 'SECRETA';
@@ -224,10 +227,34 @@ const adherirUsuario = async (newUser) => {
     }
 };
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+
+console.log('Uploading', uploadsDir);
+
+
+//Configuración de Multer para manejar las imágenes
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadsDir); // Ruta donde se guardarán las imágenes
+    },
+    filename: (req, file, cb) => {
+        const fileName = Date.now() + path.extname(file.originalname); // Asegura que el nombre del archivo sea único
+        cb(null, fileName);
+    }
+});
+
+const imageUpload = multer({ storage: storage   })
 
 
 export const agregarUsuarios = async (req, res) => {
     const { name, username, email, role, password } = req.body;
+
+    //Verificar si se subio la imagen
+    let profileImage = req.file ? req.file.filename : 'default-profile.jpg'; //Imagen por defecto
+
+
 
     if (!name) {
         return res.status(400).send("El nombre es requerido");
@@ -245,7 +272,7 @@ export const agregarUsuarios = async (req, res) => {
         return res.status(400).send("El password es requerido");
     }
 
-    const newUser = { name, username, email, role, password };
+    const newUser = { name, username, email, role, password, profileImage };
 
     try {
         const addedUser = await adherirUsuario(newUser);
@@ -258,7 +285,8 @@ export const agregarUsuarios = async (req, res) => {
     }
 };
 
-
+//Exporta el middleWare de Multer para la subida de la imagen
+export const uploadProfileImage = imageUpload.single('profileImage');
 
 
 

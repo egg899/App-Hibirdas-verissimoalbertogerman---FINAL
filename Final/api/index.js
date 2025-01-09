@@ -63,55 +63,58 @@ app.options('/upload', cors());
 
 
 
-const uploadsDir = path.join(__dirname, 'uploads');
-console.log('Uploading', uploadsDir);
+// const uploadsDir = path.join(__dirname, 'uploads');
+// console.log('Uploading', uploadsDir);
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir)
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = `${file.fieldname}_dateVal_${Date.now()}_${file.originalname}`;
-    cb(null, uniqueName);
-  }
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     if (!fs.existsSync(uploadsDir)) {
+//       fs.mkdirSync(uploadsDir, { recursive: true });
+//     }
+//     cb(null, uploadsDir);
+//   },
+//   filename: (req, file, cb) => {
+//     const uniqueName = `${file.fieldname}_dateVal_${Date.now()}_${file.originalname}`;
+//     cb(null, uniqueName);
+//   }
+// });
 
-// File type validation
-const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error('Unsupported file type. Please upload an image.'));
-  }
-}
-const imageUpload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB limit
-  fileFilter,
-})
-console.log('Multer middleware set up for file uploads');
-app.post('/image-upload', imageUpload.single("file"), (req, res) => {
-  console.log('Headers:', req.headers);
-  console.log('Body:', req.body); // This might be empty if middleware isn't working
-  console.log('File:', req.file)
+// // File type validation
+// const fileFilter = (req, file, cb) => {
+//   const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+//   if (allowedTypes.includes(file.mimetype)) {
+//     cb(null, true);
+//   } else {
+//     cb(new Error('Unsupported file type. Please upload an image.'));
+//   }
+// }
+// const imageUpload = multer({
+//   storage: storage,
+//   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB limit
+//   fileFilter,
+// })
+// console.log('Multer middleware set up for file uploads');
+// app.post('/image-upload', imageUpload.single("file"), (req, res) => {
+//   console.log('Headers:', req.headers);
+//   console.log('Body:', req.body); // This might be empty if middleware isn't working
+//   console.log('File:', req.file)
 
-  if (!req.file) {
-    return res.status(400).send({ error: 'No file uploaded' });
-  }
+//   if (!req.file) {
+//     return res.status(400).send({ error: 'No file uploaded' });
+//   }
 
-  res.send('File uploaded successfully!');
-});
+//   res.send('File uploaded successfully!');
+// });
 
-// Error handling middleware for multer
-app.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    return res.status(400).json({ error: err.message });
-  } else if (err) {
-    return res.status(400).json({ error: err.message });
-  }
-  next();
-});
+// // Error handling middleware for multer
+// app.use((err, req, res, next) => {
+//   if (err instanceof multer.MulterError) {
+//     return res.status(400).json({ error: err.message });
+//   } else if (err) {
+//     return res.status(400).json({ error: err.message });
+//   }
+//   next();
+// });
 
 // Serve the uploads directory
 //app.use('/uploads', express.static(uploadsDir));
