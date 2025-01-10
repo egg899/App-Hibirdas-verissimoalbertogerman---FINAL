@@ -75,18 +75,25 @@ const Usuario = () => {
   // If the user data is available, render the user's info
   return (
     <div>
+    <div className="row g-0 align-items-center border rounded-3 shadow-lg p-3 bg-dark text-light">
+      <div className="col-md-4">
+      <img src=  {`../../src/assets/images/uploads/${user.image}`} style={{ maxWidth: '80%' }}  className="img-fluid rounded" alt="Imagen del usuario"/>
+
+      </div>
+      <div className="col-md-8 rounded p-4 ">
       <h1>Información del Usuario</h1>
       <p><strong>Nombre:</strong> {user.name}</p>
       <p><strong>Usuario:</strong> {user.username}</p>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Rol:</strong> {user.role}</p>
-
+      </div>
       <button
         className="btn btn-secondary mt-3"
         onClick={() => navigate(-1) || navigate('/')}
       >
         Volver
       </button>
+    </div>
     </div>
   );
 };

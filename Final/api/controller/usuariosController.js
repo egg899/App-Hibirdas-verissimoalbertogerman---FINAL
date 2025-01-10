@@ -142,7 +142,8 @@ export const obtenerUsuarioPorNombre = async (req, res) => {
             name: user.name,
             username: user.username,
             email: user.email,
-            role: user.role
+            role: user.role,
+            image:user.image
         });
     } catch (error) {
         console.error("Error fetching user by name:", error);
@@ -216,6 +217,7 @@ const adherirUsuario = async (newUser) => {
         email: newUser.email,
         password: newPassword,
         role: newUser.role,
+        image: newUser.image
     });
 
     try {
@@ -229,7 +231,7 @@ const adherirUsuario = async (newUser) => {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadsDir = path.join(__dirname, '..', 'uploads');
+const uploadsDir = path.join(__dirname, '..','..' ,'client','src','assets', 'images','uploads');
 
 console.log('Uploading', uploadsDir);
 
@@ -245,14 +247,19 @@ const storage = multer.diskStorage({
     }
 });
 
-const imageUpload = multer({ storage: storage   })
+const imageUpload = multer({ storage: storage })
 
 
 export const agregarUsuarios = async (req, res) => {
-    const { name, username, email, role, password } = req.body;
+    console.log('Contenido de req.file:', req.file); // Verifica el contenido de req.file
 
+
+
+
+    const { name, username, email, role, password } = req.body;
+    
     //Verificar si se subio la imagen
-    let profileImage = req.file ? req.file.filename : 'default-profile.jpg'; //Imagen por defecto
+    const profileImage = req.file ? req.file.filename : 'default-profile.jpg';
 
 
 
@@ -272,7 +279,7 @@ export const agregarUsuarios = async (req, res) => {
         return res.status(400).send("El password es requerido");
     }
 
-    const newUser = { name, username, email, role, password, profileImage };
+    const newUser = { name, username, email, role, password,  image: profileImage };
 
     try {
         const addedUser = await adherirUsuario(newUser);

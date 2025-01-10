@@ -17,8 +17,8 @@ export const AuthContextProvider = ({children}) => {
                 name:decoded.usuario.name,
                 _id:decoded.usuario._id,
                 username:decoded.usuario.username,
-                role:decoded.usuario.role
-
+                role:decoded.usuario.role,
+                image:decoded.usuario.image
             })
         }
     }, [])

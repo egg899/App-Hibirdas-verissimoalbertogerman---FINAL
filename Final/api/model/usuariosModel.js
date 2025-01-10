@@ -26,6 +26,7 @@ const usuariosSchema = new mongoose.Schema({
     },
     image: {
         type: String,
+        required: true,
         default: 'default-profile.jpg'
     }
 })
