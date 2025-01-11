@@ -88,8 +88,9 @@ export const obtenerUsuarioPorId = async (req, res) => {
             name: user.name,
             username: user.username,
             email: user.email,
+            image: user.image,
             role: user.role,
-            password: user.password // Hide the password for security reasons
+            //password: user.password // Hide the password for security reasons
         });
     } catch (error) {
         console.error("Error fetching user by ID:", error);
@@ -143,7 +144,8 @@ export const obtenerUsuarioPorNombre = async (req, res) => {
             username: user.username,
             email: user.email,
             role: user.role,
-            image:user.image
+            image:user.image,
+            //password: user.password // Hide the password for security reasons
         });
     } catch (error) {
         console.error("Error fetching user by name:", error);

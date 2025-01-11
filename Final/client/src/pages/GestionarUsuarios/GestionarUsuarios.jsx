@@ -109,7 +109,7 @@ console.log('current',currentUsuario);
             user = {currentUsuario}
             userId = {userId}
             onUserSaved = {handleUserSaved}
-            onClose={()=> setShowModal(false)}
+            onClose={() => setShowModal(false)}
 
         />
       )}
@@ -144,7 +144,7 @@ console.log('current',currentUsuario);
               </div>
               <div className="card-footer d-flex justify-content-between">
                 
-                 <Link className="btn btn-info btn-sm ms-3" to={`/usuarios/nombre/${usuario.name}`}>
+                 <Link className="btn btn-info btn-sm" to={`/usuarios/${usuario._id}`}>
                                        Detalles
                                       </Link>
                

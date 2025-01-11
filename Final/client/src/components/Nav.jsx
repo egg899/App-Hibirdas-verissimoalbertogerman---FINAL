@@ -5,7 +5,7 @@ const capitalizeFirstLetter = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const Nav = ({ username, cerrarSesion, isLoggedIn, isAdmin }) => {
+const Nav = ({ username, cerrarSesion, isLoggedIn, isAdmin, id }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -67,7 +67,10 @@ const Nav = ({ username, cerrarSesion, isLoggedIn, isAdmin }) => {
                     </Link>
                     <ul className="dropdown-menu" aria-labelledby="userDropdown">
                       <li>
-                        <Link className="dropdown-item" to={`/usuarios/nombre/${username}`}>
+                        {/* <Link className="dropdown-item" to={`/usuarios/nombre/${username}`}>
+                          Perfil
+                        </Link> */}
+                        <Link className="dropdown-item" to={`/usuarios/${id}`}>
                           Perfil
                         </Link>
                       </li>

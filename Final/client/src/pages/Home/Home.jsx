@@ -37,7 +37,7 @@ const Home = () => {
   const debouncedSearch = useDebounce(search, 1000);
   const [error, setError] = useState("");
   const {user, auth, logoutUser} = useContext(AuthContext);
- const [usuariosConectados, setUsuariosConectados] = useState({ test: 'testUser' });
+  const [usuariosConectados, setUsuariosConectados] = useState({ test: 'testUser' });
 
   const [isAdmin, setIsAdmin] = useState(false);
   const socket = io('http://localhost:3000');//Conectado al servidor
@@ -269,7 +269,7 @@ const handleSuggestionClick = (suggestion) => {
 
   return (
     <>
-<Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn} isAdmin={isAdmin}/>
+<Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn} isAdmin={isAdmin} id={user?._id || null}/>
     <div className="container container-fluid">
       
       {user ? <h1>Bienvenido {capitalizeFirstLetter(user.name)}</h1> : <h1>Bienvenido</h1>}

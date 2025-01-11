@@ -9,6 +9,8 @@ const ModalUsuario = ({ user, userId, onClose, onUserSaved}) => {
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
     const [password, setPassword] = useState('');
+   
+
     console.log('user desde Modal', user);
     useEffect(() => {
         if(user){
@@ -81,15 +83,16 @@ const ModalUsuario = ({ user, userId, onClose, onUserSaved}) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-
-                    <select 
+                    {(user?.role === 'admin') ?
+                    (<select 
                         value={role}
                         onChange={(e) => setRole( e.target.value )}
                         >
                         <option value="user">Usuario</option>
                         <option value="admin">Administrador</option>
                         <option value="contributor">Contribuidor</option>
-                    </select>
+                    </select>): null}
+                    
 
                     <input
                         type="password"

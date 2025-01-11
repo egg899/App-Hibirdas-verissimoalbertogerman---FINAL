@@ -3,17 +3,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../context/AuthContext";
-
+import ModalUsuario from '../../components/Modal/ModalUsuario';
 
 const Usuario = () => {
-  const { name } = useParams(); // Get the username from the URL
+  const { id } = useParams(); // Get the username from the URL
   const navigate = useNavigate(); // Hook for navigating programmatically
   const [user, setUser] = useState(null); // State to hold user data
   const [error, setError] = useState(null); // State to hold error messages
   const [loading, setLoading] = useState(true); // State to track loading
-  const { logoutUser} = useContext(AuthContext); 
-  useEffect(() => {
-    const fetchUser = async () => {
+  const { logoutUser } = useContext(AuthContext); 
+  const [showModal, setShowModal] = useState(false);
+
+ const fetchUser = async () => {
       setLoading(true); // Start loading
       setError(null); // Reset error before fetching new data
 
@@ -29,7 +30,7 @@ const Usuario = () => {
         }
 
         // Add token in Authorization header
-        const response = await axios.get(`http://localhost:3000/usuarios/nombre/${name}`, {
+        const response = await axios.get(`http://localhost:3000/usuarios/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the headers
           },
@@ -44,8 +45,23 @@ const Usuario = () => {
       }
     };
 
+    const handleUserSaved = () => {
+      fetchUser();
+    }
+  console.log('user', user);
+  useEffect(() => {
+   
+
     fetchUser();
-  }, [name]); // Trigger this effect whenever 'name' changes
+  }, [id]); // Trigger this effect whenever 'name' changes
+
+  const handleEditar = (id) => {
+    console.log(`Editar usuario con ID: ${id}`);
+    setShowModal(true);
+    
+  }//handleEditar
+
+
 
   // If there's an error, handle it
   if (error) {
@@ -86,6 +102,19 @@ const Usuario = () => {
       <p><strong>Usuario:</strong> {user.username}</p>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Rol:</strong> {user.role}</p>
+      <button className="btn btn-warning btn-sm ms-3"
+      onClick={() => handleEditar(user._id) }>Editar</button>
+
+      {showModal && (
+        <ModalUsuario
+          user={user}
+          userId ={user._id}
+          onUserSaved={handleUserSaved}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
+
       </div>
       <button
         className="btn btn-secondary mt-3"

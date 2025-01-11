@@ -20,7 +20,8 @@ function App() {
         <Route path="/GuardarImg" element={ <GuardarImg/> } />
 
         <Route element={<ProtectedRoutes/>}>
-        <Route path="/usuarios/nombre/:name" element={ <Usuario/> } />
+        {/* <Route path="/usuarios/nombre/:name" element={ <Usuario/> } /> */}
+        <Route path="/usuarios/:id" element={ <Usuario/> } />
         </Route>
       </Routes>
     </>
