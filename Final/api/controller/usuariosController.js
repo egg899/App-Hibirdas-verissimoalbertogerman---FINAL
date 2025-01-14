@@ -153,52 +153,7 @@ export const obtenerUsuarioPorNombre = async (req, res) => {
     }
 };
 
-const updateUserById = async (_id, name, username, email, role, password) => {
-    try {
-        const objectId = new mongoose.Types.ObjectId(_id);
-        const updateFields = { name, username, email, role };
-        if (password) {
-            updateFields.password = await bcrypt.hash(password, 10);
-        }
-       
-        const updatedUser = await usuariosModel.findOneAndUpdate(
-            { _id: objectId },
-            updateFields,
-            { new: true }
-        );
 
-        return updatedUser;
-    }
-    catch (error) {
-        throw new Error(`Error al actualizar  el usuario: ${error.message}`);
-    }
-
-
-
-}//udatedUserById
-
-export const actualizarUsuario = async ( req, res ) => {
-    const userId = req.params.id;
-    const { name, username, email, role, password } = req.body;
-    
-    if (!name || !username || !email || !role) {
-        return res.status(400).json({ error: "Todos los campos son requeridos." });
-    }
-
-    try {
-        const updatedUser = await updateUserById(userId, name, username, email, role, password);
-        
-        if (!updatedUser) {
-            return res.status(404).send({ mensaje: "No se encontró el usuario con el id especificado" });
-        }
-
-        res.json(updatedUser);
-
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-
-}//actualizarUsuario
 
 
 
@@ -294,12 +249,73 @@ export const agregarUsuarios = async (req, res) => {
     }
 };
 
+
+
+
+
+//Actualizar el Usuario
+const updateUserById = async (_id, name, username, email, role, image, password) => {
+    try {
+        const objectId = new mongoose.Types.ObjectId(_id);
+        const updateFields = { name, username, email, role };
+        if (password) {
+            updateFields.password = await bcrypt.hash(password, 10);
+        }
+
+       if(image !== "default-profile.jpg") {
+        updateFields.image = image; // Update the image field if provided in the request body. The image field is optional.
+       } else {
+        // Retain the existing image if no new image is provided
+        const user = await usuariosModel.findById(objectId);
+        if (user && user.image) {
+            updateFields.image = user.image;
+        }
+       }
+        const updatedUser = await usuariosModel.findOneAndUpdate(
+            { _id: objectId },
+            updateFields,
+            { new: true }
+        );
+
+        return updatedUser;
+    }
+    catch (error) {
+        throw new Error(`Error al actualizar  el usuario: ${error.message}`);
+    }
+
+
+
+}//udatedUserById
+
+export const actualizarUsuario = async ( req, res ) => {
+    const userId = req.params.id;
+    const { name, username, email, role, image, password } = req.body;
+    
+    //Verificar si se subio la imagen
+    const profileImage = req.file ? req.file.filename : 'default-profile.jpg';
+   
+
+    if (!name || !username || !email || !role) {
+        return res.status(400).json({ error: "Todos los campos son requeridos." });
+    }
+
+    try {
+        const updatedUser = await updateUserById(userId, name, username, email, role, profileImage, password);
+        
+        if (!updatedUser) {
+            return res.status(404).send({ mensaje: "No se encontró el usuario con el id especificado" });
+        }
+
+        res.json(updatedUser);
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+
+}//actualizarUsuario
+
 //Exporta el middleWare de Multer para la subida de la imagen
 export const uploadProfileImage = imageUpload.single('profileImage');
-
-
-
-
 
 //Login user
 export const loginUsuario = async (req, res) => {

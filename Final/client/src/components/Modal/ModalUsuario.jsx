@@ -10,6 +10,16 @@ const ModalUsuario = ({ user, userId, onClose, onUserSaved}) => {
     const [role, setRole] = useState('');
     const [password, setPassword] = useState('');
    
+    const [file, setFile] = useState(null);
+    const [image, setImage] = useState(null);
+    const [error, setError] = useState("");
+
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        setFile(URL.createObjectURL(selectedFile));
+        setImage(selectedFile);
+    }
 
     console.log('user desde Modal', user);
     useEffect(() => {
@@ -23,31 +33,71 @@ const ModalUsuario = ({ user, userId, onClose, onUserSaved}) => {
     }, [user]);
     
     const handleSubmit = async (e) => {
+        // e.preventDefault();
+        // console.log('Enviando: ', {name, username, email, role, image, password});
+
+        // const newInfo = {
+        //     name,
+        //     username,
+        //     email,
+        //     role, 
+        //     image,
+        //     password
+        // }
+
+        // try{
+        //     if(user){
+        //         await axios.put(`http://localhost:3000/usuarios/${userId}`, newInfo);
+        //     } else {
+        //         await axios.post('http://localhost:3000/usuarios', newInfo);
+        //     }
+
+        //     console.log('La info del Usuario ha sido guardada');
+        //     onUserSaved();
+        //     onClose();
+
+        // } catch(error) {
+        //     console.log('Error:', error);
+        // }
+
+
         e.preventDefault();
-        console.log('Enviando: ', {name, username, email, role, password});
 
-        const newInfo = {
-            name,
-            username,
-            email,
-            role, 
-            password
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("role", role);
+    if(password){
+        formData.append("password", password);
+    }
+    
+    if (image) {
+        formData.append("profileImage", image); // Agrega la imagen solo si existe
+    }
+
+    try {
+        if (user) {
+            await axios.put(`http://localhost:3000/usuarios/${userId}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+        } else {
+            await axios.post('http://localhost:3000/usuarios', formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
         }
 
-        try{
-            if(user){
-                await axios.put(`http://localhost:3000/usuarios/${userId}`, newInfo);
-            } else {
-                await axios.post('http://localhost:3000/usuarios', newInfo);
-            }
+        console.log('La info del Usuario ha sido guardada');
+        onUserSaved();
+        onClose();
 
-            console.log('La info del Usuario ha sido guardada');
-            onUserSaved();
-            onClose();
-
-        } catch(error) {
-            console.log('Error:', error);
-        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
 
     };//handleSubmit
 
@@ -93,6 +143,17 @@ const ModalUsuario = ({ user, userId, onClose, onUserSaved}) => {
                         <option value="contributor">Contribuidor</option>
                     </select>): null}
                     
+                    <label htmlFor="profileImage" className ="etiqueta">Imagen de perfil (opcional)</label>
+
+                        <input
+                            type="file"
+                            className='form-control mb-3'
+                            accept="image/*"
+                            onChange={handleFileChange}
+                        />     
+                      {file && <img src={file} alt="preview" style={{ marginTop: "20px", width: "300px" }} />}
+
+
 
                     <input
                         type="password"
