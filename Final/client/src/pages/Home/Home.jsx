@@ -212,6 +212,10 @@ return () => {
       //setImage('');
       setGuitImage(null);
       setError('');
+        // Vaciar el input
+      document.getElementById("guitaristImage").value = "";
+    // Reiniciar el estado del archivo
+      setFile(null);
       fetchGuitarists(); // Refresh the list after adding
     } catch (err) {
       console.error(err);
@@ -380,7 +384,7 @@ const handleSuggestionClick = (suggestion) => {
 {isLoggedIn ? (
   <div className="row">
     {guitarristas.map((guitarrista) => (
-      <div key={guitarrista._id} className="col-md-6 col-lg-4 mb-4">
+      <div key={guitarrista._id} className="col-md-6 col-lg-6 mb-4">
         <div className="card">
           <img
             src={guitarrista.image === 'default-profile.jpg'
@@ -446,7 +450,7 @@ const handleSuggestionClick = (suggestion) => {
 ) : (
   <div className="row">
     {guitarristas.map((guitarrista) => (
-      <div key={guitarrista._id} className="col-md-6 col-lg-4 mb-4">
+      <div key={guitarrista._id} className="col-md-6 col-lg-6 mb-4">
         <div className="card">
         <img
             src={guitarrista.image === 'default-profile.jpg'

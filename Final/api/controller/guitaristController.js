@@ -5,6 +5,7 @@ import { io } from "../index.js";
 import { agregarAlbum } from "./albumController.js";
 
 import multer from "multer";
+import fs from "fs";
 import path from 'path';
 import { fileURLToPath } from "url";
 
@@ -181,9 +182,26 @@ export const devolverGuitarristaId = async (req, res) => {
 //     }
 // };
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const guitaristsDir = path.join(__dirname, '..','..' ,'client','src','assets', 'images','guitarists' );
+
+
+
+
 //Borrar guitarrista
 const deleteGuitarristasById = async (_id) => {
     const objectId = new mongoose.Types.ObjectId(_id);
+
+    const guitarist = await guitaristsModel.findById(objectId);
+    console.log('Imagen de guitarrista a borrar: ',guitarist.image);
+    const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'guitarists', guitarist.image);
+    // Verificar que la imagen actual existe antes de intentar eliminarla
+    if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
+        console.log('Imagen anterior eliminada: ', guitarist.image);
+    }
     const deletedGuitarist = await guitaristsModel.findOneAndDelete({ _id: objectId});
     return deletedGuitarist;
 }
@@ -214,9 +232,9 @@ export const eliminarGuitarrista = async (req, res) => {
     }
 }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const guitaristsDir = path.join(__dirname, '..','..' ,'client','src','assets', 'images','guitarists' );
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const guitaristsDir = path.join(__dirname, '..','..' ,'client','src','assets', 'images','guitarists' );
 
 console.log('Guitarists uploaded ', guitaristsDir);
 
@@ -292,11 +310,35 @@ const updatedGuitarristasById = async (_id, name, style, albums, description, im
         const objectId = new mongoose.Types.ObjectId(_id); // Convertir el ID a ObjectId
         
         const updateFields = { name, style, albums, description };
+
+
+        //Obtener el guitarrista actual
+        const guitarist = await guitaristsModel.findById(objectId);
+        console.log('Este es el guitarrista viejita: ', guitarist);
+       // Si se proporciona una nueva imagen que es diferente de la actual y no es la predeterminada, eliminar la anterior
+       if (image && image !== "default-profile.jpg" && image !== guitarist.image) {
+        const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'guitarists', guitarist.image);
+        
+        console.log('Ruta de la imagen a eliminar: ', imagePath);
+
+        // Verificar que la imagen actual existe antes de intentar eliminarla
+        if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
+            console.log('Imagen anterior eliminada: ', guitarist.image);
+        }
+    }
+
+
+
+
+
+
+
         
             if(image && image !== "default-profile.jpg") {
                 updateFields.image = image; // Si la imagen es distinta de la predeterminada, la agrega al updateFields
             } else {
-               const guitarist = await guitaristsModel.findById(objectId);
+               //const guitarist = await guitaristsModel.findById(objectId);
                if(guitarist && guitarist.image) {
                 updateFields.image = guitarist.image;
                }
@@ -327,8 +369,13 @@ export const actualizarGuitarrista = async (req, res) => {
         return res.status(400).json({ error: "El campo 'name' es requerido" });
     }
 
+
+    // Convertir 'albums' en un array si es una cadena separada por comas
+    const albumsArray = albums ? albums.split(',').map(album => album.trim()) : [];
+
+
     try {
-        const updatedGuitarrista = await updatedGuitarristasById(guitarristaId, name, style, albums || [], description, newGuitImage);
+        const updatedGuitarrista = await updatedGuitarristasById(guitarristaId, name, style, albumsArray, description, newGuitImage);
         if (!updatedGuitarrista) {
             return res.status(404).send("El guitarrista no fue encontrado"); // Devuelve 404 si no se encuentra
         }

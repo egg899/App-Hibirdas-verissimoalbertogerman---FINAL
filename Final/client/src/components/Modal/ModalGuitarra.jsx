@@ -38,7 +38,7 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Submitting:', { name, description, style, albums, image });
-        const albumsArray = albums.split(',').map(album => album.trim());
+        const albumsString = albums.split(',').map(album => album.trim()).join(',');
 
         // const newInfo = {
         //     name,
@@ -52,12 +52,11 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
         formData.append('name', name);
         formData.append('description', description);
         formData.append('style', style);
-        formData.append('albums', albumsArray);
-
+        formData.append('albums', albumsString);
         if(guitImage) {
             formData.append('guitaristImage', guitImage);
         }
-
+        console.log('albumsArray: ',albumsString);
 
         try {
             
