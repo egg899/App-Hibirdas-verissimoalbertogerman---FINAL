@@ -10,6 +10,19 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
     const [albums, setAlbums] = useState('');
     const [image, setImage] = useState('');
 
+    const [file, setFile] = useState(null);
+    const [guitImage, setguitImage] = useState(null);
+    const [error, setError] = useState("");
+
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        setFile(URL.createObjectURL(selectedFile));
+        setguitImage(selectedFile);
+        
+    }
+
+
     // Populate form fields if editing an existing guitarist
     useEffect(() => {
         if (guitarist) {
@@ -17,7 +30,8 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
             setDescription(guitarist.description);
             setStyle(guitarist.style);
             setAlbums(guitarist.albums.join(', '));
-            setImage(guitarist.imageUrl);  // Assuming `imageUrl` field is the one to be used
+            //setImage(guitarist.imageUrl);  // Assuming `imageUrl` field is the one to be used
+            
         }
     }, [guitarist]);
 
@@ -26,22 +40,33 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
         console.log('Submitting:', { name, description, style, albums, image });
         const albumsArray = albums.split(',').map(album => album.trim());
 
-        const newInfo = {
-            name,
-            description,
-            style,
-            albums:albumsArray,
-            imageUrl: image  // Correct field name based on the object structure
-        };
+        // const newInfo = {
+        //     name,
+        //     description,
+        //     style,
+        //     albums:albumsArray,
+        //     imageUrl: image  // Correct field name based on the object structure
+        // };
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('style', style);
+        formData.append('albums', albumsArray);
+
+        if(guitImage) {
+            formData.append('guitaristImage', guitImage);
+        }
+
 
         try {
             
             if (guitarist) {
                 // Edit existing guitarist
-                await axios.put(`http://localhost:3000/guitarists/${guitaristId}`, newInfo, { headers:{'authorizartion':auth}});
+                await axios.put(`http://localhost:3000/guitarists/${guitaristId}`, formData, { headers:{'authorizartion':auth}});
             } else {
                 // Add new guitarist
-                await axios.post('http://localhost:3000/guitarists', newInfo);
+                await axios.post('http://localhost:3000/guitarists', formData);
             }
 
             // Close modal after submit
@@ -87,12 +112,21 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
                         onChange={(e) => setAlbums(e.target.value)}
                     />
 
-                    <input
+                    {/* <input
                         type="text"
                         placeholder="Link de la imagen"
                         value={image}
                         onChange={(e) => setImage(e.target.value)}
+                    /> */}
+
+                    <input
+                        type="file"
+                        
+                        className="form-control mb-2"
+                        accept="image/*"
+                        onChange={handleFileChange}
                     />
+                    {file && <img src={file} alt="preview" style={{ marginTop: "20px", marginBottom: "20px", width: "300px" }} />}
 
                     <textarea
                         placeholder="Descripción"

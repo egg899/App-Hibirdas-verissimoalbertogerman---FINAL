@@ -4,9 +4,14 @@ import albumsModel from './albumsModel.js';
 const guitaristsSchema = new mongoose.Schema({
     // id:{type:Number, required:true},
     name:{type:String, required:true},
-    imageUrl: {
-      type: String,
-      required: true
+  //   imageUrl: {
+  //     type: String,
+  //     required: true
+  // },
+  image: {
+    type: String,
+    required: true,
+    default: 'default-profile.jpg'
   },
     description:{type:String, required:true},
     style:{type:[String], required:true},

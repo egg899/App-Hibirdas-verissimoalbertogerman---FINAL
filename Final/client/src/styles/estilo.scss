@@ -59,7 +59,7 @@ form, .error{
 
 
 
-  input[type="text"],input[type="password"],  select {
+  input[type="text"],  input[type="password"],  select {
     width: 100%; // Ensure inputs fill the container
     padding: 10px;
     margin-bottom: 10px;
@@ -67,6 +67,8 @@ form, .error{
     border-radius: 4px;
     box-sizing: border-box; // Prevent overflow
   }
+
+  
 
   button {
     display: block;

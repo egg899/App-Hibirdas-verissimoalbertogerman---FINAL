@@ -1,8 +1,8 @@
 import React from 'react';
 
 const GuitaristForm = ({
-name, style, albums, image, description, setName, setStyle, setAlbums, setImage, 
-setDescription, handleSubmit
+name, style, albums,  description, setName, setStyle, setAlbums,  setGuitImage, 
+setDescription, file, handleFileChange, handleSubmit
 }) => {
     return (
 
@@ -31,12 +31,23 @@ setDescription, handleSubmit
         value={albums}
         onChange={(e) => setAlbums(e.target.value)}
       />
-      <input
+      {/* <input
         type="text"
         placeholder="Link de la imagen"
         value={image}
         onChange={(e) => setImage(e.target.value)}
-      />
+      /> */}
+
+      <input
+        
+        type="file"
+        id="guitaristImage"
+        className="form-control mb-2"
+        accept="image/*"
+        onChange={handleFileChange}
+/>
+      {file && <img src={file} alt="preview" style={{ marginTop: "20px", marginBottom: "20px", width: "300px" }} />}
+
       <textarea
         placeholder="Descripción"
         value={description}

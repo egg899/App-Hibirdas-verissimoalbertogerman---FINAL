@@ -26,6 +26,13 @@ const Home = () => {
   const [guitaristId, setGuitaristId] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  //Parametros para la imagen
+  const [file, setFile] = useState(null);
+  const [guitImage, setGuitImage] = useState(null);
+  const [imageError, setImageError] = useState("");
+
+
+
   const [showConfirmationModal, setShowConfirmationModal] = useState(false); // For confirmation modal
   const [guitaristToDelete, setGuitaristToDelete] = useState(null); // The guitarist to delete
 
@@ -141,29 +148,58 @@ return () => {
     console.log('Usuarios conectados (effect):', usuariosConectados);
   }, [usuariosConectados]);
 
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    console.log('IMAGEN POR SER SUBIDA: ', selectedFile);
+    setFile(URL.createObjectURL(selectedFile));//Vista Previa
+    setGuitImage(selectedFile); //Almacenar el archivo seleccionado
+  }
+
+
   const handleAddGuitarrist = async (e) => {
     e.preventDefault();
 
      // Check if any required field is empty
-  if (!name || !description || !style || !albums || !image) {
+  if (!name || !description || !style || !albums ) {
     setError("Por favor llene todos los campos.");
     return; // Prevent form submission
   }
 
 
-    const newGuitarist = {
-      name,
-      description,
-      style,
-      albums,
-      imageUrl: image,
-      owner: {
-        userId: user._id,
-        username: user.username,
-      },
+    // const newGuitarist = {
+    //   name,
+    //   description,
+    //   style,
+    //   albums,
+    //   imageUrl: image,
+    //   owner: {
+    //     userId: user._id,
+    //     username: user.username,
+    //   },
      
 
-    };
+    // };
+
+
+    const newGuitarist = new FormData();
+    newGuitarist.append('name', name);
+    newGuitarist.append('description', description);
+    newGuitarist.append('style', style);
+    newGuitarist.append('albums', albums);
+    // newGuitarist.append('imageUrl', image);
+    newGuitarist.append('guitaristImage', guitImage);
+    newGuitarist.append("owner[userId]", user._id);
+    newGuitarist.append("owner[username]", user.username);
+
+
+    // for (let pair of newGuitarist.entries()) {
+    //   console.log(pair[0] + ': ' + pair[1]);
+    // }
+    // console.log('guitaristImage:', guitImage);
+    // console.log('guitaristImage name:', guitImage.name);
+    // console.log('guitaristImage type:', guitImage.type);
+    // console.log('guitaristImage size:', guitImage.size);
 
     try {
       await axios.post('http://localhost:3000/guitarists', newGuitarist,
@@ -173,7 +209,8 @@ return () => {
       setDescription('');
       setStyle('');
       setAlbums('');
-      setImage('');
+      //setImage('');
+      setGuitImage(null);
       setError('');
       fetchGuitarists(); // Refresh the list after adding
     } catch (err) {
@@ -284,13 +321,15 @@ const handleSuggestionClick = (suggestion) => {
       name={name}
       style={style}
       albums={albums}
-      image={image}
+      //image={image}
       description={description}
       setName={setName}
       setStyle={setStyle}
       setAlbums={setAlbums}
-      setImage={setImage}
+      //setImage={setImage}
       setDescription={setDescription}
+      file ={file}
+      handleFileChange = {handleFileChange}
       handleSubmit={handleAddGuitarrist}
     /></>
   ) : (
@@ -344,7 +383,9 @@ const handleSuggestionClick = (suggestion) => {
       <div key={guitarrista._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
           <img
-            src={guitarrista.imageUrl || 'default-image.jpg'} // Imagen predeterminada si no hay imagen
+            src={guitarrista.image === 'default-profile.jpg'
+              ?'../../src/assets/images/uploads/' + guitarrista.image
+              : '../../src/assets/images/guitarists/' + guitarrista.image} // Imagen predeterminada si no hay imagen
             alt={guitarrista.name}
             className="card-img-top"
             style={{ height: '200px', objectFit: 'cover', objectPosition: 'top' }} // Ajustar la imagen
@@ -407,11 +448,13 @@ const handleSuggestionClick = (suggestion) => {
     {guitarristas.map((guitarrista) => (
       <div key={guitarrista._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
-          <img
-            src={guitarrista.imageUrl || 'default-image.jpg'}
+        <img
+            src={guitarrista.image === 'default-profile.jpg'
+              ?'../../src/assets/images/uploads/' + guitarrista.image
+              : '../../src/assets/images/guitarists/'+guitarrista.image} // Imagen predeterminada si no hay imagen
             alt={guitarrista.name}
             className="card-img-top"
-            style={{ height: '200px', objectFit: 'cover' }}
+            style={{ height: '200px', objectFit: 'cover', objectPosition: 'top' }} // Ajustar la imagen
           />
           <div className="card-body">
             <h5 className="card-title">{guitarrista.name}</h5>

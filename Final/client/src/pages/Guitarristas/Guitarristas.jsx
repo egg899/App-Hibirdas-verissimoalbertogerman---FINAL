@@ -163,7 +163,7 @@ const fetchComments = async () => {
                 margin: '0 auto',
               }}
               src={
-                guitarrista.imageUrl ||
+                '../../src/assets/images/guitarists/' + guitarrista.image ||
                 'https://via.placeholder.com/300x300?text=Imagen+no+disponible'
               }
             />

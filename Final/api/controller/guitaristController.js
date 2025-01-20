@@ -3,6 +3,12 @@ import albumsModel from "../model/albumsModel.js";
 import mongoose from "mongoose";
 import { io } from "../index.js"; 
 import { agregarAlbum } from "./albumController.js";
+
+import multer from "multer";
+import path from 'path';
+import { fileURLToPath } from "url";
+
+
 //todos los guitarristas
 const todosLosGuitarristas = async (req) => {
     const { name, sort, page = 1, limit = null } = req.query; // Set default limit to 10 if not specified
@@ -137,43 +143,43 @@ export const devolverGuitarristaId = async (req, res) => {
 //     return updatedGuitarist; // Return the updated guitarist
 // };
 
-const updatedGuitarristasById = async (_id, name, style, albums, description, imageUrl) => {
-    try {
-        const objectId = new mongoose.Types.ObjectId(_id); // Convertir el ID a ObjectId
-        const updatedGuitarist = await guitaristsModel.findOneAndUpdate(
-            { _id: objectId }, // Condición de búsqueda
-            { name, style, 
-            albums,
-            description, 
-            imageUrl }, // Datos a actualizar
+// const updatedGuitarristasById = async (_id, name, style, albums, description, imageUrl) => {
+//     try {
+//         const objectId = new mongoose.Types.ObjectId(_id); // Convertir el ID a ObjectId
+//         const updatedGuitarist = await guitaristsModel.findOneAndUpdate(
+//             { _id: objectId }, // Condición de búsqueda
+//             { name, style, 
+//             albums,
+//             description, 
+//             imageUrl }, // Datos a actualizar
             
-            { new: true } // Devuelve el documento actualizado
-        );
-        return updatedGuitarist;
-    } catch (error) {
-        throw new Error("Error al actualizar el guitarrista: " + error.message);
-    }
-};
+//             { new: true } // Devuelve el documento actualizado
+//         );
+//         return updatedGuitarist;
+//     } catch (error) {
+//         throw new Error("Error al actualizar el guitarrista: " + error.message);
+//     }
+// };
 
 
-export const actualizarGuitarrista = async (req, res) => {
-    const guitarristaId = req.params.id; // El ID ya es una cadena
-    const { name, style, albums, description, imageUrl } = req.body; // Extrae el campo 'name' del cuerpo de la solicitud
+// export const actualizarGuitarrista = async (req, res) => {
+//     const guitarristaId = req.params.id; // El ID ya es una cadena
+//     const { name, style, albums, description, imageUrl } = req.body; // Extrae el campo 'name' del cuerpo de la solicitud
 
-    if (!name) {
-        return res.status(400).json({ error: "El campo 'name' es requerido" });
-    }
+//     if (!name) {
+//         return res.status(400).json({ error: "El campo 'name' es requerido" });
+//     }
 
-    try {
-        const updatedGuitarrista = await updatedGuitarristasById(guitarristaId, name, style, albums || [], description, imageUrl);
-        if (!updatedGuitarrista) {
-            return res.status(404).send("El guitarrista no fue encontrado"); // Devuelve 404 si no se encuentra
-        }
-        res.json(updatedGuitarrista);
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-};
+//     try {
+//         const updatedGuitarrista = await updatedGuitarristasById(guitarristaId, name, style, albums || [], description, imageUrl);
+//         if (!updatedGuitarrista) {
+//             return res.status(404).send("El guitarrista no fue encontrado"); // Devuelve 404 si no se encuentra
+//         }
+//         res.json(updatedGuitarrista);
+//     } catch (error) {
+//         return res.status(500).json({ error: error.message });
+//     }
+// };
 
 //Borrar guitarrista
 const deleteGuitarristasById = async (_id) => {
@@ -208,16 +214,35 @@ export const eliminarGuitarrista = async (req, res) => {
     }
 }
 
-//Agregar Guitarrista
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const guitaristsDir = path.join(__dirname, '..','..' ,'client','src','assets', 'images','guitarists' );
 
+console.log('Guitarists uploaded ', guitaristsDir);
 
+//Configuracion de Multer para manejar las imágenes
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, guitaristsDir); // Ruta donde se guardaran las imagenes de los guitaristas
+
+    },
+    filename: (req, file, cb) => {
+        const filename = Date.now() + path.extname(file.originalname); // Asegura que el nombre del archivo sea único
+        cb(null, filename);
+    }
+});
+
+const guitImageUpload = multer({ storage: storage });
 
 //Agregar Guitarrista
 export const agregarGuitarrista = async (req, res) => {
-    let { name, description, imageUrl, albums, style, owner } = req.body;
+    let { name, description, albums, style, owner } = req.body;
+
+    const guitaristImage = req.file ? req.file.filename : 'default-profile.jpg';
+    console.log('req.file: ', req.file);
 
     // Validate required fields
-    if (!name || !description || !imageUrl || !style || !albums || !owner?.userId || !owner?.username) {
+    if (!name || !description ||  !style || !albums || !owner?.userId || !owner?.username) {
         return res.status(400).json({
             error: "All fields (name, description, style, albums, owner.userId, owner.username) are required."
         });
@@ -245,7 +270,8 @@ export const agregarGuitarrista = async (req, res) => {
         const newGuitarist = new guitaristsModel({
             name,
             description,
-            imageUrl,
+            
+            image:guitaristImage,
             style,
             albums, // Store the album ObjectIds
             owner
@@ -260,5 +286,56 @@ export const agregarGuitarrista = async (req, res) => {
     }
 }
 
+//Actualizar Guitarrista
+const updatedGuitarristasById = async (_id, name, style, albums, description, image) => {
+    try {
+        const objectId = new mongoose.Types.ObjectId(_id); // Convertir el ID a ObjectId
+        
+        const updateFields = { name, style, albums, description };
+        
+            if(image && image !== "default-profile.jpg") {
+                updateFields.image = image; // Si la imagen es distinta de la predeterminada, la agrega al updateFields
+            } else {
+               const guitarist = await guitaristsModel.findById(objectId);
+               if(guitarist && guitarist.image) {
+                updateFields.image = guitarist.image;
+               }
+            }
+
+            const updatedGuitarist = await guitaristsModel.findOneAndUpdate(
+                { _id: objectId }, // Condición de búsqueda
+                updateFields, // Datos a actualizar
+                { new: true } // Devuelve el documento actualizado
+            );
+        
+            return updatedGuitarist;
+
+        } catch (error) {
+            throw new Error("Error al actualizar el guitarrista: " + error.message);
+        }
+};
 
 
+export const actualizarGuitarrista = async (req, res) => {
+    const guitarristaId = req.params.id; // El ID ya es una cadena
+    const { name, style, albums, description, image } = req.body; // Extrae el campo 'name' del cuerpo de la solicitud
+
+    const newGuitImage = req.file ? req.file.filename : 'default-profile.jpg';
+
+
+    if (!name) {
+        return res.status(400).json({ error: "El campo 'name' es requerido" });
+    }
+
+    try {
+        const updatedGuitarrista = await updatedGuitarristasById(guitarristaId, name, style, albums || [], description, newGuitImage);
+        if (!updatedGuitarrista) {
+            return res.status(404).send("El guitarrista no fue encontrado"); // Devuelve 404 si no se encuentra
+        }
+        res.json(updatedGuitarrista);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+export const uploadGuitaristImage = guitImageUpload.single('guitaristImage');
