@@ -25,6 +25,11 @@ const albumsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    image: {
+        type: String,
+        required:true,
+        defaullt: 'default-profile.jpg'
+    },
     owner:{
         userId: {
             type: String,

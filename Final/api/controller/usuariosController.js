@@ -6,6 +6,7 @@ import { io } from "../index.js";
 import mongoose from "mongoose";
 import multer from "multer";
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
@@ -257,6 +258,25 @@ export const agregarUsuarios = async (req, res) => {
 const updateUserById = async (_id, name, username, email, role, image, password) => {
     try {
         const objectId = new mongoose.Types.ObjectId(_id);
+
+
+         const usuario = await usuariosModel.findById(objectId);
+         console.log('La imagen chabon', image);
+         console.log('Este es el usuario chabon: ', usuario);
+
+        if(image && image !== 'default-profile.jpg' && image !== usuario.image) {
+            const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'uploads', usuario.image);
+        
+            if(fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath); // Delete the previous image file
+                console.log('Esta es la imagen anterior eliminada: ', usuario.image);
+            }
+        }
+         
+
+
+
+
         const updateFields = { name, username, email, role };
         if (password) {
             updateFields.password = await bcrypt.hash(password, 10);

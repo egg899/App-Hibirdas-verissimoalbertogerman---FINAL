@@ -329,12 +329,6 @@ const updatedGuitarristasById = async (_id, name, style, albums, description, im
     }
 
 
-
-
-
-
-
-        
             if(image && image !== "default-profile.jpg") {
                 updateFields.image = image; // Si la imagen es distinta de la predeterminada, la agrega al updateFields
             } else {
