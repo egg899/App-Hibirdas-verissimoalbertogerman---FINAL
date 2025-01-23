@@ -21,14 +21,14 @@ const albumsSchema = new mongoose.Schema({
         required: true
     },
    
-    imageUrl: {
-        type: String,
-        required: true
-    },
+    // imageUrl: {
+    //     type: String,
+    //     required: true
+    // },
     image: {
         type: String,
         required:true,
-        defaullt: 'default-profile.jpg'
+        default: 'default-profile.jpg'
     },
     owner:{
         userId: {

@@ -5,14 +5,16 @@ const AlbumListForm = ({
     title,
     year,
     artist,
-    image,
+    albumImage,
     description,
     setTitle,
     setYear,
     setArtist,
-    setImage,
+    setAlbumImage,
     setDescription,
     albums,
+    file,
+    handleFileChange,
     handleSubmit,
 
     
@@ -127,12 +129,21 @@ const AlbumListForm = ({
                 onChange={(e) => setArtist(e.target.value)}
             /> */}
                  
-            <input
+            {/* <input
                 type="text"
                 placeholder="Link de la imagen"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
-            />
+            /> */}
+
+        <input 
+            type="file"
+            className="form-control mb-2"
+            accept="image/*"
+            onChange ={handleFileChange}
+
+        />
+        {file && <img src={file} alt="preview" style={{ marginTop: "20px", marginBottom: "20px", width: "300px" }} />}
 
             <textarea
                 placeholder="Descripción"

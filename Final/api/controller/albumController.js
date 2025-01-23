@@ -1,7 +1,10 @@
 import albumsModel from "../model/albumsModel.js";
 import mongoose from "mongoose";
 import guitaristsModel from "../model/guitaristsModel.js"; // Import the guitarist model
-
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Todos los albums
 export const agarrarTodosLosAlbums = async (req, res) => {
@@ -246,11 +249,31 @@ export const eliminarAlbum = async (req, res) => {
     }
 }
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const albumsDir = path.join(__dirname, '..','..' ,'client','src','assets', 'images','albums' );
+
+//configuracion de Multer para manejar las imagenes
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, albumsDir);
+    },
+    filename: (req, file, cb) => {
+        const filename = Date.now() + path.extname(file.originalname);
+        cb(null, filename);
+    }
+});
+
+const albumImageUpload = multer({ storage: storage});
+
+
+
 //Agregar Album
-
 export const agregarAlbum = async (req, res) => {
-    const { title, artist, year, description, imageUrl, owner } = req.body;
-
+    const { title, artist, year, description,  owner } = req.body;
+    const albumImage = req.file ? req.file.filename :  'default-profile.jpg';
+    console.log('La imagen nene: ', albumImage);
+    console.log(req.file);
     // Check for required fields
     if (!title) {
         return res.status(400).send("El nombre es requerido.");
@@ -272,7 +295,8 @@ export const agregarAlbum = async (req, res) => {
             artist,
             year,
             description,
-            imageUrl,
+            ///imageUrl,
+            image:albumImage,
             owner, // Include the owner field
         });
 
@@ -286,3 +310,6 @@ export const agregarAlbum = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+export const upoladAlbumImage = albumImageUpload.single('albumImage');

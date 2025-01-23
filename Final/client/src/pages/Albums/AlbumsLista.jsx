@@ -29,6 +29,11 @@ const AlbumsLista = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState("");
   
+  //Parametros para la imagen de los albumes
+  const [file, setFile] = useState(null);
+  const [albumImage, setAlbumImage] = useState(null);
+  const [imageError, setImageError] = useState("");
+
 
   const fetchAlbums = async () => {
     setLoading(true);
@@ -67,7 +72,14 @@ console.log('albumsList', albumsList);
      }
    },[user])
 
- 
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      console.log('Imagen Subida:', selectedFile);
+      setFile(URL.createObjectURL(selectedFile)); // Para previsualización
+      setAlbumImage(selectedFile); // Guardar el archivo real para enviar
+    }
+  }
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
@@ -82,12 +94,13 @@ console.log('albumsList', albumsList);
 
   const handleAddAlbum = async (e) => {
     e.preventDefault();
+    console.log('Submitting:', { title, description, artist, year, albumImage });
     if (!user) {
       console.error('User not logged in');
       return;
     }
 
-    if (!title || !description || !artist || !year || !image) {
+    if (!title || !description || !artist || !year || !albumImage) {
       setError("Por favor llene todos los campos.");
       return; // Prevent form submission
     } else {
@@ -110,24 +123,41 @@ console.log('albumsList', albumsList);
 
 
 
-      const newAlbum = {
-        title,
-        year,
-        artist: artistId || null,
-        description,
-        imageUrl: image,
-        owner: {
-          userId: user._id || null,
-          username: user.username || null,
-        },
-      };
+      // const newAlbum = {
+      //   title,
+      //   year,
+      //   artist: artistId || null,
+      //   description,
+      //   imageUrl: image,
+      //   owner: {
+      //     userId: user._id || null,
+      //     username: user.username || null,
+      //   },
+      // };
+      console.log('File',file);
 
-      await axios.post('http://localhost:3000/albums', newAlbum);
+      console.log('albumImage',albumImage);
+      const newAlbum = new FormData();
+      newAlbum.append('title', title);
+      newAlbum.append('year', year);
+      newAlbum.append('artist', artistId || null);
+      newAlbum.append('description', description);
+      newAlbum.append('albumImage', albumImage);
+      newAlbum.append('owner[userId]', user._id || null);
+      newAlbum.append('owner[username]', user.username || null);
+
+
+
+      await axios.post('http://localhost:3000/albums', newAlbum, {
+        headers: {"Content-Type": "multipart/form-data"}
+      });
 
       setTitle('');
       setYear('');
       setArtist('');
       setDescription('');
+      setFile(null);
+      setAlbumImage(null);
       setImage('');
       fetchAlbums();
     } catch (error) {
@@ -203,14 +233,16 @@ console.log('albumsList', albumsList);
           title={title}
           year={year}
           artist={artist}
-          image={image}
+          albumImage={albumImage}
           description={description}
           albums ={filteredAlbums}
           setTitle={setTitle}
           setYear={setYear}
           setArtist={setArtist}
-          setImage={setImage}
+          setAlbumImage={setAlbumImage}
           setDescription={setDescription}
+          handleFileChange={handleFileChange}
+          file={file}
           handleSubmit={handleAddAlbum}
         /></>
   ) : (
@@ -253,8 +285,10 @@ console.log('albumsList', albumsList);
       <div key={album._id} className="col-md-6 col-lg-6 mb-4">
         <div className="card">
           <img
-            src={album.imageUrl || 'default-image.jpg'} // Default image if no URL
-            alt={album.title}
+        src={album.image === 'default-profile.jpg'
+          ?'../../src/assets/images/uploads/' + album.image
+          : '../../src/assets/images/albums/' + album.image}            
+          alt={album.title}
             className="card-img-top"
             style={{ height: '200px', objectFit: 'cover' }} // Adjust image
           />
@@ -310,7 +344,9 @@ console.log('albumsList', albumsList);
       <div key={album._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
           <img
-            src={album.imageUrl || 'default-image.jpg'}
+            src={album.image === 'default-profile.jpg'
+              ?'../../src/assets/images/uploads/' + album.image
+              : '../../src/assets/images/albums/' + album.image}
             alt={album.title}
             className="card-img-top"
             style={{ height: '200px', objectFit: 'cover' }}
