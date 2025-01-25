@@ -115,7 +115,9 @@ console.log("Agarrando el nombre", guitaristName);
               display: "block",
               margin: "0 auto",
             }}
-            src={album.imageUrl}
+            src={album.image === 'default-profile.jpg'
+              ?'../../src/assets/images/uploads/' + album.image
+              : '../../src/assets/images/albums/' + album.image}
           />
         </figure>
       </div>

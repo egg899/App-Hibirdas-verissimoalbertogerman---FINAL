@@ -163,91 +163,6 @@ export const agarrarAlbumPorNombre = async (req, res) => {
 
 
 
-//ActualizarAlbum por Id
-const updatedAlbumById = async (_id, title, artist, year, description, imageUrl) => {
-    // Validate ObjectId before updating
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-        throw new Error("Invalid album ID format");
-    }
-
-    // Validate the artist ID format
-    if (!mongoose.Types.ObjectId.isValid(artist)) {
-        throw new Error("Invalid artist ID format");
-    }
-
-    // Optionally, you could check if the artist exists
-    // const artistExists = await guitaristsModel.findById(artist);
-    // if (!artistExists) {
-    //     throw new Error("Artist does not exist");
-    // }
-
-    // Perform the album update using `findOneAndUpdate`
-    const updatedAlbum = await albumsModel.findOneAndUpdate(
-        { _id: _id }, // The condition to match the album
-        { title, artist, year, description, imageUrl }, // The fields to update
-        { new: true } // Return the updated document
-    );
-
-    return updatedAlbum; // Return the updated album
-};
-
-export const actualizarAlbum = async (req, res) => {
-    const albumId = req.params.id;
-    const { title, artist, year, description, imageUrl } = req.body;
-
-    // Validate that the albumId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(albumId)) {
-        return res.status(400).send("Invalid album ID format");
-    }
-
-    // Validate that the artist ID is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(artist)) {
-        return res.status(400).send("Invalid artist ID format");
-    }
-
-    // Validate required fields are provided
-    if (!title || !description || !year || !imageUrl) {
-        return res.status(400).send("All fields (title, description, year, imageUrl) are required");
-    }
-
-    try {
-        // Update the album by ID
-        const updatedAlbum = await updatedAlbumById(albumId, title, artist, year, description, imageUrl);
-
-        // If the album is not found, return 404
-        if (!updatedAlbum) {
-            return res.status(404).send("Album not found");
-        }
-
-        // Return the updated album
-        res.json(updatedAlbum);
-    } catch (error) {
-        console.error("Error updating album:", error.message);  // Log the error on the server side for debugging
-        return res.status(500).json({ error: error.message });
-    }
-};
-
-
-
-
-//Borrar Album
-const deleteAlbumById = async (_id) => {
-    const deletedAlbum = await albumsModel.findOneAndDelete({ _id });
-    return deletedAlbum;
-}
-
-export const eliminarAlbum = async (req, res) => {
-    const albumId = req.params.id;
-
-    try{
-        const deletedAlbum = await deleteAlbumById(albumId);
-        if(!deletedAlbum) { 
-            return res.status(404).send("El album no fue encontrado");
-        }
-    }catch(error){
-        return res.status(500).json({ error: error.message });
-    }
-}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -273,7 +188,7 @@ export const agregarAlbum = async (req, res) => {
     const { title, artist, year, description,  owner } = req.body;
     const albumImage = req.file ? req.file.filename :  'default-profile.jpg';
     console.log('La imagen nene: ', albumImage);
-    console.log(req.file);
+    
     // Check for required fields
     if (!title) {
         return res.status(400).send("El nombre es requerido.");
@@ -311,5 +226,148 @@ export const agregarAlbum = async (req, res) => {
     }
 };
 
+
+
+
+//ActualizarAlbum por Id
+const updatedAlbumById = async (_id, title, artist, year, description, image) => {
+    // Validate ObjectId before updating
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+        throw new Error("Invalid album ID format");
+    }
+
+    // Validate the artist ID format
+    if (!mongoose.Types.ObjectId.isValid(artist)) {
+        throw new Error("Invalid artist ID format");
+    }
+   
+
+    const objectId = new mongoose.Types.ObjectId(_id); // Convertir el ID a ObjectId
+    const updateFields = {title, artist, year, description, image};
+
+    console.log('objectId: ' + objectId);
+
+
+
+
+
+    //  // Si se proporciona una nueva imagen que es diferente de la actual y no es la predeterminada, eliminar la anterior
+    //        if (image && image !== "default-profile.jpg" && image !== album.image) {
+    //         const imagePath = path.join(__dirname, '..','..' ,'client','src','assets', 'images','albums' );
+            
+    //         console.log('Ruta de la imagen a eliminar: ', imagePath);
+    
+    //         // Verificar que la imagen actual existe antes de intentar eliminarla
+    //         if (fs.existsSync(imagePath)) {
+    //             fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
+    //             console.log('Imagen anterior eliminada: ', album.image);
+    //         }
+    //     }
+   
+
+    // Optionally, you could check if the artist exists
+    // const artistExists = await guitaristsModel.findById(artist);
+    // if (!artistExists) {
+    //     throw new Error("Artist does not exist");
+    // }
+    
+
+    if(image && image !== "default-profile.jpg") {
+        updateFields.image = image;
+    }
+    else {
+        //const guitarist = await guitaristsModel.findById(objectId);
+        if(album && album.image) {
+         updateFields.image = album.image;
+        }
+     }
+
+
+
+    // Perform the album update using `findOneAndUpdate`
+    const updatedAlbum = await albumsModel.findOneAndUpdate(
+        { _id: _id }, // The condition to match the album
+        //{ title, artist, year, description, image }, // The fields to update
+        updateFields,
+        { new: true } // Return the updated document
+    );
+
+    return updatedAlbum; // Return the updated album
+};
+
+export const actualizarAlbum = async (req, res) => {
+    const albumId = req.params.id;
+
+
+    
+    const { title, artist, year, description, image } = req.body;
+    const newAlbumImage = req.file ? req.file.filename : 'default-profile.jpg';
+    console.log('newAlbumImage', newAlbumImage);
+    console.log(req.file);
+
+    console.log('title: ' + title);
+    console.log('artist: ' + artist);
+    console.log('year: ' + year);
+    console.log('description: ' + description);
+    console.log('image: ' + newAlbumImage);
+
+
+   
+    // Validate that the albumId is a valid ObjectId
+    // if (!mongoose.Types.ObjectId.isValid(albumId)) {
+    //     return res.status(400).send("Invalid album ID format");
+    // }
+
+   
+
+    // // Validate that the artist ID is a valid ObjectId
+    // if (!mongoose.Types.ObjectId.isValid(artist)) {
+    //     return res.status(400).send("Invalid artist ID format");
+    // }
+    
+
+    // Validate required fields are provided
+    if (!title || !description || !year || !newAlbumImage) {
+        return res.status(400).send("All fields (title, description, year, image) are required");
+    }
+
+    try {
+        // Update the album by ID
+        const updatedAlbum = await updatedAlbumById(albumId, title, artist, year, description, newAlbumImage);
+
+        // If the album is not found, return 404
+        if (!updatedAlbum) {
+            return res.status(404).send("Album not found");
+        }
+
+        // Return the updated album
+        res.json(updatedAlbum);
+    } catch (error) {
+        console.error("Error updating album:", error.message);  // Log the error on the server side for debugging
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+
+
+
+//Borrar Album
+const deleteAlbumById = async (_id) => {
+    const deletedAlbum = await albumsModel.findOneAndDelete({ _id });
+    return deletedAlbum;
+}
+
+export const eliminarAlbum = async (req, res) => {
+    const albumId = req.params.id;
+
+    try{
+        const deletedAlbum = await deleteAlbumById(albumId);
+        if(!deletedAlbum) { 
+            return res.status(404).send("El album no fue encontrado");
+        }
+    }catch(error){
+        return res.status(500).json({ error: error.message });
+    }
+}
 
 export const upoladAlbumImage = albumImageUpload.single('albumImage');

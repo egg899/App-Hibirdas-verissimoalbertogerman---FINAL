@@ -12,6 +12,21 @@ const ModalAlbum = ({ album, albumId, onClose, onAlbumSaved }) => {
     const [image, setImage] = useState('');
     const [description, setDescription] = useState('');
 
+
+    const [file, setFile] = useState(null);
+    const [albumImage, setAlbumImage] = useState(null);
+    const [imageError, setImageError] = useState("");
+
+
+const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        setFile(URL.createObjectURL(selectedFile));
+        setAlbumImage(selectedFile);
+        //setImageError("");
+    }
+
+
+
     // Populate form fields if editing an existing guitarist
     useEffect(() => {
         if (album) {
@@ -19,7 +34,7 @@ const ModalAlbum = ({ album, albumId, onClose, onAlbumSaved }) => {
             setDescription(album.description);
             setArtist(album.artist.name); // Set guitarist name
             setGuitaristId(album.artist._id); // Set guitarist ID
-            setImage(album.imageUrl);
+            setImage(album.image);
             setYear(album.year);
         }
     }, [album]);
@@ -46,14 +61,34 @@ console.log('GuitaristId', guitaristId);
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Submitting:', { title, description, artist, year, image });
+        console.log('albumImage:', albumImage);
+        // const newInfo = {
+        //     title,
+        //     description,
+        //     artist:guitaristId,
+        //     year,
+        //    image: image  // Correct field name based on the object structure
+        // };
 
-        const newInfo = {
-            title,
-            description,
-            artist:guitaristId,
-            year,
-            imageUrl: image  // Correct field name based on the object structure
-        };
+        const newInfo = new FormData();
+        newInfo.append('title', title),
+        newInfo.append('description', description),
+        newInfo.append('artist', guitaristId),
+        newInfo.append('year', year),
+        newInfo.append('albumImage', albumImage);
+
+
+        // También puedes probar a imprimir los valores que estás agregando:
+console.log('title:', title);
+console.log('description:', description);
+console.log('artist:', guitaristId);
+console.log('year:', year);
+console.log('image:', albumImage);
+       
+if (!albumImage) {
+    console.error('No file selected for albumImage.');
+    return;
+}
 
         try {
             
@@ -62,10 +97,14 @@ console.log('GuitaristId', guitaristId);
                 console.log("Album ID being passed:", albumId);
 
                 // Edit existing album
-                await axios.put(`http://localhost:3000/albums/${albumId}`, newInfo);
+                await axios.put(`http://localhost:3000/albums/${albumId}`, newInfo, {
+                    headers: {"Content-Type": "multipart/form-data"}
+                  });
             } else {
                 // Add new album
-                await axios.post('http://localhost:3000/albums', newInfo);
+                await axios.post('http://localhost:3000/albums', newInfo, {
+                    headers: {"Content-Type": "multipart/form-data"}
+                  });
             }
 
             // Close modal after submit
@@ -109,12 +148,20 @@ console.log('GuitaristId', guitaristId);
                         onChange={(e) => setArtist(e.target.value)}
                     />
 
-                    <input
+                    {/* <input
                         type="text"
                         placeholder="Link de la imagen"
                         value={image}
                         onChange={(e) => setImage(e.target.value)}
-                    />
+                    /> */}
+
+                    <input
+                        type="file"
+                        className="form-control mb-2"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />    
+                   {file && <img src={file} alt="preview" style={{ marginTop: "20px", marginBottom: "20px", width: "300px" }} />}
 
                     <textarea
                         placeholder="Descripción"

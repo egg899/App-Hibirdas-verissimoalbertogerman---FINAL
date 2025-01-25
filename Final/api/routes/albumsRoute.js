@@ -10,7 +10,7 @@ router.get('', agarrarTodosLosAlbums);
 router.get('/:id', agarrarAlbumPorId);
 router.get('/titulo/:titulo', agarrarAlbumPorNombre);
 router.get('/artista/:artista', agarrarAlbumsPorGuitarrista);
-router.put('/:id', actualizarAlbum);
+router.put('/:id', upoladAlbumImage, actualizarAlbum);
 router.delete('/:id',  eliminarAlbum);
 router.post('',  upoladAlbumImage, agregarAlbum);
 
