@@ -100,7 +100,8 @@ console.log('albumsList', albumsList);
       return;
     }
 
-    if (!title || !description || !artist || !year || !albumImage) {
+    // if (!title || !description || !artist || !year || !albumImage) {
+      if (!title || !description || !artist || !year ) {
       setError("Por favor llene todos los campos.");
       return; // Prevent form submission
     } else {

@@ -85,10 +85,10 @@ console.log('artist:', guitaristId);
 console.log('year:', year);
 console.log('image:', albumImage);
        
-if (!albumImage) {
-    console.error('No file selected for albumImage.');
-    return;
-}
+// if (!albumImage) {
+//     console.error('No file selected for albumImage.');
+//     return;
+// }
 
         try {
             

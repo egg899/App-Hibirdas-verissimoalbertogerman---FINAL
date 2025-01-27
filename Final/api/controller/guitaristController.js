@@ -207,6 +207,32 @@ const deleteGuitarristasById = async (_id) => {
 }
 
 const deleteAlbumsByArtistId = async(artistId) => {
+
+    //Obtener los albumes asociados al artista
+    const albums = await albumsModel.find({artist: artistId});
+
+    console.log('Albumes loKita!!!!: ', albums);
+
+    //Recorrer cada album y eliminar su imagen
+    for (const album of albums){
+        if(album.image && album.image !== "default-profile") {
+            const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'albums', album.image);
+
+            console.log('Ruta de la imagen del album a eliminar: ', imagePath);
+
+
+            //Verificar si la imagen existe antes de eliminiarla
+            if(fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
+                console.log('Imagen del album eliminada: ', album.image);
+            }
+        }
+
+
+
+    } //For albums
+
+
     await albumsModel.deleteMany({artist:artistId});
 }
 

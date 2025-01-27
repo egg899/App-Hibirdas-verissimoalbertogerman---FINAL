@@ -243,34 +243,38 @@ const updatedAlbumById = async (_id, title, artist, year, description, image) =>
    
 
     const objectId = new mongoose.Types.ObjectId(_id); // Convertir el ID a ObjectId
-    const updateFields = {title, artist, year, description, image};
+    const updateFields = {title, artist, year, description};
 
     console.log('objectId: ' + objectId);
 
+    //Buscar el album antes de hacer cualquier modificacion
+    const album = await albumsModel.findById(objectId);
+    console.log('Este es el Album!!!!:', album)
 
+    if(!album) {
+        throw new Error("Album no encontrado");
+    }
 
-
-
-    //  // Si se proporciona una nueva imagen que es diferente de la actual y no es la predeterminada, eliminar la anterior
-    //        if (image && image !== "default-profile.jpg" && image !== album.image) {
-    //         const imagePath = path.join(__dirname, '..','..' ,'client','src','assets', 'images','albums' );
-            
-    //         console.log('Ruta de la imagen a eliminar: ', imagePath);
     
-    //         // Verificar que la imagen actual existe antes de intentar eliminarla
-    //         if (fs.existsSync(imagePath)) {
-    //             fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
-    //             console.log('Imagen anterior eliminada: ', album.image);
-    //         }
-    //     }
-   
+    //Si se proporciona una nueva imagen y no  es predeterminada ni la misma
+    //imagen que la anterior
 
-    // Optionally, you could check if the artist exists
-    // const artistExists = await guitaristsModel.findById(artist);
-    // if (!artistExists) {
-    //     throw new Error("Artist does not exist");
-    // }
+    if(image && image !== "default-profile.jpg" && image !== album.image){
+        const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'albums', album.image);
     
+        console.log('Ruta de la imagen a eliminar: ', imagePath);
+
+
+        //Verificar si la imagen anterior existe antes de intentar eliminarla
+        if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath); // Eliminar la imagen anterior
+            console.log('Imagen anterior eliminada: ', album.image);
+        }
+    }
+
+
+
+
 
     if(image && image !== "default-profile.jpg") {
         updateFields.image = image;
@@ -353,6 +357,18 @@ export const actualizarAlbum = async (req, res) => {
 
 //Borrar Album
 const deleteAlbumById = async (_id) => {
+    const objectId = new mongoose.Types.ObjectId(_id);
+
+    const album = await albumsModel.findById(objectId);
+
+    console.log("Album deleted to delete: ", album);
+    const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'albums', album.image);
+
+    if(fs.existsSync(imagePath)){
+        fs.unlinkSync(imagePath);
+        console.log('Imagen eliminada: ', album.image);
+    }
+
     const deletedAlbum = await albumsModel.findOneAndDelete({ _id });
     return deletedAlbum;
 }
