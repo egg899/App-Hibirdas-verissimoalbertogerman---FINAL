@@ -155,9 +155,9 @@ console.log('albumsList', albumsList);
 
 
 
-      // await axios.post('http://localhost:3000/albums', newAlbum, {
+       await axios.post('http://localhost:3000/albums', newAlbum, {
 
-      await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums', newAlbum, {
+      //await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums', newAlbum, {
         headers: {"Content-Type": "multipart/form-data"}
       });
 
