@@ -59,7 +59,15 @@ const Home = () => {
 
   const fetchGuitarists = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/guitarists',{
+      // const response = await axios.get('http://localhost:3000/guitarists',{
+      //   params: {
+      //     name:search,
+      //     sortBy:sort,
+      //     page,
+      //     limit
+          
+      //   },
+      const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists',{
         params: {
           name:search,
           sortBy:sort,
@@ -244,7 +252,8 @@ console.log("guitarrist", guitarristas)
     
     try {
       setShowConfirmationModal(false);
-       await axios.delete(`http://localhost:3000/guitarists/${id}`, 
+       //await axios.delete(`http://localhost:3000/guitarists/${id}`, 
+       await axios.delete(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${id}`,
        { headers:{'authorization':auth}});
        setGuitarristas(prev => prev.filter(guitarist => guitarist._id !== id)); // Update local state
 
