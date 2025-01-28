@@ -386,4 +386,4 @@ export const eliminarAlbum = async (req, res) => {
     }
 }
 
-export const upoladAlbumImage = albumImageUpload.single('albumImage');
+export const uploadAlbumImage = albumImageUpload.single('albumImage');

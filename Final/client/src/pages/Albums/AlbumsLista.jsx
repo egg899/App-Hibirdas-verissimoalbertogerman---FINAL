@@ -38,7 +38,10 @@ const AlbumsLista = () => {
   const fetchAlbums = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3000/albums');
+      //https://app-hibirdas-verissimoalbertogerman.onrender.com
+      // const response = await axios.get('http://localhost:3000/albums');
+      const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums');
+
       setTimeout(() => {
         setAlbumsList(response.data);
         setFilteredAlbums(response.data); // Initialize filtered list
@@ -109,8 +112,11 @@ console.log('albumsList', albumsList);
     }
 
     try {
+      // const response = await axios.get(
+      //   `http://localhost:3000/guitarists/id/${artist}`
+      // );
       const response = await axios.get(
-        `http://localhost:3000/guitarists/id/${artist}`
+        `https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/id/${artist}`
       );
       const artistId = response.data;
 
@@ -149,7 +155,9 @@ console.log('albumsList', albumsList);
 
 
 
-      await axios.post('http://localhost:3000/albums', newAlbum, {
+      // await axios.post('http://localhost:3000/albums', newAlbum, {
+
+      await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums', newAlbum, {
         headers: {"Content-Type": "multipart/form-data"}
       });
 
@@ -180,7 +188,9 @@ console.log('albumsList', albumsList);
     
     try {
       setShowConfirmationModal(false);
-      await axios.delete(`http://localhost:3000/albums/${albumId}`);
+      // await axios.delete(`http://localhost:3000/albums/${albumId}`);
+      await axios.delete(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/${albumId}`);
+
       fetchAlbums();
     } catch (error) {
       console.error('Error al eliminar el álbum:', error);
