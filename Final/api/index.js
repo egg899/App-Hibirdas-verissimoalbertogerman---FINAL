@@ -43,7 +43,7 @@ const __dirname = path.dirname(__filename);
 
 console.log('MongoDB URI:', process.env.MONGODB_URI);  // Verifica que la URI esté cargada correctamente
 
-mongoose.connect(process.env.MONGODB_URI,  { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://albertoverissimo:1234@cluster0.xtczf.mongodb.net/final?retryWrites=true&w=majority',  { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected to MongoDB Atlas');
   })
