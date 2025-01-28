@@ -41,6 +41,7 @@ const __dirname = path.dirname(__filename);
 //   .then(() => console.log("Successfully connected to MongoDB"))
 //   .catch((err) => console.error("MongoDB connection error:", err));
 
+console.log('MongoDB URI:', process.env.MONGODB_URI);  // Verifica que la URI esté cargada correctamente
 
 mongoose.connect(process.env.MONGODB_URI,  { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
