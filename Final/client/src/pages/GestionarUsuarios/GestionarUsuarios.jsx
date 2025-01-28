@@ -124,7 +124,7 @@ console.log('current',currentUsuario);
 
       <div className="row">
         {usuarios.map((usuario) => (
-          <div className="col-lg-4 col-md-6 mb-4" key={usuario._id}>
+          <div className="col  mb-4" key={usuario._id}>
             <div
               className="card text-light h-100"
               style={{ backgroundColor: "#333333" }}
