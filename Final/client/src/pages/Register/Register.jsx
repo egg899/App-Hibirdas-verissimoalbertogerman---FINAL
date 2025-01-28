@@ -237,7 +237,10 @@ const Register = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/usuarios/register", formData, {
+      // const res = await axios.post("http://localhost:3000/usuarios/register", formData, {
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // });
+      const res = await axios.post("https://app-hibirdas-verissimoalbertogerman.onrender.com/usuarios/register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log(res.data);

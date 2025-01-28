@@ -36,10 +36,20 @@ const io = new socketIo(server, {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Successfully connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+// // Connect to MongoDB
+// mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+//   .then(() => console.log("Successfully connected to MongoDB"))
+//   .catch((err) => console.error("MongoDB connection error:", err));
+
+
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB Atlas');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
+
 
 //Middleware to parse JSON request bodies
 app.use(cors());
