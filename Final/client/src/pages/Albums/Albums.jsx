@@ -20,7 +20,9 @@ const Albums = () => {
   const fetchAlbumsDetails = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:3000/albums/titulo/${titulo}`);
+      // const response = await axios.get(`http://localhost:3000/albums/titulo/${titulo}`);
+      const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/titulo/${titulo}`);
+
       setTimeout(() => {
         setAlbum(response.data[0] || null); //  nulo si no hay album
         setLoading(false);
@@ -36,7 +38,9 @@ useEffect(() => {
     const fetchGuitarristName = async () => {
       try {
 
-        const response = await axios.get(`http://localhost:3000/guitarists/${album.artist}`);
+       // const response = await axios.get(`http://localhost:3000/guitarists/${album.artist}`);
+       const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${album.artist}`);
+
         setGuitaristName(response.data.name || null);
 
       } catch (error){
