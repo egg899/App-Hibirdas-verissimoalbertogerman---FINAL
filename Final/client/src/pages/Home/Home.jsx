@@ -59,15 +59,7 @@ const Home = () => {
 
   const fetchGuitarists = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/guitarists',{
-        params: {
-          name:search,
-          sortBy:sort,
-          page,
-          limit
-          
-        },
-      // const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists',{
+      // const response = await axios.get('http://localhost:3000/guitarists',{
       //   params: {
       //     name:search,
       //     sortBy:sort,
@@ -75,6 +67,14 @@ const Home = () => {
       //     limit
           
       //   },
+      const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists',{
+        params: {
+          name:search,
+          sortBy:sort,
+          page,
+          limit
+          
+        },
         headers:{'token':auth}
       });
       setGuitarristas(response.data);
