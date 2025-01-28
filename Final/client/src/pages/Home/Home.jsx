@@ -59,15 +59,7 @@ const Home = () => {
 
   const fetchGuitarists = async () => {
     try {
-      // const response = await axios.get('http://localhost:3000/guitarists',{
-      //   params: {
-      //     name:search,
-      //     sortBy:sort,
-      //     page,
-      //     limit
-          
-      //   },
-      const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists',{
+      const response = await axios.get('http://localhost:3000/guitarists',{
         params: {
           name:search,
           sortBy:sort,
@@ -75,6 +67,14 @@ const Home = () => {
           limit
           
         },
+      // const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists',{
+      //   params: {
+      //     name:search,
+      //     sortBy:sort,
+      //     page,
+      //     limit
+          
+      //   },
         headers:{'token':auth}
       });
       setGuitarristas(response.data);
@@ -210,8 +210,8 @@ return () => {
     // console.log('guitaristImage size:', guitImage.size);
 
     try {
-      // await axios.post('http://localhost:3000/guitarists', newGuitarist,
-      await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists', newGuitarist,
+       await axios.post('http://localhost:3000/guitarists', newGuitarist,
+      //await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists', newGuitarist,
         { headers:{'authorization':auth}}
       );
       setName('');
@@ -252,8 +252,8 @@ console.log("guitarrist", guitarristas)
     
     try {
       setShowConfirmationModal(false);
-       //await axios.delete(`http://localhost:3000/guitarists/${id}`, 
-       await axios.delete(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${id}`,
+       await axios.delete(`http://localhost:3000/guitarists/${id}`, 
+       //await axios.delete(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${id}`,
        { headers:{'authorization':auth}});
        setGuitarristas(prev => prev.filter(guitarist => guitarist._id !== id)); // Update local state
 

@@ -38,8 +38,8 @@ useEffect(() => {
     const fetchGuitarristName = async () => {
       try {
 
-       // const response = await axios.get(`http://localhost:3000/guitarists/${album.artist}`);
-       const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${album.artist}`);
+        const response = await axios.get(`http://localhost:3000/guitarists/${album.artist}`);
+       //const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${album.artist}`);
 
         setGuitaristName(response.data.name || null);
 
