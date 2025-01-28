@@ -202,7 +202,8 @@ return () => {
     // console.log('guitaristImage size:', guitImage.size);
 
     try {
-      await axios.post('http://localhost:3000/guitarists', newGuitarist,
+      // await axios.post('http://localhost:3000/guitarists', newGuitarist,
+      await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists', newGuitarist,
         { headers:{'authorization':auth}}
       );
       setName('');

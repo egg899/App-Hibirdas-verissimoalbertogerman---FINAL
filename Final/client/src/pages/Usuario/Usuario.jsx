@@ -30,7 +30,12 @@ const Usuario = () => {
         }
 
         // Add token in Authorization header
-        const response = await axios.get(`http://localhost:3000/usuarios/${id}`, {
+        // const response = await axios.get(`http://localhost:3000/usuarios/${id}`, {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`, // Include the token in the headers
+        //   },
+        // });
+        const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/usuarios/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the headers
           },
