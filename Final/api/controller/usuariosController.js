@@ -10,8 +10,8 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
- //const secretKey = 'SECRETA';
-const secretKey = process.env.SECRET_KEY;
+ const secretKey = 'SECRETA';
+//const secretKey = process.env.SECRET_KEY;
 
 //Mostrar todos los usuarios
 export const agarrarTodosLosUsuarios = async (req, res) => {
