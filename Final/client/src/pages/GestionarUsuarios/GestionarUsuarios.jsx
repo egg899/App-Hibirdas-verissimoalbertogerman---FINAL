@@ -59,6 +59,29 @@ console.log('current',currentUsuario);
   
   const handleConfirmDelete = async () => {
     if (userToDelete) {
+      console.log('Esta es la imagen que se deberia borrar: ',userToDelete.image);
+
+     
+    let publicId = null;
+    const urlParts = userToDelete.image.split('/');
+        const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
+        publicId = publicIdFromUrl;
+   
+        if(userToDelete.image && userToDelete.image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg' ) {
+          // Primero, eliminamos la imagen anterior (si hay una)
+              if (publicId) {
+                  try {
+                      await axios.delete('http://localhost:3000/delete-image', {
+                          data: { public_id: publicId }
+                      });
+                      // alert("Imagen anterior eliminada.");
+                  } catch (error) {
+                      console.error("Error eliminando la imagen anterior:", error);
+                  }
+              }
+
+        }//if image
+
       try {
         await axios.delete(`http://localhost:3000/usuarios/${userToDelete._id}`);
         setUsuarios(usuarios.filter((usuario) => usuario._id !== userToDelete._id));

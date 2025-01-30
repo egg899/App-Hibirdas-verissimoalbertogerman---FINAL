@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
+import cloudinary from "cloudinary";
 import usuariosModel from "../model/usuariosModel.js";
 import { io } from "../index.js";
 import mongoose from "mongoose";
@@ -12,6 +13,17 @@ import { fileURLToPath } from 'url';
 dotenv.config();
  //const secretKey = 'SECRETA';
 const secretKey = process.env.SECRET_KEY;
+
+// cloudinary.config({
+//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//     api_key: process.env.CLOUDINARY_API_KEY,
+//     api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
+
+
+
+
+
 
 //Mostrar todos los usuarios
 export const agarrarTodosLosUsuarios = async (req, res) => {
@@ -208,36 +220,36 @@ const storage = multer.diskStorage({
 const imageUpload = multer({ storage: storage })
 
 
+
+//Funcion para subir la imagen a Cloudinary
+// const uploadToCloudinary = (filePath) => {
+//     return new Promise((resolve, reject) => {
+//         cloudinary.v2.uploader.upload(filePath, (error, result) => {
+//             if (error) {
+//                 console.error("Error al subir la imagen:", error);
+//                 reject(error);  // Rechaza la promesa en caso de error
+//             } else {
+//                 console.log("Resultado de Cloudinary:", result);  // Verifica la respuesta
+//                 resolve(result.secure_url);  // Devuelve la URL segura de la imagen
+//             }
+//         });
+//     });
+// };
+
+
 export const agregarUsuarios = async (req, res) => {
-    console.log('Contenido de req.file:', req.file); // Verifica el contenido de req.file
+    const { name, username, email, role, password, imageUrl } = req.body; // Ahora la imagen llega como URL
 
+    if (!name) return res.status(400).send("El nombre es requerido");
+    if (!username) return res.status(400).send("El nombre de usuario es requerido");
+    if (!email) return res.status(400).send("El email es requerido");
+    if (!role) return res.status(400).send("El rol es requerido");
+    if (!password) return res.status(400).send("El password es requerido");
 
+    // Si no hay imagen, usa una por defecto
+    const profileImage = imageUrl || 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg';
 
-
-    const { name, username, email, role, password } = req.body;
-    
-    //Verificar si se subio la imagen
-    const profileImage = req.file ? req.file.filename : 'default-profile.jpg';
-
-
-
-    if (!name) {
-        return res.status(400).send("El nombre es requerido");
-    }
-    if (!username) {
-        return res.status(400).send("El nombre de usuario es requerido");
-    }
-    if (!email) {
-        return res.status(400).send("El email es requerido");
-    }
-    if (!role) {
-        return res.status(400).send("El rol es requerido");
-    }
-    if (!password) {
-        return res.status(400).send("El password es requerido");
-    }
-
-    const newUser = { name, username, email, role, password,  image: profileImage };
+    const newUser = { name, username, email, role, password, image: profileImage };
 
     try {
         const addedUser = await adherirUsuario(newUser);
@@ -254,43 +266,113 @@ export const agregarUsuarios = async (req, res) => {
 
 
 
-//Actualizar el Usuario
-const updateUserById = async (_id, name, username, email, role, image, password) => {
-    try {
-        const objectId = new mongoose.Types.ObjectId(_id);
+// //Actualizar el Usuario
+// const updateUserById = async (_id, name, username, email, role, image, password) => {
+//     try {
+//         const objectId = new mongoose.Types.ObjectId(_id);
 
 
-         const usuario = await usuariosModel.findById(objectId);
-         console.log('La imagen chabon', image);
-         console.log('Este es el usuario chabon: ', usuario);
+//          const usuario = await usuariosModel.findById(objectId);
+//          console.log('La imagen chabon', image);
+//          console.log('Este es el usuario chabon: ', usuario);
 
-        if(image && image !== 'default-profile.jpg' && image !== usuario.image) {
-            const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'uploads', usuario.image);
+//         // if(image && image !== 'default-profile.jpg' && image !== usuario.image) {
+//         //     const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'uploads', usuario.image);
         
-            if(fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath); // Delete the previous image file
-                console.log('Esta es la imagen anterior eliminada: ', usuario.image);
-            }
-        }
+//         //     if(fs.existsSync(imagePath)) {
+//         //         fs.unlinkSync(imagePath); // Delete the previous image file
+//         //         console.log('Esta es la imagen anterior eliminada: ', usuario.image);
+//         //     }
+//         // }
          
 
 
 
 
+//         const updateFields = { name, username, email, role };
+//         if (password) {
+//             updateFields.password = await bcrypt.hash(password, 10);
+//         }
+
+//        if(image ) {
+//         updateFields.image = image; // Update the image field if provided in the request body. The image field is optional.
+//        } else {
+//         // Retain the existing image if no new image is provided
+//         const user = await usuariosModel.findById(objectId);
+//         if (user && user.image) {
+//             updateFields.image = user.image;
+//         }
+//        }
+//         const updatedUser = await usuariosModel.findOneAndUpdate(
+//             { _id: objectId },
+//             updateFields,
+//             { new: true }
+//         );
+
+//         return updatedUser;
+//     }
+//     catch (error) {
+//         throw new Error(`Error al actualizar  el usuario: ${error.message}`);
+//     }
+
+
+
+// }//udatedUserById
+
+// export const actualizarUsuario = async ( req, res ) => {
+//     const userId = req.params.id;
+//     const { name, username, email, role, image, password } = req.body;
+    
+//     //Verificar si se subio la imagen
+//     const profileImage = req.file ? req.file.filename : 'default-profile.jpg';
+   
+
+//     if (!name || !username || !email || !role) {
+//         return res.status(400).json({ error: "Todos los campos son requeridos." });
+//     }
+
+//     try {
+//         const updatedUser = await updateUserById(userId, name, username, email, role, image, password);
+        
+//         if (!updatedUser) {image
+//             return res.status(404).send({ mensaje: "No se encontró el usuario con el id especificado" });
+//         }
+
+//         res.json(updatedUser);
+
+//     } catch (error) {
+//         return res.status(500).json({ error: error.message });
+//     }
+
+// }//actualizarUsuario
+
+
+
+const updateUserById = async (_id, name, username, email, role, image, password) => {
+    try {
+        const objectId = new mongoose.Types.ObjectId(_id);
+
+        const usuario = await usuariosModel.findById(objectId);
+        console.log('La imagen chabon', image);
+        console.log('Este es el usuario chabon: ', usuario);
+
+        // Si la imagen se ha proporcionado, actualiza el campo de imagen.
         const updateFields = { name, username, email, role };
         if (password) {
             updateFields.password = await bcrypt.hash(password, 10);
         }
 
-       if(image !== "default-profile.jpg") {
-        updateFields.image = image; // Update the image field if provided in the request body. The image field is optional.
-       } else {
-        // Retain the existing image if no new image is provided
-        const user = await usuariosModel.findById(objectId);
-        if (user && user.image) {
-            updateFields.image = user.image;
+        // Actualiza la imagen solo si se proporciona una nueva imagen.
+        if (image && image !== 'default-profile.jpg') {
+            updateFields.image = image;
+        } else {
+            // Si no se proporciona una nueva imagen, conserva la imagen actual
+            if (usuario.image && usuario.image !== 'default-profile.jpg') {
+                updateFields.image = usuario.image;
+            }
         }
-       }
+
+        // Realiza la actualización en la base de datos
         const updatedUser = await usuariosModel.findOneAndUpdate(
             { _id: objectId },
             updateFields,
@@ -298,29 +380,22 @@ const updateUserById = async (_id, name, username, email, role, image, password)
         );
 
         return updatedUser;
+    } catch (error) {
+        throw new Error(`Error al actualizar el usuario: ${error.message}`);
     }
-    catch (error) {
-        throw new Error(`Error al actualizar  el usuario: ${error.message}`);
-    }
+};
 
-
-
-}//udatedUserById
-
-export const actualizarUsuario = async ( req, res ) => {
+export const actualizarUsuario = async (req, res) => {
     const userId = req.params.id;
-    const { name, username, email, role, image, password } = req.body;
-    
-    //Verificar si se subio la imagen
-    const profileImage = req.file ? req.file.filename : 'default-profile.jpg';
-   
+    const { name, username, email, role, image, password} = req.body;
 
     if (!name || !username || !email || !role) {
         return res.status(400).json({ error: "Todos los campos son requeridos." });
     }
 
     try {
-        const updatedUser = await updateUserById(userId, name, username, email, role, profileImage, password);
+        // Llamada a la función para actualizar el usuario
+        const updatedUser = await updateUserById(userId, name, username, email, role, image, password);
         
         if (!updatedUser) {
             return res.status(404).send({ mensaje: "No se encontró el usuario con el id especificado" });
@@ -331,8 +406,8 @@ export const actualizarUsuario = async ( req, res ) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
+};
 
-}//actualizarUsuario
 
 //Exporta el middleWare de Multer para la subida de la imagen
 export const uploadProfileImage = imageUpload.single('profileImage');

@@ -24,24 +24,24 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // try {
-    //     await axios.post('http://localhost:3000/usuarios/login', userData)
-    //   .then((res) => {
-    //     console.log('res', res);
-    //     setUser(res.data.usuario);
-    //     Cookies.set('jwToken', res.data.jwtToken, { expires: 3 });
-    //     navigate('/');
-    //   })
-    // }
     try {
-      await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/usuarios/login', userData)
-    .then((res) => {
-      console.log('res', res);
-      setUser(res.data.usuario);
-      Cookies.set('jwToken', res.data.jwtToken, { expires: 3 });
-      navigate('/');
-    })
-  }
+        await axios.post('http://localhost:3000/usuarios/login', userData)
+      .then((res) => {
+        console.log('res', res);
+        setUser(res.data.usuario);
+        Cookies.set('jwToken', res.data.jwtToken, { expires: 3 });
+        navigate('/');
+      })
+    }
+  //   try {
+  //     await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/usuarios/login', userData)
+  //   .then((res) => {
+  //     console.log('res', res);
+  //     setUser(res.data.usuario);
+  //     Cookies.set('jwToken', res.data.jwtToken, { expires: 3 });
+  //     navigate('/');
+  //   })
+  // }
   
     catch (error) {
       setError(error.response?.data?.mensaje || "An error occurred.");

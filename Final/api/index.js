@@ -15,9 +15,20 @@ import fs from 'fs';
 import validateBody from './validation.js';
 import { fileURLToPath } from 'url';
 import { Server as socketIo } from 'socket.io';
-
+import cloudinary from 'cloudinary';
 
 dotenv.config(); // Load environment variables
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+
+
+
+
 
 const app = express();
 //const port = 3000;
@@ -27,7 +38,7 @@ const server = http.createServer(app);
 //const io = new socketIo(server);
 const io = new socketIo(server, {
   cors: {
-    origin: ['http://localhost:5173', 'https://app-hibirdas-verissimoalbertogerman.onrender.com'],
+    origin: ['http://localhost:5173'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }
@@ -72,7 +83,22 @@ app.use('/comentarios', comentariosRoute);
 
 app.options('/upload', cors());
 
+//Endpoint para eliminar la imagen
+app.delete('/delete-image', async (req, res) => {
+  const { public_id } = req.body;
+  try {
+    const result = await cloudinary.uploader.destroy(public_id);
+    res.status(200).json({ message: 'Imagen eliminada exitosamente', result});
+  }
+  catch (error) {
+      console.error('Error al eliminar la imagen de Cloudinary, error');
+      res.status(500).json({ error: 'Error al eliminar la imagen' });
+  }
 
+
+
+
+})//app. delete
 
 // const uploadsDir = path.join(__dirname, 'uploads');
 // console.log('Uploading', uploadsDir);

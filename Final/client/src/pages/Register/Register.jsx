@@ -31,32 +31,47 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    // Subir la imagen a Cloudinary
+    let imageUrl = "";
+    if (image) {
+        const imageFormData = new FormData();
+        imageFormData.append("file", image);
+        imageFormData.append("upload_preset", "app-hib"); // Asegúrate de usar tu preset
+
+        try {
+            const cloudinaryRes = await axios.post(
+                `https://api.cloudinary.com/v1_1/dkk4j1f0q/image/upload`,
+                imageFormData
+            );
+            imageUrl = cloudinaryRes.data.secure_url;
+        } catch (error) {
+            console.error("Error al subir imagen:", error);
+            setError("Error al subir imagen");
+            return;
+        }
+    }
+
+    // Crear FormData con la URL de la imagen
     const formData = new FormData();
     formData.append("name", userData.name);
     formData.append("username", userData.username);
     formData.append("email", userData.email);
     formData.append("password", userData.password);
     formData.append("role", userData.role);
-
-    // Agregar la imagen solo si fue seleccionada
-    if (image) {
-      formData.append("profileImage", image);
-    }
+    formData.append("imageUrl", imageUrl); // Ahora se envía la URL
 
     try {
-      const res = await axios.post("http://localhost:3000/usuarios/register", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      // const res = await axios.post("https://app-hibirdas-verissimoalbertogerman.onrender.com/usuarios/register", formData, {
-      //   headers: { "Content-Type": "multipart/form-data" },
-      // });
-      console.log(res.data);
-      navigate("/login");
+        const res = await axios.post("http://localhost:3000/usuarios/register", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        console.log(res.data);
+        navigate("/login");
     } catch (error) {
-      console.error(error);
-      setError(error.response?.data?.message || "Error en el registro");
+        console.error(error);
+        setError(error.response?.data?.message || "Error en el registro");
     }
-  };
+};
+
 
   useEffect(() => {
     if (user) {

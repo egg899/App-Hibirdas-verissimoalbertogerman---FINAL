@@ -98,7 +98,8 @@ const Usuario = () => {
     <div>
     <div className="row g-0 align-items-center border rounded-3 shadow-lg p-3 bg-dark text-light">
       <div className="col-md-4">
-      <img src=  {`../../src/assets/images/uploads/${user.image}`} style={{ maxWidth: '80%' }}  className="img-fluid rounded" alt="Imagen del usuario"/>
+      {/* <img src=  {`../../src/assets/images/uploads/${user.image}`} style={{ maxWidth: '80%' }}  className="img-fluid rounded" alt="Imagen del usuario"/> */}
+      <img src=  {`${user.image}`} style={{ maxWidth: '80%' }}  className="img-fluid rounded" alt="Imagen del usuario"/>
 
       </div>
       <div className="col-md-8 rounded p-4 ">

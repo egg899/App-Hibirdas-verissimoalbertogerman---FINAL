@@ -32,74 +32,124 @@ const ModalUsuario = ({ user, userId, onClose, onUserSaved}) => {
         }
     }, [user]);
     
-    const handleSubmit = async (e) => {
-        // e.preventDefault();
-        // console.log('Enviando: ', {name, username, email, role, image, password});
+//  const handleSubmit = async (e) => {
+        
+//     e.preventDefault();
 
-        // const newInfo = {
-        //     name,
-        //     username,
-        //     email,
-        //     role, 
-        //     image,
-        //     password
-        // }
-
-        // try{
-        //     if(user){
-        //         await axios.put(`http://localhost:3000/usuarios/${userId}`, newInfo);
-        //     } else {
-        //         await axios.post('http://localhost:3000/usuarios', newInfo);
-        //     }
-
-        //     console.log('La info del Usuario ha sido guardada');
-        //     onUserSaved();
-        //     onClose();
-
-        // } catch(error) {
-        //     console.log('Error:', error);
-        // }
-
-
-        e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("username", username);
-    formData.append("email", email);
-    formData.append("role", role);
-    if(password){
-        formData.append("password", password);
-    }
+//     const formData = new FormData();
+//     formData.append("name", name);
+//     formData.append("username", username);
+//     formData.append("email", email);
+//     formData.append("role", role);
+//     if(password){
+//         formData.append("password", password);
+//     }
     
-    if (image) {
-        formData.append("profileImage", image); // Agrega la imagen solo si existe
+//     if (image) {
+//         formData.append("profileImage", image); // Agrega la imagen solo si existe
+//     }
+
+//     try {
+//         if (user) {
+//             await axios.put(`http://localhost:3000/usuarios/${userId}`, formData, {
+//                 headers: {
+//                     "Content-Type": "multipart/form-data",
+//                 },
+//             });
+//         } else {
+//             await axios.post('http://localhost:3000/usuarios', formData, {
+//                 headers: {
+//                     "Content-Type": "multipart/form-data",
+//                 },
+//             });
+//         }
+
+//         console.log('La info del Usuario ha sido guardada');
+//         onUserSaved();
+//         onClose();
+
+//     } catch (error) {
+//         console.log('Error:', error);
+//     }
+
+//     };//handleSubmit
+
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let imageUrl = user?.image;
+    let publicId = null;
+    const urlParts = user.image.split('/');
+        const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
+        publicId = publicIdFromUrl;
+    console.log('publicId loco: ', publicId);
+    console.log('La imagen mi amigazo: ', image)
+
+
+    if(image && image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg' ) {
+    // Primero, eliminamos la imagen anterior (si hay una)
+        if (publicId) {
+            try {
+                await axios.delete('http://localhost:3000/delete-image', {
+                    data: { public_id: publicId }
+                });
+                // alert("Imagen anterior eliminada.");
+            } catch (error) {
+                console.error("Error eliminando la imagen anterior:", error);
+            }
+        }
+        const formData = new FormData();
+        formData.append('file', image);
+        formData.append("upload_preset", "app-hib"); // Asegúrate de usar tu preset
+
+
+        try {
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/dkk4j1f0q/image/upload`,
+                formData
+            );
+            imageUrl = response.data.secure_url;
+        } catch(error) {
+            console.error('Error uploading image to Cloudinary:', error);
+            setError('Error uploading image to Cloudinary');
+            return;
+        }
+
+
+    }//image
+
+    const userData = {
+        name,
+        username,
+        email,
+        role,
+        image: imageUrl, // Enviar la URL en lugar del archivo
+    };
+
+    if (password) {
+        userData.password = password;
     }
+
 
     try {
         if (user) {
-            await axios.put(`http://localhost:3000/usuarios/${userId}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            await axios.put(`http://localhost:3000/usuarios/${userId}`, userData);
         } else {
-            await axios.post('http://localhost:3000/usuarios', formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            await axios.post("http://localhost:3000/usuarios", userData);
         }
 
-        console.log('La info del Usuario ha sido guardada');
+        console.log("La info del usuario ha sido guardada");
         onUserSaved();
         onClose();
-
     } catch (error) {
-        console.log('Error:', error);
+        console.error("Error:", error);
     }
+}///handleSubmit
 
-    };//handleSubmit
+
+
+
 
     return (
         <div className="modalWrapper">
