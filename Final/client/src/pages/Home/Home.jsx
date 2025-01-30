@@ -174,6 +174,26 @@ return () => {
     return; // Prevent form submission
   }
 
+  let imageUrl="";
+  if(guitImage) {
+    const imageFormData = new FormData();
+    imageFormData.append("file", guitImage);
+    imageFormData.append("upload_preset", "app-hib");
+  
+
+  try {
+    const cloudinaryRes = await axios.post(`https://api.cloudinary.com/v1_1/dkk4j1f0q/image/upload`,
+      imageFormData
+  );
+  imageUrl = cloudinaryRes.data.secure_url;
+
+  } catch(error) {
+    console.error(error);
+    setError("Hubo un error al subir la imagen.");
+    return;
+  }
+}
+
 
     // const newGuitarist = {
     //   name,
@@ -195,8 +215,8 @@ return () => {
     newGuitarist.append('description', description);
     newGuitarist.append('style', style);
     newGuitarist.append('albums', albums);
-    // newGuitarist.append('imageUrl', image);
-    newGuitarist.append('guitaristImage', guitImage);
+    newGuitarist.append('imageUrl', imageUrl);
+    //newGuitarist.append('guitaristImage', guitImage);
     newGuitarist.append("owner[userId]", user._id);
     newGuitarist.append("owner[username]", user.username);
 
@@ -396,14 +416,24 @@ const handleSuggestionClick = (suggestion) => {
     {guitarristas.map((guitarrista) => (
       <div key={guitarrista._id} className="col-md-6 col-lg-6 mb-4">
         <div className="card">
-          <img
+          {/* <img
             src={guitarrista.image === 'default-profile.jpg'
               ?'../../src/assets/images/uploads/' + guitarrista.image
               : '../../src/assets/images/guitarists/' + guitarrista.image} // Imagen predeterminada si no hay imagen
             alt={guitarrista.name}
             className="card-img-top"
             style={{ height: '200px', objectFit: 'cover', objectPosition: 'top' }} // Ajustar la imagen
+          /> */}
+
+<img
+            src={guitarrista.image === 'default-profile.jpg'
+              ?  guitarrista.image
+              :   guitarrista.image} // Imagen predeterminada si no hay imagen
+            alt={guitarrista.name}
+            className="card-img-top"
+            style={{ height: '200px', objectFit: 'cover', objectPosition: 'top' }} // Ajustar la imagen
           />
+          
           <div className="card-body">
             <h5 className="card-title">{guitarrista.name}</h5>
             <p className="autor">Autor: {guitarrista.owner.username}</p>

@@ -6,7 +6,9 @@ const router = express.Router();
 
 router.get('/', agarrarTodosLosUsuarios);
 router.get('/:id', obtenerUsuarioPorId);
+// router.post('/register', uploadProfileImage, agregarUsuarios);
 router.post('/register', uploadProfileImage, agregarUsuarios);
+
 router.post('/login', loginUsuario);
 router.put('/:id',uploadProfileImage, actualizarUsuario);
 router.delete('/:id', eliminarUsuario);

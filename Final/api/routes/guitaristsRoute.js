@@ -14,7 +14,7 @@ router.get('/id/:nombre', devolverGuitarristaId);
 router.put('/:id', uploadGuitaristImage, actualizarGuitarrista);
 router.delete('/:id', authenticateToken, eliminarGuitarrista);
 router.post('', authenticateToken, uploadGuitaristImage, agregarGuitarrista);
-
+//router.post('', authenticateToken, agregarGuitarrista);
 
 // router.get('', agarrarTodosLosGuitarristas);
 // router.get('/:id', agarrarGuitarristaPorId);

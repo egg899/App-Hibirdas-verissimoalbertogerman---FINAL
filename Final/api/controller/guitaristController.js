@@ -280,10 +280,14 @@ const guitImageUpload = multer({ storage: storage });
 
 //Agregar Guitarrista
 export const agregarGuitarrista = async (req, res) => {
-    let { name, description, albums, style, owner } = req.body;
+    let { name, description, albums, style, owner, imageUrl } = req.body;
 
-    const guitaristImage = req.file ? req.file.filename : 'default-profile.jpg';
-    console.log('req.file: ', req.file);
+    // const guitaristImage = req.file ? req.file.filename : 'default-profile.jpg';
+    // console.log('req.file: ', req.file);
+     
+    // Verifica si la URL de la imagen está presente, si no, asigna una imagen por defecto
+    const guitaristImage = imageUrl ||  'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg';
+    console.log('Imagen URL recibida: ', guitaristImage);
 
     // Validate required fields
     if (!name || !description ||  !style || !albums || !owner?.userId || !owner?.username) {
