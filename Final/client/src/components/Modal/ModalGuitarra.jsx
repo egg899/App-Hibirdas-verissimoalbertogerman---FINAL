@@ -37,26 +37,69 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Submitting:', { name, description, style, albums, image });
+        console.log('Submitting desde el Modal:', { name, description, style, albums, image });
         const albumsString = albums.split(',').map(album => album.trim()).join(',');
 
-        // const newInfo = {
-        //     name,
-        //     description,
-        //     style,
-        //     albums:albumsArray,
-        //     imageUrl: image  // Correct field name based on the object structure
-        // };
+        let imageUrl = guitarist?.image;
+        let publicId = null;
+        const urlParts = guitarist.image.split('/');
+        const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
+        
+        publicId = publicIdFromUrl;
+        console.log('publicId loco: ', publicId);
+        console.log('La imagen mi amigazo: ', guitImage);
 
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append('style', style);
-        formData.append('albums', albumsString);
-        if(guitImage) {
-            formData.append('guitaristImage', guitImage);
-        }
-        console.log('albumsArray: ',albumsString);
+
+        if(guitImage && guitImage !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg' ) {
+            // Primero, eliminamos la imagen anterior (si hay una)
+                if (publicId) {
+                    try {
+                        await axios.delete('http://localhost:3000/delete-image', {
+                            data: { public_id: publicId }
+                        });
+                        // alert("Imagen anterior eliminada.");
+                    } catch (error) {
+                        console.error("Error eliminando la imagen anterior:", error);
+                    }
+                }
+                const formData = new FormData();
+                formData.append('file', guitImage);
+                formData.append("upload_preset", "app-hib"); // Asegúrate de usar tu preset
+        
+        
+                try {
+                    const response = await axios.post(
+                        `https://api.cloudinary.com/v1_1/dkk4j1f0q/image/upload`,
+                        formData
+                    );
+                    imageUrl = response.data.secure_url;
+                } catch(error) {
+                    console.error('Error uploading image to Cloudinary:', error);
+                    setError('Error uploading image to Cloudinary');
+                    return;
+                }
+        
+        
+            }//image
+
+
+        const formData = {
+            name,
+            description,
+            style,
+            albums:albumsString,
+            image: imageUrl  // Correct field name based on the object structure
+        };
+
+        // const formData = new FormData();
+        // formData.append('name', name);
+        // formData.append('description', description);
+        // formData.append('style', style);
+        // formData.append('albums', albumsString);
+        // if(guitImage) {
+        //     formData.append('guitaristImage', guitImage);
+        // }
+        // console.log('albumsArray: ',albumsString);
 
         try {
             

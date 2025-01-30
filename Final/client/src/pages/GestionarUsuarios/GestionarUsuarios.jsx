@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import ModalUsuario from "../../components/Modal/ModalUsuario";
-import DeleteModal from "../../components/Modal/deleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal.jsx";
 import { AuthContext } from '../../context/AuthContext';
 const GestionarUsuarios = () => {
   const navigate = useNavigate();

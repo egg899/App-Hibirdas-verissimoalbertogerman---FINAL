@@ -162,8 +162,12 @@ const fetchComments = async () => {
                 display: 'block',
                 margin: '0 auto',
               }}
+              // src={
+              //   '../../src/assets/images/guitarists/' + guitarrista.image ||
+              //   'https://via.placeholder.com/300x300?text=Imagen+no+disponible'
+              // }
               src={
-                '../../src/assets/images/guitarists/' + guitarrista.image ||
+                 guitarrista.image ||
                 'https://via.placeholder.com/300x300?text=Imagen+no+disponible'
               }
             />

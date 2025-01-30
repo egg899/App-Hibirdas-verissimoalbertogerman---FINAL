@@ -383,30 +383,26 @@ const updatedGuitarristasById = async (_id, name, style, albums, description, im
 
 
 export const actualizarGuitarrista = async (req, res) => {
-    const guitarristaId = req.params.id; // El ID ya es una cadena
-    const { name, style, albums, description, image } = req.body; // Extrae el campo 'name' del cuerpo de la solicitud
-
-    const newGuitImage = req.file ? req.file.filename : 'default-profile.jpg';
-
+    const guitarristaId = req.params.id;
+    const { name, style, albums, description, image } = req.body; // Recibimos la URL de la nueva imagen
 
     if (!name) {
         return res.status(400).json({ error: "El campo 'name' es requerido" });
     }
 
-
-    // Convertir 'albums' en un array si es una cadena separada por comas
     const albumsArray = albums ? albums.split(',').map(album => album.trim()) : [];
 
-
     try {
-        const updatedGuitarrista = await updatedGuitarristasById(guitarristaId, name, style, albumsArray, description, newGuitImage);
+        // Aquí solo actualizamos los campos del guitarrista, incluyendo la URL de la imagen
+        const updatedGuitarrista = await updatedGuitarristasById(guitarristaId, name, style, albumsArray, description, image);
         if (!updatedGuitarrista) {
-            return res.status(404).send("El guitarrista no fue encontrado"); // Devuelve 404 si no se encuentra
+            return res.status(404).send("El guitarrista no fue encontrado");
         }
         res.json(updatedGuitarrista);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
 };
+
 
 export const uploadGuitaristImage = guitImageUpload.single('guitaristImage');

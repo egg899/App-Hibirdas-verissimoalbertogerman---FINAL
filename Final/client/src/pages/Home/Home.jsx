@@ -269,7 +269,35 @@ console.log("guitarrist", guitarristas)
   };
 
   const handleDeleteGuitarist = async (id) => {
+    if(id) {
+     const responseGuit = await axios.get(`http://localhost:3000/guitarists/${id}`);
     
+     console.log('El guitarrista: ', responseGuit.data.image);
+
+      let publicId = null;
+      const urlParts = responseGuit.data.image.split('/');
+      const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
+      publicId = publicIdFromUrl;
+      console.log('PublicId HOME: ', publicId);
+
+      if(responseGuit.data.image && responseGuit.data.image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg') {
+        if(publicId) {
+          try{
+            await axios.delete('http://localhost:3000/delete-image', {
+              data: { public_id: publicId }
+          });
+          }
+          catch (error){
+            console.error('Error al eliminar la imagen en Cloudinary:', error);
+          }
+        } 
+      }
+
+
+    }//if id
+
+
+
     try {
       setShowConfirmationModal(false);
        await axios.delete(`http://localhost:3000/guitarists/${id}`, 
@@ -287,9 +315,9 @@ console.log("guitarrist", guitarristas)
     } catch (error) {
       console.error('Error al eliminar guitarrista:', error);
     }
-    // setShowConfirmationModal(false); // Close the confirmation modal after deletion
+    setShowConfirmationModal(false); // Close the confirmation modal after deletion
     
-    // await fetchGuitarists(); 
+    await fetchGuitarists(); 
 
 };
 
