@@ -62,28 +62,71 @@ console.log('GuitaristId', guitaristId);
         e.preventDefault();
         console.log('Submitting:', { title, description, artist, year, image });
         console.log('albumImage:', albumImage);
-        // const newInfo = {
-        //     title,
-        //     description,
-        //     artist:guitaristId,
-        //     year,
-        //    image: image  // Correct field name based on the object structure
-        // };
+        console.log('El Album del modal;', album.image);
 
-        const newInfo = new FormData();
-        newInfo.append('title', title),
-        newInfo.append('description', description),
-        newInfo.append('artist', guitaristId),
-        newInfo.append('year', year),
-        newInfo.append('albumImage', albumImage);
+        let imageUrl = album?.image;
+        let publicId = null;
+        const urlParts = album.image.split('/');
+        const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
+
+        publicId = publicIdFromUrl;
+
+        if(albumImage && albumImage !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg')
+        
+        {
+             // Primero, eliminamos la imagen anterior (si hay una)
+             if (publicId) {
+                try {
+                    await axios.delete('http://localhost:3000/delete-image', {
+                        data: { public_id: publicId }
+                    });
+                    // alert("Imagen anterior eliminada.");
+                } catch (error) {
+                    console.error("Error eliminando la imagen anterior:", error);
+                }
+            }
+            const formData = new FormData();
+            formData.append('file', albumImage);
+            formData.append("upload_preset", "app-hib"); // Asegúrate de usar tu preset
+    
+    
+            try {
+                const response = await axios.post(
+                    `https://api.cloudinary.com/v1_1/dkk4j1f0q/image/upload`,
+                    formData
+                );
+                imageUrl = response.data.secure_url;
+            } catch(error) {
+                console.error('Error uploading image to Cloudinary:', error);
+                setError('Error uploading image to Cloudinary');
+                return;
+            }
+
+
+        }//albumImage
+        
+            const newInfo = {
+                    title,
+                    description,
+                    artist:guitaristId,
+                    year,
+                    image: imageUrl  // Correct field name based on the object structure
+        };
+
+        // const newInfo = new FormData();
+        // newInfo.append('title', title),
+        // newInfo.append('description', description),
+        // newInfo.append('artist', guitaristId),
+        // newInfo.append('year', year),
+        // newInfo.append('albumImage', albumImage);
 
 
         // También puedes probar a imprimir los valores que estás agregando:
-console.log('title:', title);
-console.log('description:', description);
-console.log('artist:', guitaristId);
-console.log('year:', year);
-console.log('image:', albumImage);
+            console.log('title:', title);
+            console.log('description:', description);
+            console.log('artist:', guitaristId);
+            console.log('year:', year);
+            console.log('image:', albumImage);
        
 // if (!albumImage) {
 //     console.error('No file selected for albumImage.');

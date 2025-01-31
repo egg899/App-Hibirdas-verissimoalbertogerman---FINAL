@@ -3,7 +3,7 @@ import albumsModel from "../model/albumsModel.js";
 import mongoose from "mongoose";
 import { io } from "../index.js"; 
 import { agregarAlbum } from "./albumController.js";
-
+import axios from 'axios';
 import multer from "multer";
 import fs from "fs";
 import path from 'path';
@@ -198,10 +198,10 @@ const deleteGuitarristasById = async (_id) => {
     console.log('Imagen de guitarrista a borrar: ',guitarist.image);
     const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'guitarists', guitarist.image);
     // Verificar que la imagen actual existe antes de intentar eliminarla
-    if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
-        console.log('Imagen anterior eliminada: ', guitarist.image);
-    }
+    // if (fs.existsSync(imagePath)) {
+    //     fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
+    //     console.log('Imagen anterior eliminada: ', guitarist.image);
+    // }
     const deletedGuitarist = await guitaristsModel.findOneAndDelete({ _id: objectId});
     return deletedGuitarist;
 }
@@ -213,24 +213,48 @@ const deleteAlbumsByArtistId = async(artistId) => {
 
     console.log('Albumes loKita!!!!: ', albums);
 
-    //Recorrer cada album y eliminar su imagen
-    for (const album of albums){
-        if(album.image && album.image !== "default-profile") {
-            const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'albums', album.image);
+  
+    for (const album of albums) {
+        if (album.image && album.image !== "default-profile") {
+            // Extraemos el public_id de la URL de Cloudinary
+            const urlParts = album.image.split('/');
+            const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
 
-            console.log('Ruta de la imagen del album a eliminar: ', imagePath);
+            console.log('Public ID del álbum:', publicIdFromUrl);
 
-
-            //Verificar si la imagen existe antes de eliminiarla
-            if(fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
-                console.log('Imagen del album eliminada: ', album.image);
+            // Eliminar la imagen de Cloudinary
+            try {
+                await axios.delete('http://localhost:3000/delete-image', {
+                    data: { public_id: publicIdFromUrl }
+                });
+                console.log('Imagen del álbum eliminada de Cloudinary:', album.image);
+            } catch (error) {
+                console.error('Error al eliminar la imagen del álbum en Cloudinary:', error);
             }
         }
+    }
 
 
 
-    } //For albums
+    //Recorrer cada album y eliminar su imagen
+    // for (const album of albums){
+    //     if(album.image && album.image !== "default-profile") {
+    //         const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'albums', album.image);
+
+    //         console.log('Ruta de la imagen del album a eliminar: ', imagePath);
+
+
+    //         //Verificar si la imagen existe antes de eliminiarla
+    //         if(fs.existsSync(imagePath)) {
+    //             fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
+    //             console.log('Imagen del album eliminada: ', album.image);
+    //         }
+    //     }
+
+
+
+    // } //For albums
+
 
 
     await albumsModel.deleteMany({artist:artistId});

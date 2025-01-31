@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "atob": "^2.1.2",
+    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.5.1",
     "core-js": "^3.39.0",

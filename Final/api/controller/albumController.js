@@ -185,10 +185,11 @@ const albumImageUpload = multer({ storage: storage});
 
 //Agregar Album
 export const agregarAlbum = async (req, res) => {
-    const { title, artist, year, description,  owner } = req.body;
-    const albumImage = req.file ? req.file.filename :  'default-profile.jpg';
-    console.log('La imagen nene: ', albumImage);
-    
+    const { title, artist, year, description,  owner, imageUrl } = req.body;
+    //const albumImage = req.file ? req.file.filename :  'default-profile.jpg';
+    //console.log('La imagen nene: ', albumImage);
+    const albumImage = imageUrl ||  'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg';
+    console.log('Imagen URL recibido', albumImage);
     // Check for required fields
     if (!title) {
         return res.status(400).send("El nombre es requerido.");
@@ -210,8 +211,9 @@ export const agregarAlbum = async (req, res) => {
             artist,
             year,
             description,
-            ///imageUrl,
             image:albumImage,
+            ///imageUrl,
+            //image:albumImage,
             owner, // Include the owner field
         });
 
@@ -305,7 +307,8 @@ export const actualizarAlbum = async (req, res) => {
 
     
     const { title, artist, year, description, image } = req.body;
-    const newAlbumImage = req.file ? req.file.filename : 'default-profile.jpg';
+    //const newAlbumImage = req.file ? req.file.filename : 'default-profile.jpg';
+    const newAlbumImage = image;
     console.log('newAlbumImage', newAlbumImage);
     console.log(req.file);
 

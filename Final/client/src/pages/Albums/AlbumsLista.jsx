@@ -111,6 +111,33 @@ console.log('albumsList', albumsList);
       setError("");
     }
 
+    let imageUrl="";
+    if(albumImage) {
+        const imageFormData = new FormData();
+        imageFormData.append("file", albumImage);
+        imageFormData.append("upload_preset", "app-hib" );
+
+
+      try {
+        const cloudinaryRes = await axios.post(`https://api.cloudinary.com/v1_1/dkk4j1f0q/image/upload`,
+          imageFormData
+        );
+        imageUrl = cloudinaryRes.data.secure_url;
+      }
+      catch (error) {
+        console.error(error);
+        setError("Hubo un error al subir la imagen.");
+        return;
+      }
+
+
+
+    }//if(albumImage)
+
+
+
+
+
     try {
       const response = await axios.get(
         `http://localhost:3000/guitarists/id/${artist}`
@@ -142,14 +169,15 @@ console.log('albumsList', albumsList);
       //   },
       // };
       console.log('File',file);
-
-      console.log('albumImage',albumImage);
+      console.log('imageUrl', imageUrl);
+      //console.log('albumImage',albumImage);
       const newAlbum = new FormData();
       newAlbum.append('title', title);
       newAlbum.append('year', year);
       newAlbum.append('artist', artistId || null);
+      newAlbum.append('imageUrl', imageUrl);
       newAlbum.append('description', description);
-      newAlbum.append('albumImage', albumImage);
+     // newAlbum.append('albumImage', albumImage);
       newAlbum.append('owner[userId]', user._id || null);
       newAlbum.append('owner[username]', user.username || null);
 
@@ -185,7 +213,32 @@ console.log('albumsList', albumsList);
   };
 
   const handleDeleteAlbum = async (albumId) => {
-    
+    if(albumId) {
+      const responseAlbum = await axios.get(`http://localhost:3000/albums/${albumId}`);
+      console.log('El Album de responseAlbum: ', responseAlbum.data.image);
+
+      let publicId = null;
+      const urlParts = responseAlbum.data.image.split('/');
+      const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
+      publicId = publicIdFromUrl;
+      console.log('PublicId HOME: ', publicId);
+
+      if(responseAlbum.data.image && responseAlbum.data.image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg') {
+        if(publicId) {
+          try{
+            await axios.delete('http://localhost:3000/delete-image', {
+              data: { public_id: publicId }
+          });
+          }
+          catch (error){
+            console.error('Error al eliminar la imagen en Cloudinary:', error);
+          }
+        } 
+      }
+
+
+
+    }//if albumId
     try {
       setShowConfirmationModal(false);
        await axios.delete(`http://localhost:3000/albums/${albumId}`);
@@ -296,9 +349,12 @@ console.log('albumsList', albumsList);
       <div key={album._id} className="col-md-6 col-lg-6 mb-4">
         <div className="card">
           <img
+        // src={album.image === 'default-profile.jpg'
+        //   ?'../../src/assets/images/uploads/' + album.image
+        //   : '../../src/assets/images/albums/' + album.image}     
         src={album.image === 'default-profile.jpg'
-          ?'../../src/assets/images/uploads/' + album.image
-          : '../../src/assets/images/albums/' + album.image}            
+          ? album.image
+          :  album.image}            
           alt={album.title}
             className="card-img-top"
             style={{ height: '200px', objectFit: 'cover' }} // Adjust image

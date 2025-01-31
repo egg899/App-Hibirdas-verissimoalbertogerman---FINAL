@@ -13,6 +13,7 @@ router.get('/artista/:artista', agarrarAlbumsPorGuitarrista);
 router.put('/:id', uploadAlbumImage, actualizarAlbum);
 router.delete('/:id',  eliminarAlbum);
 router.post('',  uploadAlbumImage, agregarAlbum);
+//router.post('',  agregarAlbum);
 
 // router.put('/:id', authenticateToken, actualizarAlbum);
 // router.delete('/:id', authenticateToken, eliminarAlbum);
