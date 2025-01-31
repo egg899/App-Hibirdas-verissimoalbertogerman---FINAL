@@ -380,7 +380,7 @@ const updatedGuitarristasById = async (_id, name, style, albums, description, im
     //         fs.unlinkSync(imagePath); // Eliminar el archivo de la imagen anterior
     //         console.log('Imagen anterior eliminada: ', guitarist.image);
     //     }
-    }
+    //}
 
 
             if(image && image !== "https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg") {
