@@ -39,8 +39,8 @@ const AlbumsLista = () => {
     setLoading(true);
     try {
       //https://app-hibirdas-verissimoalbertogerman.onrender.com
-       const response = await axios.get('http://localhost:3000/albums');
-      //const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums');
+       //const response = await axios.get('http://localhost:3000/albums');
+      const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums');
 
       setTimeout(() => {
         setAlbumsList(response.data);
@@ -139,12 +139,12 @@ console.log('albumsList', albumsList);
 
 
     try {
-      const response = await axios.get(
-        `http://localhost:3000/guitarists/id/${artist}`
-      );
       // const response = await axios.get(
-      //   `https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/id/${artist}`
+      //   `http://localhost:3000/guitarists/id/${artist}`
       // );
+      const response = await axios.get(
+        `https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/id/${artist}`
+      );
       const artistId = response.data;
 
       if (!artistId) {
@@ -183,9 +183,9 @@ console.log('albumsList', albumsList);
 
 
 
-       await axios.post('http://localhost:3000/albums', newAlbum, {
+       //await axios.post('http://localhost:3000/albums', newAlbum, {
 
-      // await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums', newAlbum, {
+       await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums', newAlbum, {
         headers: {"Content-Type": "multipart/form-data"}
       });
 
@@ -214,7 +214,9 @@ console.log('albumsList', albumsList);
 
   const handleDeleteAlbum = async (albumId) => {
     if(albumId) {
-      const responseAlbum = await axios.get(`http://localhost:3000/albums/${albumId}`);
+      const responseAlbum = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/${albumId}`);
+
+      //const responseAlbum = await axios.get(`http://localhost:3000/albums/${albumId}`);
       console.log('El Album de responseAlbum: ', responseAlbum.data.image);
 
       let publicId = null;
@@ -223,10 +225,12 @@ console.log('albumsList', albumsList);
       publicId = publicIdFromUrl;
       console.log('PublicId HOME: ', publicId);
 
-      if(responseAlbum.data.image && responseAlbum.data.image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg') {
+      if(responseAlbum.data.image && responseAlbum.data.image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg') {
         if(publicId) {
           try{
-            await axios.delete('http://localhost:3000/delete-image', {
+            //await axios.delete('http://localhost:3000/delete-image', {
+              await axios.delete('https://app-hibirdas-verissimoalbertogerman.onrender.com/delete-image', {
+
               data: { public_id: publicId }
           });
           }
@@ -241,8 +245,8 @@ console.log('albumsList', albumsList);
     }//if albumId
     try {
       setShowConfirmationModal(false);
-       await axios.delete(`http://localhost:3000/albums/${albumId}`);
-      //await axios.delete(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/${albumId}`);
+       //await axios.delete(`http://localhost:3000/albums/${albumId}`);
+      await axios.delete(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/${albumId}`);
 
       fetchAlbums();
     } catch (error) {
@@ -352,7 +356,7 @@ console.log('albumsList', albumsList);
         // src={album.image === 'default-profile.jpg'
         //   ?'../../src/assets/images/uploads/' + album.image
         //   : '../../src/assets/images/albums/' + album.image}     
-        src={album.image === 'default-profile.jpg'
+        src={album.image === 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg'
           ? album.image
           :  album.image}            
           alt={album.title}
@@ -411,9 +415,12 @@ console.log('albumsList', albumsList);
       <div key={album._id} className="col-md-6 col-lg-4 mb-4">
         <div className="card">
           <img
-            src={album.image === 'default-profile.jpg'
-              ?'../../src/assets/images/uploads/' + album.image
-              : '../../src/assets/images/albums/' + album.image}
+            // src={album.image === 'default-profile.jpg'
+            //   ?'../../src/assets/images/uploads/' + album.image
+            //   : '../../src/assets/images/albums/' + album.image}
+            src={album.image === 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg'
+              ? album.image
+              :  album.image}
             alt={album.title}
             className="card-img-top"
             style={{ height: '200px', objectFit: 'cover' }}

@@ -20,8 +20,8 @@ const Albums = () => {
   const fetchAlbumsDetails = async () => {
     setLoading(true);
     try {
-       const response = await axios.get(`http://localhost:3000/albums/titulo/${titulo}`);
-      //const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/titulo/${titulo}`);
+       //const response = await axios.get(`http://localhost:3000/albums/titulo/${titulo}`);
+      const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/titulo/${titulo}`);
 
       setTimeout(() => {
         setAlbum(response.data[0] || null); //  nulo si no hay album
@@ -38,8 +38,8 @@ useEffect(() => {
     const fetchGuitarristName = async () => {
       try {
 
-        const response = await axios.get(`http://localhost:3000/guitarists/${album.artist}`);
-       //const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${album.artist}`);
+        //const response = await axios.get(`http://localhost:3000/guitarists/${album.artist}`);
+       const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${album.artist}`);
 
         setGuitaristName(response.data.name || null);
 
@@ -119,9 +119,12 @@ console.log("Agarrando el nombre", guitaristName);
               display: "block",
               margin: "0 auto",
             }}
-            src={album.image === 'default-profile.jpg'
-              ?'../../src/assets/images/uploads/' + album.image
-              : '../../src/assets/images/albums/' + album.image}
+            // src={album.image === 'default-profile.jpg'
+            //   ?'../../src/assets/images/uploads/' + album.image
+            //   : '../../src/assets/images/albums/' + album.image}
+            src={album.image === 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg'
+              ? album.image
+              :  album.image}
           />
         </figure>
       </div>

@@ -47,7 +47,8 @@ const Home = () => {
   const [usuariosConectados, setUsuariosConectados] = useState({ test: 'testUser' });
 
   const [isAdmin, setIsAdmin] = useState(false);
-  const socket = io('http://localhost:3000');//Conectado al servidor
+  //const socket = io('http://localhost:3000');//Conectado al servidor
+  const socket = io('https://app-hibirdas-verissimoalbertogerman.onrender.com');//Conectado al servidor
 
 //console.log('auth',auth);
 
@@ -59,7 +60,9 @@ const Home = () => {
 
   const fetchGuitarists = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/guitarists',{
+      const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists',{
+
+      //const response = await axios.get('http://localhost:3000/guitarists',{
         params: {
           name:search,
           sortBy:sort,
@@ -281,10 +284,11 @@ console.log("guitarrist", guitarristas)
       publicId = publicIdFromUrl;
       console.log('PublicId HOME: ', publicId);
 
-      if(responseGuit.data.image && responseGuit.data.image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg') {
+      if(responseGuit.data.image && responseGuit.data.image !== 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg') {
         if(publicId) {
           try{
-            await axios.delete('http://localhost:3000/delete-image', {
+            await axios.delete('https://app-hibirdas-verissimoalbertogerman.onrender.com/delete-image', {
+            //await axios.delete('http://localhost:3000/delete-image', {
               data: { public_id: publicId }
           });
           }
@@ -456,7 +460,7 @@ const handleSuggestionClick = (suggestion) => {
           /> */}
 
 <img
-            src={guitarrista.image === 'default-profile.jpg'
+            src={guitarrista.image === 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg'
               ?  guitarrista.image
               :   guitarrista.image} // Imagen predeterminada si no hay imagen
             alt={guitarrista.name}
@@ -523,9 +527,9 @@ const handleSuggestionClick = (suggestion) => {
       <div key={guitarrista._id} className="col-md-6 col-lg-6 mb-4">
         <div className="card">
         <img
-            src={guitarrista.image === 'default-profile.jpg'
-              ?'../../src/assets/images/uploads/' + guitarrista.image
-              : '../../src/assets/images/guitarists/'+guitarrista.image} // Imagen predeterminada si no hay imagen
+            src={guitarrista.image === 'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg'
+              ? guitarrista.image
+              : guitarrista.image} // Imagen predeterminada si no hay imagen
             alt={guitarrista.name}
             className="card-img-top"
             style={{ height: '200px', objectFit: 'cover', objectPosition: 'top' }} // Ajustar la imagen
