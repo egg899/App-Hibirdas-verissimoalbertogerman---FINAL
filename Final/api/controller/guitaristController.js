@@ -215,7 +215,7 @@ const deleteAlbumsByArtistId = async(artistId) => {
 
   
     for (const album of albums) {
-        if (album.image && album.image !== "default-profile") {
+        if (album.image && album.image !== "https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg") {
             // Extraemos el public_id de la URL de Cloudinary
             const urlParts = album.image.split('/');
             const publicIdFromUrl = urlParts[urlParts.length - 1].split('.')[0]; // Extraemos el public_id de la URL
@@ -224,7 +224,7 @@ const deleteAlbumsByArtistId = async(artistId) => {
 
             // Eliminar la imagen de Cloudinary
             try {
-                await axios.delete('http://localhost:3000/delete-image', {
+                await axios.delete('https://app-hibirdas-verissimoalbertogerman.onrender.com/delete-image', {
                     data: { public_id: publicIdFromUrl }
                 });
                 console.log('Imagen del álbum eliminada de Cloudinary:', album.image);
@@ -310,7 +310,7 @@ export const agregarGuitarrista = async (req, res) => {
     // console.log('req.file: ', req.file);
      
     // Verifica si la URL de la imagen está presente, si no, asigna una imagen por defecto
-    const guitaristImage = imageUrl ||  'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738173415/default-profile_yrvw0s.jpg';
+    const guitaristImage = imageUrl ||  'https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg';
     console.log('Imagen URL recibida: ', guitaristImage);
 
     // Validate required fields
@@ -370,7 +370,7 @@ const updatedGuitarristasById = async (_id, name, style, albums, description, im
         const guitarist = await guitaristsModel.findById(objectId);
         console.log('Este es el guitarrista viejita: ', guitarist);
        // Si se proporciona una nueva imagen que es diferente de la actual y no es la predeterminada, eliminar la anterior
-       if (image && image !== "default-profile.jpg" && image !== guitarist.image) {
+       if (image && image !== "https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg" && image !== guitarist.image) {
         const imagePath = path.join(__dirname, '..', '..', 'client', 'src', 'assets', 'images', 'guitarists', guitarist.image);
         
         console.log('Ruta de la imagen a eliminar: ', imagePath);
@@ -383,7 +383,7 @@ const updatedGuitarristasById = async (_id, name, style, albums, description, im
     }
 
 
-            if(image && image !== "default-profile.jpg") {
+            if(image && image !== "https://res.cloudinary.com/dkk4j1f0q/image/upload/v1738344600/default-profile_ktxzmv.jpg") {
                 updateFields.image = image; // Si la imagen es distinta de la predeterminada, la agrega al updateFields
             } else {
                //const guitarist = await guitaristsModel.findById(objectId);
