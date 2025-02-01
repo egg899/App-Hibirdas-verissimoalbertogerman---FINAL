@@ -246,8 +246,9 @@ const imageUpload = multer({ storage: storage })
 
 
 export const agregarUsuarios = async (req, res) => {
-    const { name, username, email, role, password, imageUrl } = req.body; // Ahora la imagen llega como URL
+    const { name, username, email, role, password, imageUrl } = req.body;
 
+    // Verificar los campos requeridos
     if (!name) return res.status(400).send("El nombre es requerido");
     if (!username) return res.status(400).send("El nombre de usuario es requerido");
     if (!email) return res.status(400).send("El email es requerido");
@@ -261,11 +262,15 @@ export const agregarUsuarios = async (req, res) => {
 
     try {
         const addedUser = await adherirUsuario(newUser);
-        res.json(addedUser);
+        res.json(addedUser); // Usuario creado exitosamente
     } catch (err) {
-        if (err.message === "El usuario ya existe") {
-            return res.status(400).send(err.message);
+        // Si el error está relacionado con el nombre de usuario o email en uso, lo manejamos de forma específica
+        if (err.message.includes("ya está en uso")) {
+            return res.status(400).send(err.message);  // Retornar el mensaje exacto del error
         }
+        
+        // Si es un error genérico o cualquier otro error, retornamos un mensaje de error 500
+        console.error("Error adhiriendo al usuario:", err);
         return res.status(500).send("Error adheriendo al usuario");
     }
 };
