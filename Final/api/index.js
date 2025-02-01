@@ -38,7 +38,7 @@ const server = http.createServer(app);
 //const io = new socketIo(server);
 const io = new socketIo(server, {
   cors: {
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://app-hibirdas-verissimoalbertogerman-final.vercel.app/'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }
