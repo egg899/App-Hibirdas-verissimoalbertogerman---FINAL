@@ -120,7 +120,7 @@ const AlbumListForm = ({
                 type="text"
                 placeholder="Año de Publicación"
                 value={year}
-                onChange={(e) => setYear(e.target.value)}/>
+                onChange={(e) => setYear(e.target.value.trim())}/>
 
                 {/* <input
                 type="text"

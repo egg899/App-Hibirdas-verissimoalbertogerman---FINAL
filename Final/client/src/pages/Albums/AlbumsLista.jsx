@@ -107,9 +107,19 @@ console.log('albumsList', albumsList);
       if (!title || !description || !artist || !year ) {
       setError("Por favor llene todos los campos.");
       return; // Prevent form submission
+    } 
+
+
+    //Validar que el año sea un numero de 4 digitos
+    const yearRegex = /^\d{4}$/;
+    if(!yearRegex.test(year)) {
+      setError("El año debe ser un número de 4 dígitos.");
+      return; // Prevent form submission
     } else {
       setError("");
     }
+
+
 
     let imageUrl="";
     if(albumImage) {

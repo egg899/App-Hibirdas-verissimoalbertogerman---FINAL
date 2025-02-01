@@ -11,7 +11,7 @@ const ModalAlbum = ({ album, albumId, onClose, onAlbumSaved }) => {
     const [artist, setArtist] = useState('');
     const [image, setImage] = useState('');
     const [description, setDescription] = useState('');
-
+    const [error, setError] = useState('');
 
     const [file, setFile] = useState(null);
     const [albumImage, setAlbumImage] = useState(null);
@@ -61,6 +61,19 @@ console.log('GuitaristId', guitaristId);
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Submitting:', { title, description, artist, year, image });
+
+        //Validar que el año sea un numero de 4 digitos
+            const yearRegex = /^\d{4}$/;
+                if(!yearRegex.test(year)) {
+                setError("El año debe ser un número de 4 dígitos.");
+                return; // Prevent form submission
+                } else {
+                setError("");
+                }
+
+
+
+
         console.log('albumImage:', albumImage);
         console.log('El Album del modal;', album.image);
 
@@ -181,9 +194,9 @@ console.log('GuitaristId', guitaristId);
                         type="text"
                         placeholder="Año del Álbum"
                         value={year}
-                        onChange={(e) => setYear(e.target.value)}
+                        onChange={(e) => setYear(e.target.value.trim())}
                     />
-
+                    {error && <h3 className="alert alert-danger mt-3">{error}</h3>}
                     <input
                         type="text"
                         placeholder="Ártista"
