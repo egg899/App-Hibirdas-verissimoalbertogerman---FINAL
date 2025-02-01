@@ -172,16 +172,23 @@ export const obtenerUsuarioPorNombre = async (req, res) => {
 
 //Adherir Usuarios
 const adherirUsuario = async (newUser) => {
-    const existingUser = await usuariosModel.findOne({ name: newUser.name });
+    const existingUser = await usuariosModel.findOne({
+        $or: [{ username: newUser.username }, { email: newUser.email }]
+    });
+
     if (existingUser) {
-        throw new Error("El usuario ya existe");
+        if (existingUser.username === newUser.username && existingUser.email === newUser.email) {
+            throw new Error("El nombre de usuario y el email ya están en uso.");
+        } else if (existingUser.username === newUser.username) {
+            throw new Error("El nombre de usuario ya está en uso.");
+        } else {
+            throw new Error("El email ya está en uso.");
+        }
     }
 
     const newPassword = await bcrypt.hash(newUser.password, 10);
-    //const userCount = await usuariosModel.countDocuments(); // Get the current user count
-    //newUser.id = userCount > 0 ? userCount + 1 : 1;
+
     const orderedUsuarios = new usuariosModel({
-        //id: newUser.id,
         name: newUser.name,
         username: newUser.username,
         email: newUser.email,
@@ -191,13 +198,14 @@ const adherirUsuario = async (newUser) => {
     });
 
     try {
-        const savedUser = await orderedUsuarios.save(); // Save to MongoDB
+        const savedUser = await orderedUsuarios.save();
         return savedUser;
     } catch (err) {
         console.error("Error guardando el usuario en la base de datos", err);
         throw new Error("Error al guardar el usuario en la base de datos");
     }
 };
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
