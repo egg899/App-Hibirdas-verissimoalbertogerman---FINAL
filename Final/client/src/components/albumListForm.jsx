@@ -27,7 +27,8 @@ const AlbumListForm = ({
 
     const fetchGuitarists = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/guitarists');
+            const response = await axios.get('https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists');
+            // const response = await axios.get('http://localhost:3000/guitarists');
             setGuitarristas(response.data);
 
         } catch (err) {
