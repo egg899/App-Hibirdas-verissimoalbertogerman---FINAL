@@ -18,7 +18,9 @@ const Register = () => {
 
   const [file, setFile] = useState(null); // Para la vista previa de la imagen
   const [image, setImage] = useState(null); // Para almacenar el archivo seleccionado
-  const [error, setError] = useState("");
+  const [error, setError] = useState({});
+  const [imgError, setImgError] = useState(''); 
+  const [regError, setRegError] = useState(''); 
   const { user, auth, logoutUser } = useContext(AuthContext);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -30,6 +32,32 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  let newErrors = {};
+
+  if (!userData.name) {
+    newErrors.name = "Por favor, ingrese su nombre.";
+  }
+  if (!userData.username) {
+    newErrors.username = "Por favor, ingrese un nombre de usuario.";
+  }
+  if (!userData.email) {
+    newErrors.email = "Por favor, ingrese su correo electrónico.";
+  } else if (!emailRegex.test(userData.email)) {
+    newErrors.email = "Por favor, ingrese un email válido.";
+  }
+  if (!userData.password) {
+    newErrors.password = "Por favor, ingrese una contraseña.";
+  }
+
+  // Si hay errores, actualiza el estado y sal de la función
+  if (Object.keys(newErrors).length > 0) {
+    setError(newErrors);
+    return;  // Esto evita continuar si hay errores
+  }
+
+  setError({}); //Limpiar errores si todo está bien
 
     // Subir la imagen a Cloudinary
     let imageUrl = "";
@@ -46,7 +74,7 @@ const Register = () => {
             imageUrl = cloudinaryRes.data.secure_url;
         } catch (error) {
             console.error("Error al subir imagen:", error);
-            setError("Error al subir imagen");
+            setImgError("Error al subir imagen");
             return;
         }
     }
@@ -71,7 +99,7 @@ const Register = () => {
         navigate("/login");
     } catch (error) {
         console.error(error);
-        setError(error.response?.data?.message || "Error en el registro");
+        setRegError(error.response?.data?.message || "Error en el registro");
     }
 };
 
@@ -88,7 +116,7 @@ const Register = () => {
         <div className="col col-lg-12">
           <h1 className="text-center">Registrarse</h1>
           <p className="text-center">Crea una cuenta para comenzar a usar nuestra plataforma.</p>
-          <form onSubmit={handleRegister} encType="multipart/form-data">
+          <form onSubmit={handleRegister} encType="multipart/form-data" noValidate>
             <div className="form-group mb-3">
               <label htmlFor="name">Nombre</label>
               <input
@@ -99,6 +127,8 @@ const Register = () => {
                 onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                 required
               />
+                {error.name && <div className="alert alert-danger mt-3">{error.name}</div>}
+
             </div>
 
             <div className="form-group mb-3">
@@ -111,6 +141,8 @@ const Register = () => {
                 onChange={(e) => setUserData({ ...userData, username: e.target.value })}
                 required
               />
+               {error.username && <div className="alert alert-danger mt-3">{error.username}</div>}
+
             </div>
 
             <div className="form-group mb-3">
@@ -121,8 +153,10 @@ const Register = () => {
                 className="form-control"
                 value={userData.email}
                 onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-                required
+                
               />
+        {error.email && <div className="alert alert-danger mt-3">{error.email}</div>}
+
             </div>
 
             <div className="form-group mb-3">
@@ -135,6 +169,8 @@ const Register = () => {
                 onChange={(e) => setUserData({ ...userData, password: e.target.value })}
                 required
               />
+       {error.password && <div className="alert alert-danger mt-3">{error.password}</div>}
+
             </div>
 
             {isAdmin && (
@@ -164,8 +200,11 @@ const Register = () => {
               />
               {file && <img src={file} alt="preview" style={{ marginTop: "20px", width: "300px" }} />}
             </div>
+            
+           
+          {imgError && <div className="alert alert-danger">{imgError}</div>}
 
-            {error && <div className="alert alert-danger">{error}</div>}
+          {regError && <div className="alert alert-danger">{regError}</div>}
 
             <button type="submit" className="btn btn-primary btn-block">
               Registrarse
