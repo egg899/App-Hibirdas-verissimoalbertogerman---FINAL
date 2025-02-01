@@ -99,7 +99,7 @@ const Register = () => {
         navigate("/login");
     } catch (error) {
         console.error(error);
-        setRegError(error.response?.data?.message || "Error en el registro");
+        setRegError(error.response?.data || "Error en el registro");
     }
 };
 

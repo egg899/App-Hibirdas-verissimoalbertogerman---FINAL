@@ -266,7 +266,7 @@ export const agregarUsuarios = async (req, res) => {
         if (err.message === "El usuario ya existe") {
             return res.status(400).send(err.message);
         }
-        return res.status(500).send("Error adheriendo al usuario");
+        //return res.status(500).send("Error adheriendo al usuario");
     }
 };
 
