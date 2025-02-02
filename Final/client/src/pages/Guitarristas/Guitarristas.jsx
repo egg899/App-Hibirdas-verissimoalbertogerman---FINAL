@@ -37,7 +37,9 @@ const Guitarristas = () => {
   const fetchGuitaristsDetails = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:3000/guitarists/${id}`);
+      const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/${id}`);
+
+      // const response = await axios.get(`http://localhost:3000/guitarists/${id}`);
       setTimeout(() => {
         setGuitarrista(response.data);
         setLoading(false);
@@ -47,7 +49,9 @@ const Guitarristas = () => {
     //Validar la existencia del album
     const albumPromises = response.data.albums.map((album) =>
       axios
-        .get(`http://localhost:3000/albums/titulo/${album}`)
+        // .get(`http://localhost:3000/albums/titulo/${album}`)
+        .get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/titulo/${album}`)
+
         .then((res) => res.data.length > 0 && album) // Devuleve el album si existe
         .catch(() => null) // Ignora errores
     );
@@ -79,8 +83,9 @@ const Guitarristas = () => {
         guitarist:id
 
       }; //New Comment
-      
-      const response = await axios.post(`http://localhost:3000/comentarios/`, newComment);
+      const response = await axios.post(`https://app-hibirdas-verissimoalbertogerman.onrender.com/comentarios/`, newComment);
+
+      //const response = await axios.post(`http://localhost:3000/comentarios/`, newComment);
       setMessage("Comentario adherido con exito");
       setContent("");
       fetchComments();
@@ -95,7 +100,9 @@ const Guitarristas = () => {
 
 const fetchComments = async () => {
     try{
-      const response = await axios.get(`http://localhost:3000/comentarios/${id}`);
+      const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/comentarios/${id}`);
+
+      // const response = await axios.get(`http://localhost:3000/comentarios/${id}`);
       setComments(response.data);
     }
     catch (error) {
