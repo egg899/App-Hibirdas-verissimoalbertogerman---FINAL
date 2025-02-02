@@ -90,7 +90,9 @@ console.log('GuitaristId', guitaristId);
              // Primero, eliminamos la imagen anterior (si hay una)
              if (publicId) {
                 try {
-                    await axios.delete('http://localhost:3000/delete-image', {
+                    await axios.delete('https://app-hibirdas-verissimoalbertogerman.onrender.com/delete-image', {
+
+                    //await axios.delete('http://localhost:3000/delete-image', {
                         data: { public_id: publicId }
                     });
                     // alert("Imagen anterior eliminada.");
