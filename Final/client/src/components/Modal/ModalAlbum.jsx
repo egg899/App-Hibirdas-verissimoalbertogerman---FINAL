@@ -153,12 +153,16 @@ console.log('GuitaristId', guitaristId);
                 console.log("Album ID being passed:", albumId);
 
                 // Edit existing album
-                await axios.put(`http://localhost:3000/albums/${albumId}`, newInfo, {
+                await axios.put(`https://app-hibirdas-verissimoalbertogerman.onrender.com/albums/${albumId}`, newInfo, {
+
+                // await axios.put(`http://localhost:3000/albums/${albumId}`, newInfo, {
                     headers: {"Content-Type": "multipart/form-data"}
                   });
             } else {
                 // Add new album
-                await axios.post('http://localhost:3000/albums', newInfo, {
+                await axios.post('https://app-hibirdas-verissimoalbertogerman.onrender.com/albums', newInfo, {
+
+                // await axios.post('http://localhost:3000/albums', newInfo, {
                     headers: {"Content-Type": "multipart/form-data"}
                   });
             }
