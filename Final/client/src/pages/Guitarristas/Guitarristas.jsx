@@ -37,7 +37,7 @@ const Guitarristas = () => {
   const fetchGuitaristsDetails = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/${id}`);
+      const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${id}`);
 
       // const response = await axios.get(`http://localhost:3000/guitarists/${id}`);
       setTimeout(() => {
