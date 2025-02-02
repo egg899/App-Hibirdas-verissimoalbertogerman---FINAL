@@ -47,8 +47,8 @@ const Home = () => {
   const [usuariosConectados, setUsuariosConectados] = useState({ test: 'testUser' });
 
   const [isAdmin, setIsAdmin] = useState(false);
-  const socket = io('http://localhost:3000');//Conectado al servidor
-  //const socket = io('https://app-hibirdas-verissimoalbertogerman.onrender.com');//Conectado al servidor
+  //const socket = io('http://localhost:3000');//Conectado al servidor
+  const socket = io('https://app-hibirdas-verissimoalbertogerman.onrender.com');//Conectado al servidor
 
 //console.log('auth',auth);
 

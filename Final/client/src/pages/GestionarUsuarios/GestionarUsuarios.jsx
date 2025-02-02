@@ -21,7 +21,9 @@ const GestionarUsuarios = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/usuarios");
+      const response = await axios.get("https://app-hibirdas-verissimoalbertogerman.onrender.com/usuarios");
+
+      // const response = await axios.get("http://localhost:3000/usuarios");
       setUsuarios(response.data.usuarios);
     } catch (error) {
       console.error("Error obteniendo a los usuarios:", error);
@@ -36,7 +38,10 @@ const GestionarUsuarios = () => {
   const fetchUser = async (id) =>
 {
     try {
-        const response = await axios.get(`http://localhost:3000/usuarios/${id}`);
+      const response = await axios.get(`https://app-hibirdas-verissimoalbertogerman.onrender.com
+/usuarios/${id}`);
+
+        //const response = await axios.get(`http://localhost:3000/usuarios/${id}`);
         setCurrentUsuario(response.data);
       
      
@@ -85,7 +90,9 @@ console.log('current',currentUsuario);
         }//if image
 
       try {
-        await axios.delete(`http://localhost:3000/usuarios/${userToDelete._id}`);
+        await axios.delete(`https://app-hibirdas-verissimoalbertogerman.onrender.com/usuarios/${userToDelete._id}`);
+
+        // await axios.delete(`http://localhost:3000/usuarios/${userToDelete._id}`);
         setUsuarios(usuarios.filter((usuario) => usuario._id !== userToDelete._id));
         setShowDeleteModal(false);
         setUserToDelete(null);
