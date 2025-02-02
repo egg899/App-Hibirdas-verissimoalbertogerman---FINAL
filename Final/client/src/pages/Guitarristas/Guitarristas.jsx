@@ -192,7 +192,7 @@ const fetchComments = async () => {
 
 
         <div className="col-sm-6 ">
-          <p className="text-justify">
+          <p className="text-justify text-pre-wrap">
             {guitarrista.description || 'Descripción no disponible'}
           </p>
 
