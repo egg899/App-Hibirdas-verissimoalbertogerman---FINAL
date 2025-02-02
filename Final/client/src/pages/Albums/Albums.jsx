@@ -131,7 +131,7 @@ console.log("Agarrando el nombre", guitaristName);
       <p>
         <strong>Año de Publicación: </strong> {album.year}
       </p>
-      <p>{album.description}</p>
+      <p className="text-pre-wrap">{album.description}</p>
       <p>
         <strong>Guitarrista: </strong>
         
