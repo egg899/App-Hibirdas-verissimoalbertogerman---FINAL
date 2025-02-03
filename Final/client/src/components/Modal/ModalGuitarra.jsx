@@ -108,7 +108,7 @@ const ModalGuitarra = ({ guitarist, guitaristId, onClose, onGuitaristSaved, auth
             if (guitarist) {
                 // Edit existing guitarist
                 // await axios.put(`http://localhost:3000/guitarists/${guitaristId}`, formData, { headers:{'authorizartion':auth}});
-                await axios.put(`https://app-hibirdas-verissimoalbertogerman.onrender.com/${guitaristId}`, formData, { headers:{'authorizartion':auth}});
+                await axios.put(`https://app-hibirdas-verissimoalbertogerman.onrender.com/guitarists/${guitaristId}`, formData, { headers:{'authorizartion':auth}});
 
             } else {
                 // Add new guitarist
