@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const capitalizeFirstLetter = (str) => {
@@ -6,8 +6,26 @@ const capitalizeFirstLetter = (str) => {
 };
 
 const Nav = ({ username, cerrarSesion, isLoggedIn, isAdmin, id }) => {
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if(window.scrollY > 50) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+
+  }, []);
+
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className={`navbar navbar-expand-lg navbar-light bg-light sticky-top ${isSticky ? 'full-width' : ''}`}>
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           GuitaristApp
@@ -32,7 +50,7 @@ const Nav = ({ username, cerrarSesion, isLoggedIn, isAdmin, id }) => {
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/albumsLista">
-                Albums
+                Albumes
               </Link>
             </li>
 
