@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from '../../context/AuthContext';
 import Nav from '../../components/Nav'
+import { Link } from 'react-router-dom';
 const Albums = () => {
   const { titulo } = useParams();
   const navigate = useNavigate();
@@ -136,9 +137,12 @@ console.log("Agarrando el nombre", guitaristName);
         <strong>Guitarrista: </strong>
         
         {guitaristName ? (
-    <a href={`/guitarristas/${album.artist}`}>
+    // <a href={`/guitarristas/${album.artist}`}>
+    //   {guitaristName}
+    // </a>
+    <Link to={`/guitarristas/${album.artist}`}>
       {guitaristName}
-    </a>
+    </Link>
   ) : (
     "Cargando..." // Show "Cargando..." if the name isn't fetched yet
   )}
