@@ -11,6 +11,7 @@ const Albums = () => {
   const [album, setAlbum] = useState(null); // Start with `null` to differentiate no data
   const [guitaristName, setGuitaristName] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(false);
 
 
@@ -67,6 +68,7 @@ useEffect(() => {
   useEffect(() =>{
     if(user) {
       setIsLoggedIn(true);
+      setIsAdmin(user.role === 'admin');
     } else {
       setIsLoggedIn(false);
     }
@@ -106,7 +108,7 @@ console.log("Agarrando el nombre", guitaristName);
   return (
 
     <>
-    <Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn}/>
+    <Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn}  isAdmin={isAdmin} id={user?._id || null}/>
 
     <div className="container container-fluid" style={{ minHeight: "100vh" }}>
       <h1>{album.title}</h1>

@@ -22,7 +22,7 @@ const Guitarristas = () => {
 
   const [validAlbums, setValidAlbums] = useState([]); // To store valid albums
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+   const [isAdmin, setIsAdmin] = useState(false);
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
   const [comments, setComments] = useState([]);
@@ -125,9 +125,12 @@ const fetchComments = async () => {
   
   console.log('Los comentarios :', comments );
   console.log("validAlbums", validAlbums);
+  console.log('USERRRR', user);
+  console.log(isLoggedIn);
   useEffect(() =>{
     if(user) {
       setIsLoggedIn(true);
+      setIsAdmin(user.role === 'admin');
     } else {
       setIsLoggedIn(false);
     }
@@ -154,7 +157,7 @@ const fetchComments = async () => {
 
   return (
     <>
-<Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn}/>
+<Nav username={user?.name || null} cerrarSesion={logoutUser} isLoggedIn={isLoggedIn} isAdmin={isAdmin} id={user?._id || null}/>
     <div className="container container-fluid" style={{ minHeight: '100vh' }}>
       <h1>{guitarrista.name || 'Nombre no disponible'}</h1>
 
