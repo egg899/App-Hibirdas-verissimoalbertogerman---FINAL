@@ -22,7 +22,7 @@ const Guitarristas = () => {
 
   const [validAlbums, setValidAlbums] = useState([]); // To store valid albums
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
   const [comments, setComments] = useState([]);
